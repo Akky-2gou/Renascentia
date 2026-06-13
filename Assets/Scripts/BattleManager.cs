@@ -3,9 +3,14 @@ using SkillTypes;
 using GameTypes;
 using System.Collections.Generic;
 
+/*
+ * バトルシステムマネージャー
+ * バトルのダメージ処理やターン処理など、バトル全体を管理する
+ */
+
 public class BattleManager : MonoBehaviour
 {
-    int _SP; // スキルポイント
+    int _currentSP; // スキルポイント
 
     const int MAX_SP = 6; // SPの最大値
     const int BASIC_SP_GAIN = 1; // 基本的なSPの増加量
@@ -16,12 +21,11 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private CharacterStatus[] _enemys; // 敵の参照
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
 
-        CharacterStatus[] partyMembers = FindAnyObjectByType<Party>().GetPartyMember(); // パーティーメンバーのステータスを取得する
+        CharacterStatus[] partyMembers = FindAnyObjectByType<Party>().Members; // パーティーメンバーのステータスを取得する
         foreach (CharacterStatus member in partyMembers)
         {
             _characterQueue.Enqueue(member);
@@ -32,36 +36,40 @@ public class BattleManager : MonoBehaviour
             _characterQueue.Enqueue(enemy);
         } 
 
-        CharacterStatus endPoint = new CharacterStatus(); // 終了点のオブジェクトを作成する
-        endPoint.SetBattleUnitType(BattleUnitType.EndPoint);
+        // 終端エネミーを追加
+        GameObject dummyObj = new GameObject("DummyEndPoint");
+        CharacterStatus endPoint = dummyObj.AddComponent<CharacterStatus>();
+        endPoint.BattleUnitType = BattleUnitType.EndPoint;
         _characterQueue.Enqueue(endPoint);
     }
 
+    // ダメージを与える処理
     void TakeDamage(CharacterStatus attacker, CharacterStatus[] defenders)
     {
-        int attackPower = attacker.GetAttack();
+        int attackPower = attacker.Attack;
 
         foreach (CharacterStatus defender in defenders)
         {
-            if (defender.GetHp() <= 0)
+            if (defender.Hp <= 0)
             {
                 continue; // HPが0以下のキャラクターは攻撃しない
             }
 
-            int defensePower = defender.GetDefense();
+            int defensePower = defender.Defense;
             int damage = attackPower - defensePower; // ダメージは攻撃力 - 防御力で計算する
 
             defender.DecreaseHp(damage); // ダメージを与える
         }
     }
 
+    // 体力を回復する処理
     void TakeHealing(CharacterStatus healer, CharacterStatus[] targets)
     {
-        int healingPower = healer.GetHealAmount();
+        int healingPower = healer.HealAmount;
 
         foreach (CharacterStatus target in targets)
         {
-            if (target.GetHp() <= 0)
+            if (target.Hp <= 0)
             {
                 continue; // HPが0以下のキャラクターは回復しない
             }
@@ -70,24 +78,27 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // SP回復処理
     void IncreaseSP(int amount)
     {
-        _SP += amount; // SPを増加させる
-        if (_SP > MAX_SP)
+        _currentSP += amount; // SPを増加させる
+        if (_currentSP > MAX_SP)
         {
-            _SP = MAX_SP; // SPが最大値を超えないようにする
+            _currentSP = MAX_SP; // SPが最大値を超えないようにする
         }
     }
 
+    // SP消費処理
     void DecreaseSP(int amount)
     {
-        _SP -= amount; // SPを減少させる
-        if (_SP < 0)
+        _currentSP -= amount; // SPを減少させる
+        if (_currentSP < 0)
         {
-            _SP = 0; // SPが0未満にならないようにする
+            _currentSP = 0; // SPが0未満にならないようにする
         }
     }
 
+    // ゲームオーバー判定処理
     bool IsGameOver()
     {
         bool isGameOver = true; // ゲームオーバーのフラグを初期化する
@@ -95,7 +106,7 @@ public class BattleManager : MonoBehaviour
         // ゲームオーバーの条件をチェックする
         foreach (CharacterStatus character in _characterQueue)
         {
-            if (character.GetBattleUnitType() == BattleUnitType.Player)
+            if (character.BattleUnitType == BattleUnitType.Player)
             {
                 isGameOver = false;
             }
@@ -104,6 +115,7 @@ public class BattleManager : MonoBehaviour
         return isGameOver;
     }
 
+    // ゲームクリア判定
     bool IsGameClear()
     {
         bool isClear = true; // クリアのフラグを初期化する
@@ -111,7 +123,7 @@ public class BattleManager : MonoBehaviour
         // クリアの条件をチェックする
         foreach (CharacterStatus character in _characterQueue)
         {
-            if (character.GetBattleUnitType() == BattleUnitType.Enemy)
+            if (character.BattleUnitType == BattleUnitType.Enemy)
             {
                 isClear = false;
             }
@@ -120,6 +132,7 @@ public class BattleManager : MonoBehaviour
         return isClear;
     }
 
+    // ターン経過処理。敵味方関わらず、1人の行動が終わったら呼び出され、次の順番に回す
     void NextTurn()
     {
         // ターンの終了処理を行う
@@ -137,7 +150,7 @@ public class BattleManager : MonoBehaviour
         CharacterStatus currentCharacter = _characterQueue.Dequeue(); // キューから現在のキャラクターを取り出す
         _characterQueue.Enqueue(currentCharacter); // 現在のキャラクターをキューの最後に戻す
 
-        if (_characterQueue.Peek().GetBattleUnitType() == BattleUnitType.EndPoint)
+        if (_characterQueue.Peek().BattleUnitType == BattleUnitType.EndPoint)
         {
             _turnCount++; // ターン数を増加させる
             Debug.Log("Turn " + _turnCount);
@@ -147,6 +160,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // 通常攻撃処理
     void NormalAttack(CharacterStatus attacker, CharacterStatus[] defenders)
     {
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
@@ -154,14 +168,15 @@ public class BattleManager : MonoBehaviour
         NextTurn(); // ターンを終了する
     }
 
+    // スキル処理
     void UseSkill(CharacterStatus user, CharacterStatus[] targets, SkillType skillType, int skillCost)
     {
         // スキルの使用処理を行う
         // 例えば、SPを消費して強力な攻撃を行ったり、味方を回復したりする
 
-        if (_SP < skillCost)
+        if (_currentSP < skillCost)
         {
-            Debug.Log("Not enough SP to use the skill! Current SP: " + _SP);
+            Debug.Log("Not enough SP to use the skill! Current SP: " + _currentSP);
             return; // SPが足りない場合はスキルを使用できない
         }
 

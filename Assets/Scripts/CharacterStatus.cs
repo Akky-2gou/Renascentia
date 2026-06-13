@@ -24,75 +24,46 @@ public class CharacterStatus : MonoBehaviour
         _hp = _maxHp; // 初期HPは最大HPと同じ
     }
 
-
-    public int GetHp()
+    public int Hp
     {
-        return _hp;
+        get { return _hp; }
+        set { _hp = value; }
     }
 
-    public void SetHp(int hp)
+    public int Attack
     {
-        _hp = hp;
+        get { return _attack; }
+        set { _attack = value; }
     }
 
-    public int GetAttack()
+    public int Defense
     {
-        return _attack;
+        get { return _defense; }
+        set { _defense = value; }
     }
 
-    public void SetAttack(int attack)
+    public int HealAmount
     {
-        _attack = attack;
+        get { return _healAmount; }
+        set { _healAmount = value; }
     }
 
-    public int GetDefense()
+    public BattleUnitType BattleUnitType
     {
-        return _defense;
+        get { return _battleUnitType; }
+        set { _battleUnitType = value; }
     }
 
-    public void SetDefense(int defense)
+    public CharacterType CharacterType
     {
-        _defense = defense;
+        get { return _characterType; }
+        set { _characterType = value; }
     }
 
-    public int GetHealAmount()
+    public PassiveType PassiveType
     {
-        return _healAmount;
-    }
-
-    public void SetHealAmount(int healAmount)
-    {
-        _healAmount = healAmount;
-    }
-
-    public BattleUnitType GetBattleUnitType()
-    {
-        return _battleUnitType;
-    }
-
-    public void SetBattleUnitType(BattleUnitType battleUnitType)
-    {
-        _battleUnitType = battleUnitType;
-    }
-
-    public GameTypes.CharacterType GetCharacterType()
-    {
-        return _characterType;
-    }
-
-    public void SetCharacterType(GameTypes.CharacterType characterType)
-    {
-        _characterType = characterType;
-    }
-
-    public GameTypes.PassiveType GetPassiveType()
-    {
-        return _passiveType;
-    }
-
-    public void SetPassiveType(GameTypes.PassiveType passiveType)
-    {
-        _passiveType = passiveType;
+        get { return _passiveType; }
+        set { _passiveType = value; }
     }
 
     /// <summary>

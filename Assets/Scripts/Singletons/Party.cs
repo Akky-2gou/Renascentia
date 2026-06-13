@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/*
+ * パーティ情報を保持するシングルトン
+ */
+
 public class Party : MonoBehaviour
 {
     const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数
@@ -14,18 +18,38 @@ public class Party : MonoBehaviour
         }
     }
 
-    public CharacterStatus[] GetPartyMember()
+    /// <summary>
+    /// パーティメンバー全員を取得するgetter
+    /// </summary>
+    public CharacterStatus[] Members
     {
-        return _partyMembers;
+        get { return _partyMembers; }
     }
 
-    public void SetPartyMember(CharacterStatus partyMember, int index)
+    /// <summary>
+    /// パーティメンバーの一部を取得・変更するgetter・setter
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public CharacterStatus this[int index]
     {
-        if (index < 0 || index >= MAX_PARTY_MEMBERS)
+        set
         {
-            Debug.LogError("Invalid party member index: " + index);
-            return;
+            if (index < 0 || index >= MAX_PARTY_MEMBERS)
+            {
+                Debug.LogError("Invalid party member index: " + index);
+                return;
+            }
+            _partyMembers[index] = value; 
         }
-        _partyMembers[index] = partyMember;
+        get 
+        {
+            if (index < 0 || index >= MAX_PARTY_MEMBERS)
+            {
+                Debug.LogError("Invalid party member index: " + index);
+                return null;
+            }
+            return _partyMembers[index];
+        }
     }
 }
