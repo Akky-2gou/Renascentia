@@ -28,6 +28,9 @@ namespace GameTypes
         None
     }
 
+    /// <summary>
+    /// キャラクターの敵・味方・終端文字を表す列挙型
+    /// </summary>
     public enum BattleUnitType
     {
         Player,

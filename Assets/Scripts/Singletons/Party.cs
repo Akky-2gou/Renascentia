@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/*
+ * パーティ情報を保持するシングルトン
+ */
+
 public class Party : MonoBehaviour
 {
     const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数

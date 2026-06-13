@@ -3,6 +3,11 @@ using SkillTypes;
 using GameTypes;
 using System.Collections.Generic;
 
+/*
+ * バトルシステムマネージャー
+ * バトルのダメージ処理やターン処理など、バトル全体を管理する
+ */
+
 public class BattleManager : MonoBehaviour
 {
     int _SP; // スキルポイント
@@ -16,7 +21,6 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private CharacterStatus[] _enemys; // 敵の参照
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
@@ -37,6 +41,7 @@ public class BattleManager : MonoBehaviour
         _characterQueue.Enqueue(endPoint);
     }
 
+    // ダメージを与える処理
     void TakeDamage(CharacterStatus attacker, CharacterStatus[] defenders)
     {
         int attackPower = attacker.GetAttack();
@@ -55,6 +60,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // 体力を回復する処理
     void TakeHealing(CharacterStatus healer, CharacterStatus[] targets)
     {
         int healingPower = healer.GetHealAmount();
@@ -70,6 +76,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // SP回復処理
     void IncreaseSP(int amount)
     {
         _SP += amount; // SPを増加させる
@@ -79,6 +86,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // SP消費処理
     void DecreaseSP(int amount)
     {
         _SP -= amount; // SPを減少させる
@@ -88,6 +96,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // ゲームオーバー判定処理
     bool IsGameOver()
     {
         bool isGameOver = true; // ゲームオーバーのフラグを初期化する
@@ -104,6 +113,7 @@ public class BattleManager : MonoBehaviour
         return isGameOver;
     }
 
+    // ゲームクリア判定
     bool IsGameClear()
     {
         bool isClear = true; // クリアのフラグを初期化する
@@ -120,6 +130,7 @@ public class BattleManager : MonoBehaviour
         return isClear;
     }
 
+    // ターン経過処理。敵味方関わらず、1人の行動が終わったら呼び出され、次の順番に回す
     void NextTurn()
     {
         // ターンの終了処理を行う
@@ -147,6 +158,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // 通常攻撃処理
     void NormalAttack(CharacterStatus attacker, CharacterStatus[] defenders)
     {
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
@@ -154,6 +166,7 @@ public class BattleManager : MonoBehaviour
         NextTurn(); // ターンを終了する
     }
 
+    // スキル処理
     void UseSkill(CharacterStatus user, CharacterStatus[] targets, SkillType skillType, int skillCost)
     {
         // スキルの使用処理を行う
