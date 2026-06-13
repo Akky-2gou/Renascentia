@@ -1,5 +1,7 @@
 using UnityEngine;
 using SkillTypes;
+using GameTypes;
+using System.Collections.Generic;
 
 public class BattleManager : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public class BattleManager : MonoBehaviour
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
 
-        CharacterStatus[] partyMembers = FindObjectOfType<Party>().GetPartyMember(); // パーティーメンバーのステータスを取得する
+        CharacterStatus[] partyMembers = FindAnyObjectByType<Party>().GetPartyMember(); // パーティーメンバーのステータスを取得する
         foreach (CharacterStatus member in partyMembers)
         {
             _characterQueue.Enqueue(member);
