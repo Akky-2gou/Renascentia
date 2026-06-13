@@ -3,7 +3,7 @@ using UnityEngine;
 public class Party : MonoBehaviour
 {
     const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数
-    private CharacterStatus[MAX_PARTY_MEMBERS] _partyMembers; // パーティーメンバーのステータスを格納する配列
+    private CharacterStatus[] _partyMembers = new CharacterStatus[MAX_PARTY_MEMBERS]; // パーティーメンバーのステータスを格納する配列
 
     void Start()
     {
