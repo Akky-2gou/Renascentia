@@ -1,27 +1,37 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /*
- * パーティ情報を保持するシングルトン
+ * パーティ情報とそのステータスを保持するシングルトン
  */
 
 public class Party : MonoBehaviour
 {
     const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数
-    private CharacterStatus[] _partyMembers = new CharacterStatus[MAX_PARTY_MEMBERS]; // パーティーメンバーのステータスを格納する配列
+    private CharacterData[] _partyMembers = new CharacterData[MAX_PARTY_MEMBERS]; // パーティーメンバーのステータスを格納する配列
 
-    void Start()
+    /*
+     * テスト用プログラム
+     */
+    [SerializeField] private CharacterData playerCharacter;
+
+    void Awake()
     {
         // パーティーメンバーの初期化
         for (int i = 0; i < MAX_PARTY_MEMBERS; i++)
         {
             _partyMembers[i] = null; // 最初は全てのメンバーがいない状態にする
         }
+
+        // テスト用コード
+        _partyMembers[0] = playerCharacter;
     }
 
     /// <summary>
     /// パーティメンバー全員を取得するgetter
     /// </summary>
-    public CharacterStatus[] Members
+    public CharacterData[] Members
     {
         get { return _partyMembers; }
     }
@@ -31,7 +41,7 @@ public class Party : MonoBehaviour
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public CharacterStatus this[int index]
+    public CharacterData this[int index]
     {
         set
         {

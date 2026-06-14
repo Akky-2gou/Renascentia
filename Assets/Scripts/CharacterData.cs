@@ -23,5 +23,8 @@ public class CharacterData : ScriptableObject
     [SerializeField] PassiveType _passiveType;
     public PassiveType PassiveType => _passiveType;
 
+    [SerializeField] BattleUnitType _battleUnitType;
+    public BattleUnitType BattleUnitType => _battleUnitType;
+
     // [Header("見た目のデータ")]
 }
