@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
   _enemys: []
+  _baseCharacter: {fileID: 5414294618426697234, guid: 93c0c37e9d08bf24c977738b6ecfafd7, type: 3}
 --- !u!4 &62845505
 Transform:
   m_ObjectHideFlags: 0
@@ -208,6 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0185553cb146e47118f090320c1a15e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Party
+  playerCharacter: {fileID: 11400000, guid: f2f05babc1df72d45a93f904e950f77d, type: 2}
 --- !u!1 &1261133645
 GameObject:
   m_ObjectHideFlags: 0

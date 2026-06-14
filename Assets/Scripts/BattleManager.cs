@@ -2,6 +2,7 @@ using UnityEngine;
 using SkillTypes;
 using GameTypes;
 using System.Collections.Generic;
+using UnityEngine.TextCore.Text;
 
 /*
  * バトルシステムマネージャー
@@ -20,15 +21,23 @@ public class BattleManager : MonoBehaviour
     Queue<CharacterStatus> _characterQueue; // ターンの順番を管理するキュー
 
     [SerializeField] private CharacterStatus[] _enemys; // 敵の参照
+    [SerializeField] private GameObject _baseCharacter;
 
     void Start()
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
 
-        CharacterStatus[] partyMembers = FindAnyObjectByType<Party>().Members; // パーティーメンバーのステータスを取得する
-        foreach (CharacterStatus member in partyMembers)
+        CharacterData[] partyMembers = FindAnyObjectByType<Party>().Members; // パーティーメンバーのステータスを取得する
+        foreach (CharacterData characterData in partyMembers)
         {
-            _characterQueue.Enqueue(member);
+            if (characterData == null)
+            {
+                continue;
+            }
+            GameObject character = Instantiate(_baseCharacter); // ベースキャラ(PreFabの生成)
+            CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
+            characterStatus.Initialize(characterData); // ベースキャラのキャラクターステータスにデータ注入
+            _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
 
         foreach (CharacterStatus enemy in _enemys)

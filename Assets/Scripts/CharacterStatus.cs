@@ -19,9 +19,19 @@ public class CharacterStatus : MonoBehaviour
     GameTypes.CharacterType _characterType; // キャラクターのタイプ
     GameTypes.PassiveType _passiveType; // パッシブのタイプ
 
-    void Start()
+    /// <summary>
+    /// ステータスを初期化する処理
+    /// </summary>
+    public void Initialize(CharacterData characterData)
     {
-        _hp = _maxHp; // 初期HPは最大HPと同じ
+        _maxHp = characterData.MaxHp;
+        _attack = characterData.Attack;
+        _defense = characterData.Defense;
+        _healAmount = characterData.HealAmount;
+        _battleUnitType = characterData.BattleUnitType;
+        _characterType = characterData.CharacterType;
+        _passiveType = characterData.PassiveType;
+        _hp = _maxHp;
     }
 
     public int Hp
