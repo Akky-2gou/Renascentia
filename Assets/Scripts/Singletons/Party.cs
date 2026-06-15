@@ -26,6 +26,7 @@ public class Party : MonoBehaviour
 
         // テスト用コード
         _partyMembers[0] = playerCharacter;
+        _partyMembers[1] = playerCharacter;
     }
 
     /// <summary>

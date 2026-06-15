@@ -1,12 +1,14 @@
 using UnityEngine;
 using GameTypes;
+using System;
+using UnityEngine.EventSystems;
 
 /*
  * キャラクターのステータスを管理するクラス
  */
 
 
-public class CharacterStatus : MonoBehaviour
+public class CharacterStatus : MonoBehaviour, IPointerClickHandler
 {
     int _maxHp; // 最大ヒットポイント
     int _hp; // ヒットポイント
@@ -18,6 +20,17 @@ public class CharacterStatus : MonoBehaviour
 
     GameTypes.CharacterType _characterType; // キャラクターのタイプ
     GameTypes.PassiveType _passiveType; // パッシブのタイプ
+
+    // マウスクリックされたことを外部に知らせるイベント
+    public event Action<CharacterStatus> OnClicked;
+
+    // ★マウスクリック時にUnityが自動で呼んでくれる関数
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log(gameObject.name + " がクリックされました！");
+        // 引数として「自分自身(this)」を渡す
+        OnClicked?.Invoke(this); 
+    }
 
     /// <summary>
     /// ステータスを初期化する処理
@@ -38,6 +51,11 @@ public class CharacterStatus : MonoBehaviour
     {
         get { return _hp; }
         set { _hp = value; }
+    }
+
+    public int MaxHp
+    {
+        get { return _maxHp; }
     }
 
     public int Attack
