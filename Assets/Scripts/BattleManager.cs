@@ -20,8 +20,11 @@ public class BattleManager : MonoBehaviour
 
     Queue<CharacterStatus> _characterQueue; // ターンの順番を管理するキュー
 
-    [SerializeField] private CharacterStatus[] _enemys; // 敵の参照
+    [SerializeField] private CharacterData[] _enemys; // 敵の参照
     [SerializeField] private GameObject _baseCharacter;
+
+    [SerializeField] GameObject AttackButton;
+    [SerializeField] GameObject SkillButton;
 
     void Start()
     {
@@ -40,9 +43,12 @@ public class BattleManager : MonoBehaviour
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
 
-        foreach (CharacterStatus enemy in _enemys)
+        foreach (CharacterData enemy in _enemys)
         {
-            _characterQueue.Enqueue(enemy);
+            GameObject character = Instantiate(_baseCharacter); // ベースキャラ(PreFabの生成)
+            CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
+            characterStatus.Initialize(enemy); // ベースキャラのキャラクターステータスにデータ注入
+            _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
 
         // 終端エネミーを追加
@@ -167,12 +173,28 @@ public class BattleManager : MonoBehaviour
             CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
             _characterQueue.Enqueue(endPoint); // 終了点をキューの最後に
         }
+
+        foreach (var character in _characterQueue)
+        {
+            character.OnClicked -= NormalAttack;
+        }
+
+        TestDisplayCharactersHelth();
+
+        if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
+        {
+            TestEnemyAction();
+        }
+
+        AttackButton.SetActive(true);
+        SkillButton.SetActive(true);
     }
 
     // 通常攻撃処理
-    void NormalAttack(CharacterStatus attacker, CharacterStatus[] defenders)
+    void NormalAttack(CharacterStatus defender)
     {
-        TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
+        CharacterStatus[] defenders = {defender}; // 配列を生成
+        TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
         NextTurn(); // ターンを終了する
     }
@@ -216,4 +238,57 @@ public class BattleManager : MonoBehaviour
         NextTurn(); // ターンを終了する
     }
 
+    /// <summary>
+    /// 攻撃ボタンが押された際の処理
+    /// </summary>
+    public void OnClickedAttackButton()
+    {
+        AttackButton.SetActive(false);
+        SkillButton.SetActive(false);
+
+        foreach (var character in _characterQueue)
+        {
+            if (character.BattleUnitType == BattleUnitType.Enemy)
+            {
+                character.OnClicked += NormalAttack; 
+            }
+        }
+    }
+
+    // 敵攻撃のテスト処理
+    void TestEnemyAction()
+    {
+        CharacterStatus defender = null;
+        foreach (var character in _characterQueue)
+        {
+            if (character.BattleUnitType == BattleUnitType.Player)
+            {
+                defender = character;
+                break;
+            }
+        }
+        CharacterStatus[] defenders = {defender}; // 配列を生成
+        TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
+        NextTurn();
+    }
+
+    // キャラの体力を表示するテスト処理
+    void TestDisplayCharactersHelth()
+    {
+        Debug.Log("=== キャラクター体力一覧 ===");
+
+        foreach (var character in _characterQueue)
+        {
+            // ターン区切り用のダミーデータ（EndPoint）は体力が無いのでログから省く
+            if (character.BattleUnitType == BattleUnitType.EndPoint)
+            {
+                continue; 
+            }
+
+            // $"文字列 {変数}" の形式で書くと、綺麗にデータを出力できます
+            Debug.Log($"【{character.BattleUnitType}】 {character.gameObject.name} : HP {character.Hp} / {character.MaxHp}");
+        }
+
+        Debug.Log("============================");
+    }
 }
