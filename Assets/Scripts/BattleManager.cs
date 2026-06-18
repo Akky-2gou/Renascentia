@@ -3,6 +3,9 @@ using SkillTypes;
 using GameTypes;
 using System.Collections.Generic;
 using UnityEngine.TextCore.Text;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System.Threading.Tasks;
 
 /*
  * バトルシステムマネージャー
@@ -176,7 +179,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (var character in _characterQueue)
         {
-            character.OnClicked -= NormalAttack;
+            character.OnClicked -= OnNormalAttackClicked;
         }
 
         TestDisplayCharactersHelth();
@@ -190,12 +193,25 @@ public class BattleManager : MonoBehaviour
         SkillButton.SetActive(true);
     }
 
+    // 通常攻撃ボタンが押された時に呼ばれる関数
+    private void OnNormalAttackClicked(CharacterStatus defender)
+    {
+        // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
+        NormalAttack(defender).Forget(); 
+    }
+
     // 通常攻撃処理
-    void NormalAttack(CharacterStatus defender)
+    async UniTaskVoid NormalAttack(CharacterStatus defender)
     {
         CharacterStatus[] defenders = {defender}; // 配列を生成
         TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
+
+        //攻撃側が攻撃アニメーション
+        CancellationToken token = this.GetCancellationTokenOnDestroy(); // thisが消えた時にキャンセル
+        await UniTask.WhenAll(_characterQueue.Peek().PlayAttackAnimation(token), defender.PlayDamagedAnimation(token));
+        // ↑は全体攻撃用に直す必要あり（defender全員のアニメーションを待つため）
+
         NextTurn(); // ターンを終了する
     }
 
@@ -250,7 +266,7 @@ public class BattleManager : MonoBehaviour
         {
             if (character.BattleUnitType == BattleUnitType.Enemy)
             {
-                character.OnClicked += NormalAttack; 
+                character.OnClicked += OnNormalAttackClicked; 
             }
         }
     }
