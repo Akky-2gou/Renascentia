@@ -1,8 +1,10 @@
 using UnityEngine;
 using GameTypes;
 using System;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
  * キャラクターのステータスを管理するクラス
@@ -63,14 +65,25 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         // スプライトレンダラーを取得する
         _spriteRenderer = GetComponent<SpriteRenderer>();
         // アニメーションデータを取得
-        ReadAnimationData(characterData.AttackAnimationData, _attackAnimationSprites, _attackAnimationFrameDelay);
-        ReadAnimationData(characterData.DamagedAnimationData, _damagedAnimationSprites, _damagedAnimationFrameDelay);
-        ReadAnimationData(characterData.IdleAnimationData, _idleAnimationSprites, _idleAnimationFrameDelay);
-        ReadAnimationData(characterData.SkillAnimationData, _skillAnimationSprites, _skillAnimationFrameDelay);
+        ReadAnimationData(characterData.CharacterAttackAnimation, _attackAnimationSprites, _attackAnimationFrameDelay);
+        ReadAnimationData(characterData.CharacterDamagedAnimation, _damagedAnimationSprites, _damagedAnimationFrameDelay);
+        ReadAnimationData(characterData.CharacterIdleAnimation, _idleAnimationSprites, _idleAnimationFrameDelay);
+        ReadAnimationData(characterData.CharacterSkillAnimation, _skillAnimationSprites, _skillAnimationFrameDelay);
 
-        // 初期状態はアイドルアニメーションの最初のフレームを表示する
-        _spriteRenderer.sprite = _idleAnimationSprites[0];
+        // tokenをメンバ変数にすべきか迷ってるよ
+        CancellationTokenSource manualCts = new CancellationTokenSource();
+        CancellationToken destroyToken = this.GetCancellationTokenOnDestroy(); // オブジェクトが消えた時にキャンセルされるトークン
+        // 2つのトークンを「合成」
+        CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(manualCts.Token, destroyToken);
+        CancellationToken combinedToken = linkedCts.Token;
+
+        // 初期状態はアイドルアニメーションを再生
+        PlayIdleAnimation(combinedToken).Forget();
     }
+
+    // テクスチャをスプライトに変換する関数
+    private static Sprite Texture2DtoSprite(Texture2D tex)
+        => Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 
     // アニメーションデータを読み込む関数
     void ReadAnimationData(TextAsset animationData, List<Sprite> animationSprites, List<float> frameDelays)
@@ -178,8 +191,49 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// 攻撃アニメーションを再生する関数
     /// </summary>
-    public void PlayAnimation(TextAsset animationData)
+    public async UniTask PlayAttackAnimation(CancellationToken token)
     {
-        _spriteRenderer.sprite = _attackAnimationSprites[0]; // とりあえず攻撃アニメーションの最初のフレームを表示する
+        await PlayAnimationAsync(_attackAnimationSprites, _attackAnimationFrameDelay, token);
+    }
+
+    /// <summary>
+    /// 被弾アニメーションを再生する関数
+    /// </summary>
+    public async UniTask PlayDamagedAnimation(CancellationToken token)
+    {
+        // ここで待機アニメーションをキャンセル
+
+        await PlayAnimationAsync(_damagedAnimationSprites, _damagedAnimationFrameDelay, token);
+
+        // トークンを再作成し，待機アニメーションを再生(.Forget()を忘れずに！)
+    }
+
+    /// <summary>
+    /// 待機アニメーションを再生する関数
+    /// </summary>
+    public async UniTask PlayIdleAnimation(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            await PlayAnimationAsync(_idleAnimationSprites, _idleAnimationFrameDelay, token);
+        }
+    }
+
+    /// <summary>
+    /// スキルアニメーションを再生する関数
+    /// </summary>
+    public async UniTask PlaySkillAnimation(CancellationToken token)
+    {
+        await PlayAnimationAsync(_skillAnimationSprites, _skillAnimationFrameDelay, token);
+    }
+    
+    // 与えられたアニメーションを再生する非同期関数
+    async UniTask PlayAnimationAsync(List<Sprite> animationSprites, List<float> frameDelays, CancellationToken token)
+    {
+        for (int i = 0; i < animationSprites.Count; i++)
+        {
+            _spriteRenderer.sprite = animationSprites[i];
+            await UniTask.Delay(TimeSpan.FromSeconds(frameDelays[i]), cancellationToken: token);
+        }
     }
 }
