@@ -1,5 +1,6 @@
 using UnityEngine;
 using GameTypes;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "GameData/CharacterData")]
 public class CharacterData : ScriptableObject
@@ -27,16 +28,16 @@ public class CharacterData : ScriptableObject
     public BattleUnitType BattleUnitType => _battleUnitType;
 
     // [Header("見た目のデータ")]
-    [SerializeField] TextAsset _characterAttackAnimation;
-    public TextAsset CharacterAttackAnimation => _characterAttackAnimation;
+    [SerializeField] List<Sprite> _characterAttackAnimation;
+    public List<Sprite> CharacterAttackAnimation => _characterAttackAnimation;
 
-    [SerializeField] TextAsset _characterSkillAnimation;
-    public TextAsset CharacterSkillAnimation => _characterSkillAnimation;
+    [SerializeField] List<Sprite> _characterSkillAnimation;
+    public List<Sprite> CharacterSkillAnimation => _characterSkillAnimation;
 
-    [SerializeField] TextAsset _characterIdleAnimation;
-    public TextAsset CharacterIdleAnimation => _characterIdleAnimation;
+    [SerializeField] List<Sprite> _characterIdleAnimation;
+    public List<Sprite> CharacterIdleAnimation => _characterIdleAnimation;
 
-    [SerializeField] TextAsset _characterDamagedAnimation;
-    public TextAsset CharacterDamagedAnimation => _characterDamagedAnimation;
+    [SerializeField] List<Sprite> _characterDamagedAnimation;
+    public List<Sprite> CharacterDamagedAnimation => _characterDamagedAnimation;
     
 }

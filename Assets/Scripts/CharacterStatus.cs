@@ -26,15 +26,15 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
 
     SpriteRenderer _spriteRenderer; // キャラクターのスプライトレンダラー
 
-    private readonly List<Sprite> _attackAnimationSprites = new List<Sprite>(); // 攻撃アニメーションのフレームを格納する配列
-    private readonly List<Sprite> _damagedAnimationSprites = new List<Sprite>(); // ダメージアニメーションのフレームを格納する配列
-    private readonly List<Sprite> _idleAnimationSprites = new List<Sprite>(); // アイドルアニメーションのフレームを格納する配列
-    private readonly List<Sprite> _skillAnimationSprites = new List<Sprite>(); // スキルアニメーションのフレームを格納する配列
+    private List<Sprite> _attackAnimationSprites; 
+    private List<Sprite> _damagedAnimationSprites; 
+    private List<Sprite> _idleAnimationSprites; 
+    private List<Sprite> _skillAnimationSprites;
 
-    private readonly List<float>  _attackAnimationFrameDelay = new List<float>(); // 攻撃アニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _damagedAnimationFrameDelay = new List<float>(); // ダメージアニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _idleAnimationFrameDelay = new List<float>(); // アイドルアニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _skillAnimationFrameDelay = new List<float>(); // スキルアニメーションのフレーム遅延を格納する配列
+    private float  _attackAnimationFrameDelay = 0.1f; // 攻撃アニメーションのフレーム遅延を格納する配列
+    private float  _damagedAnimationFrameDelay = 0.1f; // ダメージアニメーションのフレーム遅延を格納する配列
+    private float  _idleAnimationFrameDelay = 0.1f; // アイドルアニメーションのフレーム遅延を格納する配列
+    private float  _skillAnimationFrameDelay = 0.1f; // スキルアニメーションのフレーム遅延を格納する配列
 
     // マウスクリックされたことを外部に知らせるイベント
     public event Action<CharacterStatus> OnClicked;
@@ -65,10 +65,17 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         // スプライトレンダラーを取得する
         _spriteRenderer = GetComponent<SpriteRenderer>();
         // アニメーションデータを取得
-        ReadAnimationData(characterData.CharacterAttackAnimation, _attackAnimationSprites, _attackAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterDamagedAnimation, _damagedAnimationSprites, _damagedAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterIdleAnimation, _idleAnimationSprites, _idleAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterSkillAnimation, _skillAnimationSprites, _skillAnimationFrameDelay);
+        _attackAnimationSprites = characterData.CharacterAttackAnimation;
+        _attackAnimationFrameDelay = 0.1f;
+
+        _damagedAnimationSprites = characterData.CharacterDamagedAnimation;
+        _damagedAnimationFrameDelay = 0.1f;
+
+        _idleAnimationSprites = characterData.CharacterIdleAnimation;
+        _idleAnimationFrameDelay = 0.1f;
+
+        _skillAnimationSprites = characterData.CharacterSkillAnimation;
+        _skillAnimationFrameDelay = 0.1f;
 
         // tokenをメンバ変数にすべきか迷ってるよ
         CancellationTokenSource manualCts = new CancellationTokenSource();
@@ -86,19 +93,11 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         => Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 
     // アニメーションデータを読み込む関数
-    void ReadAnimationData(TextAsset animationData, List<Sprite> animationSprites, List<float> frameDelays)
+    void ReadAnimationData(List<Sprite> animationData, List<Sprite> animationSprites, float frameDelays)
     {
-        using( var decoder = new MG.GIF.Decoder( animationData.bytes ))
-        {
-            var img = decoder.NextImage();
+        animationSprites = animationData;
+        frameDelays = 0.1f;
 
-            while( img != null )
-            {
-                animationSprites.Add( Texture2DtoSprite(img.CreateTexture()));
-                frameDelays.Add(img.Delay/1000.0f);
-                img = decoder.NextImage();
-            }
-        }
     }
 
     public int Hp
@@ -228,12 +227,12 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     }
     
     // 与えられたアニメーションを再生する非同期関数
-    async UniTask PlayAnimationAsync(List<Sprite> animationSprites, List<float> frameDelays, CancellationToken token)
+    async UniTask PlayAnimationAsync(List<Sprite> animationSprites, float frameDelays, CancellationToken token)
     {
         for (int i = 0; i < animationSprites.Count; i++)
         {
             _spriteRenderer.sprite = animationSprites[i];
-            await UniTask.Delay(TimeSpan.FromSeconds(frameDelays[i]), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(frameDelays), cancellationToken: token);
         }
     }
 }
