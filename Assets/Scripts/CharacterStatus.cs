@@ -24,17 +24,12 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     GameTypes.CharacterType _characterType; // キャラクターのタイプ
     GameTypes.PassiveType _passiveType; // パッシブのタイプ
 
+    Animator _animator; // キャラクターのアニメーターコントローラー
+
     SpriteRenderer _spriteRenderer; // キャラクターのスプライトレンダラー
 
-    private readonly List<Sprite> _attackAnimationSprites = new List<Sprite>(); // 攻撃アニメーションのフレームを格納する配列
-    private readonly List<Sprite> _damagedAnimationSprites = new List<Sprite>(); // ダメージアニメーションのフレームを格納する配列
-    private readonly List<Sprite> _idleAnimationSprites = new List<Sprite>(); // アイドルアニメーションのフレームを格納する配列
-    private readonly List<Sprite> _skillAnimationSprites = new List<Sprite>(); // スキルアニメーションのフレームを格納する配列
 
-    private readonly List<float>  _attackAnimationFrameDelay = new List<float>(); // 攻撃アニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _damagedAnimationFrameDelay = new List<float>(); // ダメージアニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _idleAnimationFrameDelay = new List<float>(); // アイドルアニメーションのフレーム遅延を格納する配列
-    private readonly List<float>  _skillAnimationFrameDelay = new List<float>(); // スキルアニメーションのフレーム遅延を格納する配列
+    float time = 0;
 
     // マウスクリックされたことを外部に知らせるイベント
     public event Action<CharacterStatus> OnClicked;
@@ -62,42 +57,35 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         _passiveType = characterData.PassiveType;
         _hp = _maxHp;
 
-        // スプライトレンダラーを取得する
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        // アニメーションデータを取得
-        ReadAnimationData(characterData.CharacterAttackAnimation, _attackAnimationSprites, _attackAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterDamagedAnimation, _damagedAnimationSprites, _damagedAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterIdleAnimation, _idleAnimationSprites, _idleAnimationFrameDelay);
-        ReadAnimationData(characterData.CharacterSkillAnimation, _skillAnimationSprites, _skillAnimationFrameDelay);
-
-        // tokenをメンバ変数にすべきか迷ってるよ
-        CancellationTokenSource manualCts = new CancellationTokenSource();
-        CancellationToken destroyToken = this.GetCancellationTokenOnDestroy(); // オブジェクトが消えた時にキャンセルされるトークン
-        // 2つのトークンを「合成」
-        CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(manualCts.Token, destroyToken);
-        CancellationToken combinedToken = linkedCts.Token;
-
-        // 初期状態はアイドルアニメーションを再生
-        PlayIdleAnimation(combinedToken).Forget();
+        _animator = this.GetComponent<Animator>();
     }
 
-    // テクスチャをスプライトに変換する関数
-    private static Sprite Texture2DtoSprite(Texture2D tex)
-        => Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-
-    // アニメーションデータを読み込む関数
-    void ReadAnimationData(TextAsset animationData, List<Sprite> animationSprites, List<float> frameDelays)
+    public void Start()
     {
-        using( var decoder = new MG.GIF.Decoder( animationData.bytes ))
-        {
-            var img = decoder.NextImage();
+        _animator = this.GetComponent<Animator>();
+    }
 
-            while( img != null )
-            {
-                animationSprites.Add( Texture2DtoSprite(img.CreateTexture()));
-                frameDelays.Add(img.Delay/1000.0f);
-                img = decoder.NextImage();
-            }
+    public void Update()
+    {
+        time += Time.deltaTime;
+
+        if (time >= 3f && time < 4f)
+        {
+            PlayAttackAnimation();
+            time = 10000;
+        }
+
+
+        if (time >= 10010f && time < 10020f)
+        {
+            PlaySkillAnimation();
+            time = 20000;
+        }
+
+        if (time >= 20030f && time < 20040f)
+        {
+            PlayDamagedAnimation();
+            time = 30000;
         }
     }
 
@@ -191,49 +179,35 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// 攻撃アニメーションを再生する関数
     /// </summary>
-    public async UniTask PlayAttackAnimation(CancellationToken token)
+    public void PlayAttackAnimation()
     {
-        await PlayAnimationAsync(_attackAnimationSprites, _attackAnimationFrameDelay, token);
+        Debug.Log("攻撃アニメーション再生");
+        _animator.SetTrigger("AttackTrigger");
     }
 
     /// <summary>
     /// 被弾アニメーションを再生する関数
     /// </summary>
-    public async UniTask PlayDamagedAnimation(CancellationToken token)
+    public void PlayDamagedAnimation()
     {
-        // ここで待機アニメーションをキャンセル
-
-        await PlayAnimationAsync(_damagedAnimationSprites, _damagedAnimationFrameDelay, token);
-
-        // トークンを再作成し，待機アニメーションを再生(.Forget()を忘れずに！)
+        Debug.Log("被弾アニメーション再生");
+        _animator.SetTrigger("DamagedTrigger");
     }
 
     /// <summary>
     /// 待機アニメーションを再生する関数
     /// </summary>
-    public async UniTask PlayIdleAnimation(CancellationToken token)
+    public void PlayIdleAnimation()
     {
-        while (!token.IsCancellationRequested)
-        {
-            await PlayAnimationAsync(_idleAnimationSprites, _idleAnimationFrameDelay, token);
-        }
+        // 待機アニメーションを再生する処理
     }
 
     /// <summary>
     /// スキルアニメーションを再生する関数
     /// </summary>
-    public async UniTask PlaySkillAnimation(CancellationToken token)
+    public void PlaySkillAnimation()
     {
-        await PlayAnimationAsync(_skillAnimationSprites, _skillAnimationFrameDelay, token);
-    }
-    
-    // 与えられたアニメーションを再生する非同期関数
-    async UniTask PlayAnimationAsync(List<Sprite> animationSprites, List<float> frameDelays, CancellationToken token)
-    {
-        for (int i = 0; i < animationSprites.Count; i++)
-        {
-            _spriteRenderer.sprite = animationSprites[i];
-            await UniTask.Delay(TimeSpan.FromSeconds(frameDelays[i]), cancellationToken: token);
-        }
+        Debug.Log("スキルアニメーション再生");
+        _animator.SetTrigger("SkillTrigger");
     }
 }

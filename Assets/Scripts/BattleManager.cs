@@ -208,8 +208,8 @@ public class BattleManager : MonoBehaviour
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
 
         //攻撃側が攻撃アニメーション
-        CancellationToken token = this.GetCancellationTokenOnDestroy(); // thisが消えた時にキャンセル
-        await UniTask.WhenAll(_characterQueue.Peek().PlayAttackAnimation(token), defender.PlayDamagedAnimation(token));
+        //CancellationToken token = this.GetCancellationTokenOnDestroy(); // thisが消えた時にキャンセル
+        //await UniTask.WhenAll(_characterQueue.Peek().PlayAttackAnimation(token), defender.PlayDamagedAnimation(token));
         // ↑は全体攻撃用に直す必要あり（defender全員のアニメーションを待つため）
 
         NextTurn(); // ターンを終了する
