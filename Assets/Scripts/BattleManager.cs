@@ -6,6 +6,7 @@ using UnityEngine.TextCore.Text;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 /*
  * バトルシステムマネージャー
@@ -24,7 +25,6 @@ public class BattleManager : MonoBehaviour
     Queue<CharacterStatus> _characterQueue; // ターンの順番を管理するキュー
 
     [SerializeField] private CharacterData[] _enemys; // 敵の参照
-    [SerializeField] private GameObject _baseCharacter;
 
     [SerializeField] GameObject AttackButton;
     [SerializeField] GameObject SkillButton;
@@ -40,7 +40,7 @@ public class BattleManager : MonoBehaviour
             {
                 continue;
             }
-            GameObject character = Instantiate(_baseCharacter); // ベースキャラ(PreFabの生成)
+            GameObject character = Instantiate(characterData.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
             characterStatus.Initialize(characterData); // ベースキャラのキャラクターステータスにデータ注入
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
@@ -48,7 +48,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (CharacterData enemy in _enemys)
         {
-            GameObject character = Instantiate(_baseCharacter); // ベースキャラ(PreFabの生成)
+            GameObject character = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
             characterStatus.Initialize(enemy); // ベースキャラのキャラクターステータスにデータ注入
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
@@ -203,14 +203,38 @@ public class BattleManager : MonoBehaviour
     // 通常攻撃処理
     async UniTaskVoid NormalAttack(CharacterStatus defender)
     {
+        CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         CharacterStatus[] defenders = {defender}; // 配列を生成
-        TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
-        IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
 
-        //攻撃側が攻撃アニメーション
-        //CancellationToken token = this.GetCancellationTokenOnDestroy(); // thisが消えた時にキャンセル
-        //await UniTask.WhenAll(_characterQueue.Peek().PlayAttackAnimation(token), defender.PlayDamagedAnimation(token));
-        // ↑は全体攻撃用に直す必要あり（defender全員のアニメーションを待つため）
+        // イベントを await するための準備
+        var hitTcs = new UniTaskCompletionSource();
+        var endTcs = new UniTaskCompletionSource();
+
+        // Actionが呼ばれたらTCSを完了(TrySetResult)させる
+        Action onHit = () => hitTcs.TrySetResult();
+        Action onEnd = () => endTcs.TrySetResult();
+
+        // アタッカーのイベントに登録
+        attacker.OnHitEvent += onHit;
+        attacker.OnAnimationEndEvent += onEnd;
+
+        // attackerの攻撃アニメーション開始
+        attacker.PlayAttackAnimation();
+
+        // アニメーション上で OnHit が呼ばれるまで待機(実際に攻撃される瞬間まで待機)
+        await hitTcs.Task;
+
+        // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
+        TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
+        IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
+        defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
+
+        // 攻撃アニメーションが最後まで終わるまで待つ
+        await endTcs.Task;
+
+        // イベントの登録を解除
+        attacker.OnHitEvent -= onHit;
+        attacker.OnAnimationEndEvent -= onEnd;
 
         NextTurn(); // ターンを終了する
     }

@@ -26,17 +26,7 @@ public class CharacterData : ScriptableObject
     [SerializeField] BattleUnitType _battleUnitType;
     public BattleUnitType BattleUnitType => _battleUnitType;
 
-    // [Header("見た目のデータ")]
-    [SerializeField] TextAsset _characterAttackAnimation;
-    public TextAsset CharacterAttackAnimation => _characterAttackAnimation;
-
-    [SerializeField] TextAsset _characterSkillAnimation;
-    public TextAsset CharacterSkillAnimation => _characterSkillAnimation;
-
-    [SerializeField] TextAsset _characterIdleAnimation;
-    public TextAsset CharacterIdleAnimation => _characterIdleAnimation;
-
-    [SerializeField] TextAsset _characterDamagedAnimation;
-    public TextAsset CharacterDamagedAnimation => _characterDamagedAnimation;
-    
+    // [Header("キャラクターPreafab")]
+    [SerializeField] GameObject _characterPrefab;
+    public GameObject CharacterPrefab => _characterPrefab;
 }
