@@ -26,20 +26,41 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
 
     Animator _animator; // キャラクターのアニメーターコントローラー
 
-    SpriteRenderer _spriteRenderer; // キャラクターのスプライトレンダラー
-
-
     float time = 0;
 
     // マウスクリックされたことを外部に知らせるイベント
     public event Action<CharacterStatus> OnClicked;
 
-    // ★マウスクリック時にUnityが自動で呼んでくれる関数
+    // アニメーションイベントを通知するためのAction
+    public event Action OnHitEvent;
+    public event Action OnAnimationEndEvent;
+
+    /// <summary>
+    /// マウスクリック時にUnityが自動で呼んでくれる関数
+    /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log(gameObject.name + " がクリックされました！");
+        // Debug.Log(gameObject.name + " がクリックされました！");
         // 引数として「自分自身(this)」を渡す
         OnClicked?.Invoke(this); 
+    }
+
+    /// <summary>
+    /// UnityのAnimation Eventから呼ばれる関数（ヒットタイミング）
+    /// </summary>
+    public void AnimEvent_OnHit()
+    {
+        // Debug.Log($"{gameObject.name} の攻撃がヒット！");
+        OnHitEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// UnityのAnimation Eventから呼ばれる関数（アニメーション終了）
+    /// </summary>
+    public void AnimEvent_OnAnimationEnd()
+    {
+        // Debug.Log($"{gameObject.name} の攻撃モーション終了！");
+        OnAnimationEndEvent?.Invoke();
     }
 
     /// <summary>
@@ -58,35 +79,6 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         _hp = _maxHp;
 
         _animator = this.GetComponent<Animator>();
-    }
-
-    public void Start()
-    {
-        _animator = this.GetComponent<Animator>();
-    }
-
-    public void Update()
-    {
-        time += Time.deltaTime;
-
-        if (time >= 3f && time < 4f)
-        {
-            PlayAttackAnimation();
-            time = 10000;
-        }
-
-
-        if (time >= 10010f && time < 10020f)
-        {
-            PlaySkillAnimation();
-            time = 20000;
-        }
-
-        if (time >= 20030f && time < 20040f)
-        {
-            PlayDamagedAnimation();
-            time = 30000;
-        }
     }
 
     public int Hp
