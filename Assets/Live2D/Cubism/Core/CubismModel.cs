@@ -667,9 +667,17 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
+// 以下はUnityエディター上で動かすための措置
+# if !UNITY_EDITOR
             // Sync parameters back.
             TaskableModel.TryReadParameters(Parameters);
+# else
+            if (Application.isPlaying)
+            {
+                // Sync parameters back.
+                TaskableModel.TryReadParameters(Parameters);
+            }
+# endif
 
             // restore last frame parameters value and parts opacity.
             if (_parameterStore != null)
