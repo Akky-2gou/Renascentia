@@ -33,6 +33,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
 
     // アニメーションイベントを通知するためのAction
     public event Action OnHitEvent;
+    public event Action OnSkillAnimEvent;
     public event Action OnAnimationEndEvent;
 
     /// <summary>
@@ -40,7 +41,6 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Debug.Log(gameObject.name + " がクリックされました！");
         // 引数として「自分自身(this)」を渡す
         OnClicked?.Invoke(this); 
     }
@@ -50,8 +50,15 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void AnimEvent_OnHit()
     {
-        // Debug.Log($"{gameObject.name} の攻撃がヒット！");
         OnHitEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// UnityのAnimation Eventから呼ばれる関数（スキルアニメーションタイミング）
+    /// </summary>
+    public void AnimEvent_OnSkillAnim()
+    {
+        OnSkillAnimEvent?.Invoke();
     }
 
     /// <summary>
@@ -59,7 +66,6 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void AnimEvent_OnAnimationEnd()
     {
-        // Debug.Log($"{gameObject.name} の攻撃モーション終了！");
         OnAnimationEndEvent?.Invoke();
     }
 

@@ -15,9 +15,11 @@ using System;
 
 public class BattleManager : MonoBehaviour
 {
-    int _currentSP; // スキルポイント
+    float _currentSP; // スキルポイント
+    int _skillCost; // スキルコスト
 
     const int MAX_SP = 6; // SPの最大値
+    const int MAX_SKILL_COST = 3; // 消費SPの最大値
     const int BASIC_SP_GAIN = 1; // 基本的なSPの増加量
 
     int _turnCount = 1; // ターン数を管理する変数
@@ -28,6 +30,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] GameObject AttackButton;
     [SerializeField] GameObject SkillButton;
+    [SerializeField] GameObject SkillAttackButtun;
 
     void Start()
     {
@@ -116,6 +119,12 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // 消費SP量のリセット
+    void ResetSkillCost()
+    {
+        _skillCost = 0;
+    }
+
     // ゲームオーバー判定処理
     bool IsGameOver()
     {
@@ -180,17 +189,18 @@ public class BattleManager : MonoBehaviour
         foreach (var character in _characterQueue)
         {
             character.OnClicked -= OnNormalAttackClicked;
+            character.OnClicked -= OnSkillAttackClicked;
         }
 
-        TestDisplayCharactersHelth();
+        //TestDisplayCharactersHelth();
+        TestDisplaySP();
 
         if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
         {
             TestEnemyAction();
         }
 
-        AttackButton.SetActive(true);
-        SkillButton.SetActive(true);
+        ButtunUISetActive(true);
     }
 
     // 通常攻撃ボタンが押された時に呼ばれる関数
@@ -239,6 +249,53 @@ public class BattleManager : MonoBehaviour
         NextTurn(); // ターンを終了する
     }
 
+    // スキル攻撃ボタンが押された時に呼ばれる関数
+    private void OnSkillAttackClicked(CharacterStatus defender)
+    {
+        // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
+        SkillAttack(defender).Forget(); 
+    }
+
+    // スキル攻撃処理
+    async UniTaskVoid SkillAttack(CharacterStatus defender)
+    {
+        CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
+        CharacterStatus[] defenders = {defender}; // 配列を生成
+
+        // イベントを await するための準備
+        // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
+        // var endTcs = new UniTaskCompletionSource();
+
+        // Actionが呼ばれたらTCSを完了(TrySetResult)させる
+        // Action onSkillAnim = () => skillAnimTcs.TrySetResult();
+        // Action onEnd = () => endTcs.TrySetResult();
+
+        // アタッカーのイベントに登録
+        // attacker.OnSkillAnimEvent += onSkillAnim;
+        // attacker.OnAnimationEndEvent += onEnd;
+
+        // attackerのスキルアニメーション開始
+        attacker.PlaySkillAnimation();
+
+        // アニメーション上で OnSkillAnim が呼ばれるまで待機(実際にスキルエフェクトが描画される瞬間まで待機)
+        // await skillAnimTcs;
+
+        // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
+        TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
+        DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
+        ResetSkillCost();
+        defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
+
+        // 攻撃アニメーションが最後まで終わるまで待つ
+        // await endTcs.Task;
+
+        // イベントの登録を解除
+        // attacker.OnHitEvent -= onSkillAnim;
+        // attacker.OnAnimationEndEvent -= onEnd;
+
+        NextTurn(); // ターンを終了する
+    }
+
     // スキル処理
     void UseSkill(CharacterStatus user, CharacterStatus[] targets, SkillType skillType, int skillCost)
     {
@@ -283,8 +340,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void OnClickedAttackButton()
     {
-        AttackButton.SetActive(false);
-        SkillButton.SetActive(false);
+        ButtunUISetActive(false);
 
         foreach (var character in _characterQueue)
         {
@@ -292,6 +348,53 @@ public class BattleManager : MonoBehaviour
             {
                 character.OnClicked += OnNormalAttackClicked; 
             }
+        }
+    }
+
+    /// <summary>
+    /// スキルボタンが押された際の処理(SP消費量の選択)
+    /// </summary>
+    public void OnClickedSkillButton()
+    {
+        if (_currentSP - _skillCost >= 1 && _skillCost != MAX_SKILL_COST) {
+            _skillCost++;
+        } else {
+            _skillCost = 0;
+        }
+
+        TestDisplaySP();
+    }
+
+    /// <summary>
+    /// スキル攻撃ボタンが押された際の処理
+    /// </summary>
+    public void OnClickedSkillAtackButtun()
+    {
+        if (_skillCost == 0) return;
+
+        ButtunUISetActive(false);
+
+        foreach (var character in _characterQueue)
+        {
+            if (character.BattleUnitType == BattleUnitType.Enemy)
+            {
+                character.OnClicked += OnSkillAttackClicked; // 一旦、通常攻撃処理と同じにするが、実際は変更させる
+            }
+        }
+    }
+
+    // ボタンUIの表示と非表示
+    private void ButtunUISetActive(bool display)
+    {
+        if (display)
+        {
+            AttackButton.SetActive(true);
+            SkillButton.SetActive(true);
+            SkillAttackButtun.SetActive(true);
+        } else {
+            AttackButton.SetActive(false);
+            SkillButton.SetActive(false);
+            SkillAttackButtun.SetActive(false);
         }
     }
 
@@ -328,6 +431,18 @@ public class BattleManager : MonoBehaviour
             // $"文字列 {変数}" の形式で書くと、綺麗にデータを出力できます
             Debug.Log($"【{character.BattleUnitType}】 {character.gameObject.name} : HP {character.Hp} / {character.MaxHp}");
         }
+
+        Debug.Log("============================");
+    }
+
+    // SPを表示するテスト処理
+    void TestDisplaySP()
+    {
+        Debug.Log("=== 全体SPと選択した消費SP ===");
+
+        Debug.Log($"【SP】 : {_currentSP} / {MAX_SP}");
+
+        Debug.Log($"【消費SP】 : {_skillCost} / {MAX_SKILL_COST}");
 
         Debug.Log("============================");
     }
