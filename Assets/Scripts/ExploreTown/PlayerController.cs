@@ -55,14 +55,14 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Rigidbody2D取得成功");
         }
 
-        col = GetComponent<Collider2D>(); // Collider2Dを取得
+        col = GetComponent<CapsuleCollider2D>(); // CapsuleCollider2Dを取得
         if (col == null)
         {
-            Debug.LogError("Collider2Dがアタッチされていません");
+            Debug.LogError("CapsuleCollider2Dがアタッチされていません");
         }
         else
         {
-            Debug.Log("Collider2D取得成功");
+            Debug.Log("CapsuleCollider2D取得成功");
         }
 
         playerAnimator = GetComponent<Animator>(); // Animatorを取得
