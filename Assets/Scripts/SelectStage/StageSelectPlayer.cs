@@ -21,6 +21,7 @@ public class StageSelectPlayer : MonoBehaviour
     private Rigidbody2D targetRb;
     private readonly List<int> pendingRouteIndices = new List<int>();
     private int currentIndex;
+    private string currentStageId = string.Empty;
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
@@ -61,6 +62,8 @@ public class StageSelectPlayer : MonoBehaviour
         selectedIndex = currentIndex;
         ClampSelection();
         PrepareTargetPositionForIndex(currentIndex);
+        currentStageId = GetStageId(currentIndex);
+        Debug.Log("初期ノード: " + currentStageId);
     }
 
     private void Update()
@@ -282,7 +285,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         isMoving = true;
-        Debug.Log("ステージ移動開始: " + SelectedStageId);
+        Debug.Log("ステージ移動開始: 現在=" + currentStageId + " / 目的地=" + SelectedStageId);
     }
 
     private void AdvanceRoute()
@@ -294,6 +297,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         currentIndex = pendingRouteIndices[0];
+        currentStageId = GetStageId(currentIndex);
         pendingRouteIndices.RemoveAt(0);
 
         if (pendingRouteIndices.Count == 0)
@@ -326,6 +330,22 @@ public class StageSelectPlayer : MonoBehaviour
     {
         isMoving = false;
         pendingRouteIndices.Clear();
-        Debug.Log("ステージ移動完了: " + SelectedStageId);
+        Debug.Log("ステージ移動完了: 現在=" + currentStageId);
+    }
+
+    private string GetStageId(int index)
+    {
+        if (!HasValidIndex(index))
+        {
+            return string.Empty;
+        }
+
+        StageTarget target = stageTargets[index];
+        if (target == null)
+        {
+            return string.Empty;
+        }
+
+        return target.stageId;
     }
 }
