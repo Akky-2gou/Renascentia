@@ -13,11 +13,14 @@ public class StageSelectPlayer : MonoBehaviour
     }
 
     [SerializeField] private List<StageTarget> stageTargets = new List<StageTarget>();
+    [SerializeField] private string initialStageId = "1";
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
 
     private Rigidbody2D targetRb;
+    private readonly List<int> pendingRouteIndices = new List<int>();
+    private int currentIndex;
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
@@ -47,14 +50,22 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         targetRb = moveTarget.GetComponent<Rigidbody2D>();
-        selectedIndex = 0;
+
+        currentIndex = GetStageIndexById(initialStageId);
+        if (currentIndex < 0)
+        {
+            currentIndex = 0;
+            Debug.LogWarning("初期ステージIDが見つからないため、先頭のノードを初期位置として扱います: " + initialStageId);
+        }
+
+        selectedIndex = currentIndex;
         ClampSelection();
-        PrepareTargetPosition();
+        PrepareTargetPositionForIndex(currentIndex);
     }
 
     private void Update()
     {
-        if (!isMoving || !HasValidSelection())
+        if (!isMoving || pendingRouteIndices.Count == 0 || !HasValidSelection())
         {
             return;
         }
@@ -73,7 +84,7 @@ public class StageSelectPlayer : MonoBehaviour
         if (Vector3.Distance(moveTarget.position, currentTargetPosition) <= arriveDistance)
         {
             SnapToTarget();
-            FinishMovement();
+            AdvanceRoute();
         }
     }
 
@@ -133,9 +144,13 @@ public class StageSelectPlayer : MonoBehaviour
             return;
         }
 
-        PrepareTargetPosition();
-        isMoving = true;
-        Debug.Log("ステージ移動開始: " + SelectedStageId);
+        List<int> route = BuildRouteIndices(currentIndex, selectedIndex);
+        if (route.Count == 0)
+        {
+            return;
+        }
+
+        BeginRoute(route);
     }
 
     public void MoveToStage(string stageId)
@@ -155,9 +170,7 @@ public class StageSelectPlayer : MonoBehaviour
             if (stageTargets[i].stageId == stageId)
             {
                 selectedIndex = i;
-                PrepareTargetPosition();
-                isMoving = true;
-                Debug.Log("ステージ移動開始: " + stageId);
+                MoveToSelectedStage();
                 return;
             }
         }
@@ -170,32 +183,130 @@ public class StageSelectPlayer : MonoBehaviour
         return stageTargets != null && stageTargets.Count > 0 && selectedIndex >= 0 && selectedIndex < stageTargets.Count;
     }
 
+    private bool HasValidIndex(int index)
+    {
+        return stageTargets != null && index >= 0 && index < stageTargets.Count;
+    }
+
+    private int GetStageIndexById(string stageId)
+    {
+        if (stageTargets == null || string.IsNullOrEmpty(stageId))
+        {
+            return -1;
+        }
+
+        for (int i = 0; i < stageTargets.Count; i++)
+        {
+            if (stageTargets[i] != null && stageTargets[i].stageId == stageId)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     private void ClampSelection()
     {
         if (stageTargets == null || stageTargets.Count == 0)
         {
+            currentIndex = 0;
             selectedIndex = 0;
             return;
         }
 
+        currentIndex = Mathf.Clamp(currentIndex, 0, stageTargets.Count - 1);
         selectedIndex = Mathf.Clamp(selectedIndex, 0, stageTargets.Count - 1);
     }
 
     private void PrepareTargetPosition()
     {
-        if (!HasValidSelection())
+        PrepareTargetPositionForIndex(selectedIndex);
+    }
+
+    private bool PrepareTargetPositionForIndex(int index)
+    {
+        if (!HasValidIndex(index))
         {
-            return;
+            return false;
         }
 
-        StageTarget target = stageTargets[selectedIndex];
+        StageTarget target = stageTargets[index];
         if (target == null || target.marker == null)
         {
             Debug.LogWarning("選択中のステージにマーカーが設定されていません。");
-            return;
+            return false;
         }
 
         currentTargetPosition = target.marker.position + target.offset;
+        return true;
+    }
+
+    private List<int> BuildRouteIndices(int fromIndex, int toIndex)
+    {
+        List<int> route = new List<int>();
+
+        if (!HasValidIndex(fromIndex) || !HasValidIndex(toIndex) || fromIndex == toIndex)
+        {
+            return route;
+        }
+
+        int step = fromIndex < toIndex ? 1 : -1;
+        for (int index = fromIndex + step; ; index += step)
+        {
+            route.Add(index);
+
+            if (index == toIndex)
+            {
+                break;
+            }
+        }
+
+        return route;
+    }
+
+    private void BeginRoute(List<int> route)
+    {
+        pendingRouteIndices.Clear();
+        pendingRouteIndices.AddRange(route);
+
+        if (pendingRouteIndices.Count == 0)
+        {
+            return;
+        }
+
+        if (!PrepareTargetPositionForIndex(pendingRouteIndices[0]))
+        {
+            pendingRouteIndices.Clear();
+            return;
+        }
+
+        isMoving = true;
+        Debug.Log("ステージ移動開始: " + SelectedStageId);
+    }
+
+    private void AdvanceRoute()
+    {
+        if (pendingRouteIndices.Count == 0)
+        {
+            FinishMovement();
+            return;
+        }
+
+        currentIndex = pendingRouteIndices[0];
+        pendingRouteIndices.RemoveAt(0);
+
+        if (pendingRouteIndices.Count == 0)
+        {
+            FinishMovement();
+            return;
+        }
+
+        if (!PrepareTargetPositionForIndex(pendingRouteIndices[0]))
+        {
+            pendingRouteIndices.Clear();
+            FinishMovement();
+        }
     }
 
     private void SnapToTarget()
@@ -214,6 +325,7 @@ public class StageSelectPlayer : MonoBehaviour
     private void FinishMovement()
     {
         isMoving = false;
+        pendingRouteIndices.Clear();
         Debug.Log("ステージ移動完了: " + SelectedStageId);
     }
 }
