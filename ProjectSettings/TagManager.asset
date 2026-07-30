@@ -9,7 +9,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - StageNode
   - Water
   - UI
   - 
@@ -41,6 +41,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: StageNode
+    uniqueID: 1551965679
     locked: 0
   m_RenderingLayers:
   - Default
