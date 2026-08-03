@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     
     // 摩擦の設定
     [SerializeField] private float friction;
+
+    [SerializeField] private string interactableTag = "Interactable";
+
     Vector2 moveInput; // 移動入力を格納する変数
     bool isFacingRight; // プレイヤーが右を向いているかどうか
     bool isMoving = false; // プレイヤーが移動中かどうか
@@ -26,7 +29,6 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnimator; // Animatorを追加
 
     bool isInteracting = false; // インタラクション中かどうかのフラグ
-    [SerializeField] private string interactableTag = "Interactable";
     
     // 接触しているコライダー
     private Collider2D touchingCollision = null;
@@ -163,17 +165,20 @@ public class PlayerController : MonoBehaviour
                         isFacingRight = false;
                         transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                     }
-
+                    
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる
                     targetVelocityX = maxSpeed * moveInput.x;
                     // (目標速度 - 現在の速度) / 時間 = 必要な加速度
                     // これに質量を掛けたものが力になる (AddForceは質量を考慮してくれる)
                     forceX = (targetVelocityX - rb.linearVelocity.x) * rb.mass / Time.fixedDeltaTime * 0.9f;
+
                 }
+
                 // 水平方向に力を加える (垂直方向の動きには影響を与えない)
-                rb.AddForce(new Vector2(forceX, 0f));
+                rb.AddForce(new Vector2(forceX, 0.0f));
 
                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate); // 毎フレーム待機
+
             } catch (System.OperationCanceledException)
             {
                 // オブジェクトが破棄されてキャンセルされた場合、ここに飛ぶ
@@ -182,7 +187,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     
     /// <summary>
     /// 決定ボタンが入力された際の処理
