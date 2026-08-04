@@ -48,7 +48,6 @@ public class VisualGroundSnapper : MonoBehaviour
     {
         while (!token.IsCancellationRequested)
         {
-            Debug.Log("VisualGroundSnapper: UpdateVisualHeight実行中");
             // 自分より少し高いところからRayを飛ばす
             Vector2 rayStartPoint = transform.position;
             rayStartPoint += new Vector2(0, _rayStartOffsetY); // 少し上にオフセットしてRayを飛ばす
@@ -85,7 +84,7 @@ public class VisualGroundSnapper : MonoBehaviour
             }
 
             // 毎フレーム待機
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate);
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _cancellationTokenSource.Token);
         }
     }
 }
