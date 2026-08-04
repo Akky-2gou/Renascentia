@@ -12,43 +12,47 @@ using System;
 public class PlayerController : MonoBehaviour
 {
 
-    [SerializeField] private float maxSpeed; // 最大スピード
+    [SerializeField] private float _maxSpeed; // 最大スピード
     
     // 摩擦の設定
-    [SerializeField] private float friction;
+    [SerializeField] private float _friction;
 
-    [SerializeField] private string interactableTag = "Interactable";
+    [SerializeField] private string _interactableTag = "Interactable";
+    
+    // エレベーターのタグ
+    [SerializeField] private string _elevatorTag = "Elevator";
 
-    Vector2 moveInput; // 移動入力を格納する変数
-    bool isFacingRight; // プレイヤーが右を向いているかどうか
-    bool isMoving = false; // プレイヤーが移動中かどうか
-    private Rigidbody2D rb; // Rigidbodyを追加
-    private Collider2D col; // Collider2Dを追加
-    private CancellationTokenSource cancellationTokenSource; // CancellationTokenを管理するクラス
+    // Animatorを参照
+    [SerializeField] private Animator _playerAnimator; 
 
-    private Animator playerAnimator; // Animatorを追加
+    Vector2 _moveInput; // 移動入力を格納する変数
+    bool _isFacingRight; // プレイヤーが右を向いているかどうか
+    bool _isMoving = false; // プレイヤーが移動中かどうか
+    private Rigidbody2D _rb; // Rigidbodyを追加
+    private Collider2D _col; // Collider2Dを追加
+    private CancellationTokenSource _cancellationTokenSource; // CancellationTokenを管理するクラス
 
-    bool isInteracting = false; // インタラクション中かどうかのフラグ
+    bool _isInteracting = false; // インタラクション中かどうかのフラグ
     
     // 接触しているコライダー
-    private Collider2D touchingCollision = null;
+    private Collider2D _touchingCollision = null;
 
-    //public bool isInputEnabled = true; // 入力を受け付けるかどうかのフラグ
+    public bool _isInputEnabled = true; // 入力を受け付けるかどうかのフラグ
 
     private void Awake()
     {
         // オブジェクトが破棄されたときにキャンセルされるトークンソースを作成
-        cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
     
         // isFacingRightの初期化
         if (Mathf.Approximately(transform.localScale.x, -1f)) { // 大きさが負なら右向き
-            isFacingRight = true;
+            _isFacingRight = true;
         } else {
-            isFacingRight = false;
+            _isFacingRight = false;
         }
 
-        rb = GetComponent<Rigidbody2D>(); // Rigidbodyを取得
-        if (rb == null)
+        _rb = GetComponent<Rigidbody2D>(); // Rigidbodyを取得
+        if (_rb == null)
         {
             Debug.LogError("Rigidbodyがアタッチされていません");
         }
@@ -57,8 +61,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Rigidbody2D取得成功");
         }
 
-        col = GetComponent<CapsuleCollider2D>(); // CapsuleCollider2Dを取得
-        if (col == null)
+        _col = GetComponent<CapsuleCollider2D>(); // CapsuleCollider2Dを取得
+        if (_col == null)
         {
             Debug.LogError("CapsuleCollider2Dがアタッチされていません");
         }
@@ -67,8 +71,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("CapsuleCollider2D取得成功");
         }
 
-        playerAnimator = GetComponent<Animator>(); // Animatorを取得
-        if (playerAnimator == null)
+        if (_playerAnimator == null)
         {
             Debug.LogError("Animatorがアタッチされていません");
         }
@@ -85,21 +88,21 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            //if (!isInputEnabled) return;
+            if (!_isInputEnabled) return;
 
-            moveInput = context.ReadValue<Vector2>();
-            if (!isMoving)
+            _moveInput = context.ReadValue<Vector2>();
+            if (!_isMoving)
             {
                 // 動き始めたら摩擦を0にする
-                col.sharedMaterial.friction = 0;
+                _col.sharedMaterial.friction = 0;
                 // physicsマテリアルの更新
-                col.enabled = false;
-                col.enabled = true;
+                _col.enabled = false;
+                _col.enabled = true;
 
-                isMoving = true;
+                _isMoving = true;
 
                 // Walkアニメーションの開始
-                if (playerAnimator != null)
+                if (_playerAnimator != null)
                 {
                     //playerAnimator.SetBool("WalkingBool", true);
                     Debug.Log("Walkアニメーション開始");
@@ -109,39 +112,44 @@ public class PlayerController : MonoBehaviour
                     Debug.LogError("playerAnimator is null in OnMove");
                 }
 
-                MoveLoop(cancellationTokenSource.Token).Forget(); // 非同期ループを開始
+                MoveLoop(_cancellationTokenSource.Token).Forget(); // 非同期ループを開始
             }
         }
         else if (context.canceled)
         {
-            //SoundManager.Instance.StopSE(); // 歩行SEを止める
-            //isWalkSoundPlaying = false;
+            StopMove();
+        }
+    }
 
-            // 止まってる場合は摩擦を有効化する
-            col.sharedMaterial.friction = friction;
-            // physicsマテリアルの更新
-            col.enabled = false;
-            col.enabled = true;
+    private void StopMove()
+    {
+        //SoundManager.Instance.StopSE(); // 歩行SEを止める
+        //isWalkSoundPlaying = false;
 
-            moveInput = Vector2.zero;
-            isMoving = false;
+        // 止まってる場合は摩擦を有効化する
+        _col.sharedMaterial.friction = _friction;
+        // physicsマテリアルの更新
+        _col.enabled = false;
+        _col.enabled = true;
 
-            // Walkアニメーションの停止
-            if (playerAnimator != null)
-            {
-                //playerAnimator.SetBool("WalkingBool", false);
-                Debug.Log("Walkアニメーション停止");
-            }
-            else
-            {
-                Debug.LogError("playerAnimator is null in OnMove");
-            }
+        _moveInput = Vector2.zero;
+        _isMoving = false;
+
+        // Walkアニメーションの停止
+        if (_playerAnimator != null)
+        {
+            //playerAnimator.SetBool("WalkingBool", false);
+            Debug.Log("Walkアニメーション停止");
+        }
+        else
+        {
+            Debug.LogError("playerAnimator is null in OnMove");
         }
     }
 
     private async UniTaskVoid MoveLoop(CancellationToken token)
     {
-        while (!token.IsCancellationRequested && isMoving)
+        while (!token.IsCancellationRequested && _isMoving)
         {
             try
             {
@@ -149,35 +157,35 @@ public class PlayerController : MonoBehaviour
 
                 float targetVelocityX, forceX = 0f;
 
-                if (rb != null)
+                if (_rb != null)
                 {
                     // 移動方向に応じてプレイヤー画像を反転
                     // 右向きならx軸の大きさを正、左向きなら負
-                    if (moveInput.x == 1 && !isFacingRight)
+                    if (_moveInput.x == 1 && !_isFacingRight)
                     {
                         // 右向きにする
-                        isFacingRight = true;
+                        _isFacingRight = true;
                         transform.localScale = new Vector3(-Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                     }
-                    else if (moveInput.x == -1 && isFacingRight)
+                    else if (_moveInput.x == -1 && _isFacingRight)
                     {
                         // 左向きにする
-                        isFacingRight = false;
+                        _isFacingRight = false;
                         transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                     }
                     
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる
-                    targetVelocityX = maxSpeed * moveInput.x;
+                    targetVelocityX = _maxSpeed * _moveInput.x;
                     // (目標速度 - 現在の速度) / 時間 = 必要な加速度
                     // これに質量を掛けたものが力になる (AddForceは質量を考慮してくれる)
-                    forceX = (targetVelocityX - rb.linearVelocity.x) * rb.mass / Time.fixedDeltaTime * 0.9f;
+                    forceX = (targetVelocityX - _rb.linearVelocity.x) * _rb.mass / Time.fixedDeltaTime * 0.9f;
 
                 }
 
                 // 水平方向に力を加える (垂直方向の動きには影響を与えない)
-                rb.AddForce(new Vector2(forceX, 0.0f));
+                _rb.AddForce(new Vector2(forceX, 0.0f));
 
-                await UniTask.Yield(PlayerLoopTiming.FixedUpdate); // 毎フレーム待機
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _cancellationTokenSource.Token); // 毎フレーム待機
 
             } catch (System.OperationCanceledException)
             {
@@ -196,7 +204,7 @@ public class PlayerController : MonoBehaviour
         // テキスト表示中でEnterキー待ち状態の場合は何もしない
         // (GameTextDisplayがEnterキーを処理する)
         /*
-        if (textDisplay != null && textDisplay.IsDisplaying)
+        if (_textDisplay != null && _textDisplay.IsDisplaying)
         {
             if (showDebugLogs) Debug.Log("テキスト表示中のため、オブジェクトインタラクションはスキップ");
             return;
@@ -204,7 +212,7 @@ public class PlayerController : MonoBehaviour
         */
 
         // 実行中チェックのみ
-        if (isInteracting)
+        if (_isInteracting)
         {
             Debug.Log("インタラクション実行中のため無視");
             return;
@@ -213,15 +221,29 @@ public class PlayerController : MonoBehaviour
         try
         {
             // 何かと接触している場合、そのオブジェクトとインタラクションを試みる
-            if (touchingCollision != null)
+            if (_touchingCollision != null)
             {
-                if (touchingCollision.gameObject.CompareTag(interactableTag))
+                if (_touchingCollision.gameObject.CompareTag(_interactableTag))
                 {
                     // フラグをセットして実行開始
-                    isInteracting = true;
+                    _isInteracting = true;
                     // ここで何らかの処理
-                    isInteracting = false;
+                    _isInteracting = false;
                     Debug.Log("決定！");
+                }
+                else if (_touchingCollision.gameObject.CompareTag(_elevatorTag)) // エレベーター
+                {
+                    var component = _touchingCollision.gameObject.GetComponent<Elevator>();
+                    if (component != null)
+                    {
+                        // フラグをセットして実行開始
+                        _isInteracting = true;
+
+                        StopMove(); // 移動を止める
+                        _isInputEnabled = false; // 入力を無効化
+
+                        HandleElevatorInteraction(component).Forget();
+                    }
                 }
             }
         }
@@ -232,23 +254,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+    // エレベーターのインタラクション処理
+    private async UniTask HandleElevatorInteraction(Elevator component)
+    {
+        await component.UseAsync(transform, _rb, _cancellationTokenSource.Token); // エレベーターの利用完了まで待機
+
+        _isInputEnabled = true; // 入力を有効化
+        _isInteracting = false; // インタラクション終了
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(interactableTag))
+        if (collision.gameObject.CompareTag(_interactableTag) || collision.gameObject.CompareTag(_elevatorTag))
         {
             Debug.Log("接触！");
-            touchingCollision = collision;
+            _touchingCollision = collision;
         }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (touchingCollision == collision)
+        if (_touchingCollision == collision)
         {
             Debug.Log("接触してないよ！");
-            touchingCollision = null;
-            //textDisplay.HideText(dct).Forget();
+            _touchingCollision = null;
+            // _textDisplay.HideText(dct).Forget();
         }
     }
-
 }
