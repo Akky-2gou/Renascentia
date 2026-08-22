@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     // Animatorを参照
     [SerializeField] private Animator _playerAnimator; 
 
+    // ChangeVisualDirectionを参照
+    [SerializeField] private ChangeVisualDirection _changeVisualDirection; 
+
     Vector2 _moveInput; // 移動入力を格納する変数
     bool _isFacingRight; // プレイヤーが右を向いているかどうか
     bool _isMoving = false; // プレイヤーが移動中かどうか
@@ -165,13 +168,13 @@ public class PlayerController : MonoBehaviour
                     {
                         // 右向きにする
                         _isFacingRight = true;
-                        transform.localScale = new Vector3(-Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right, transform);
                     }
                     else if (_moveInput.x == -1 && _isFacingRight)
                     {
                         // 左向きにする
                         _isFacingRight = false;
-                        transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left, transform);
                     }
                     
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる
