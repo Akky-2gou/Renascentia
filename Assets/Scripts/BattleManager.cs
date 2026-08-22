@@ -32,6 +32,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject SkillButton;
     [SerializeField] GameObject SkillAttackButtun;
 
+    // スキルゲージの取得
+    [SerializeField] SkillGauge skillGauge;
+
     void Start()
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
@@ -123,6 +126,7 @@ public class BattleManager : MonoBehaviour
     void ResetSkillCost()
     {
         _skillCost = 0;
+        skillGauge.SetGaugeImmediate(0);
     }
 
     // ゲームオーバー判定処理
@@ -361,6 +365,7 @@ public class BattleManager : MonoBehaviour
         } else {
             _skillCost = 0;
         }
+        skillGauge.SetGauge(_skillCost);
 
         TestDisplaySP();
     }
