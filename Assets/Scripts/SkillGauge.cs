@@ -164,9 +164,10 @@ public class SkillGauge : MonoBehaviour
         // fillAmount
         foreach(Image innerImage in innerImages)
         {
-            innerImage.GetComponent<Image>().fillAmount = Mathf.Clamp01(value / 3);
+            float fillAmount = Mathf.Clamp01(value / 3f);
+            SetInnerFill(innerImage, fillAmount);
         }
-        
+
         // 全部非表示
         SetAllAlpha(innerImages, 0f);
         
@@ -200,6 +201,21 @@ public class SkillGauge : MonoBehaviour
             SetAlpha(innerImages[1], 1f - t);
             SetAlpha(innerImages[2], t);
         }
+    }
+
+    // =========================================================
+    // Shader
+    // =========================================================
+    private void SetInnerFill(Image image, float fillAmount)
+    {
+        fillAmount = Mathf.Clamp01(fillAmount);
+
+        image.fillAmount = fillAmount;
+
+        image.material.SetFloat(
+            "_FillAmount",
+            fillAmount
+        );
     }
 
     // =========================================================
