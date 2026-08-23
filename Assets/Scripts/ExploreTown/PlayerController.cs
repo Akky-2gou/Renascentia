@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 {
 
     [SerializeField] private float _maxSpeed; // 最大スピード
+
+    [SerializeField] private float _maxAcceleration = 30f; // 最大加速度
     
     // 摩擦の設定
     [SerializeField] private float _friction;
@@ -181,8 +183,8 @@ public class PlayerController : MonoBehaviour
                     targetVelocityX = _maxSpeed * _moveInput.x;
                     // (目標速度 - 現在の速度) / 時間 = 必要な加速度
                     // これに質量を掛けたものが力になる (AddForceは質量を考慮してくれる)
-                    forceX = (targetVelocityX - _rb.linearVelocity.x) * _rb.mass / Time.fixedDeltaTime * 0.9f;
-
+                    // Mathf.Clampで最大加速度を制限
+                    forceX = Mathf.Clamp(targetVelocityX - _rb.linearVelocity.x, -_maxAcceleration, _maxAcceleration);
                 }
 
                 // 水平方向に力を加える (垂直方向の動きには影響を与えない)
