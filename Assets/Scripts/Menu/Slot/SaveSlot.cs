@@ -2,10 +2,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI; // Textを使うため
 using TMPro;
+using System.Collections.Generic;
 
 public class SaveSlot : Button
 {
     //private SaveData saveData; // セーブデータの参照
+
+    [Header("保存処理")]
+    [SerializeField] private SaveData saveData;
+
+    [Header("保存するデータ")]
+    [SerializeField] private int stageProgress;
+    [SerializeField] private List<int> unlockedCharacterIds = new List<int>();
+    [SerializeField] private List<int> collectedItemIds = new List<int>();
+    [SerializeField] private int lastMapId;
 
     [Header("セーブデータ番号")]
     [SerializeField] private int saveDataNum;
@@ -137,7 +147,26 @@ public class SaveSlot : Button
     {
         //base.OnClick(); // 決定音を鳴らす
         Debug.Log("ファイル" + saveDataNum + "の確認画面");
-        confirmation.ShowConfirmationSaveDialog(saveDataNum);
+        confirmation.ShowConfirmationSaveDialog(saveDataNum, this);
+    }
+
+    public void ExecuteSave()
+    {
+        if (saveData == null)
+        {
+            Debug.LogWarning("SaveData が設定されていないため保存できません。");
+            return;
+        }
+
+        saveData.SaveGame(saveDataNum, stageProgress, unlockedCharacterIds, collectedItemIds, lastMapId);
+    }
+
+    public void SetSaveContent(int stageProgress, List<int> unlockedCharacterIds, List<int> collectedItemIds, int lastMapId)
+    {
+        this.stageProgress = stageProgress;
+        this.unlockedCharacterIds = unlockedCharacterIds != null ? new List<int>(unlockedCharacterIds) : new List<int>();
+        this.collectedItemIds = collectedItemIds != null ? new List<int>(collectedItemIds) : new List<int>();
+        this.lastMapId = lastMapId;
     }
 
     /*

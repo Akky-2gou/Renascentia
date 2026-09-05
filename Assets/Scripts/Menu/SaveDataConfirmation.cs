@@ -32,6 +32,7 @@ public class SaveDataConfirmation : MonoBehaviour
 
     // セーブするスロット
     private int saveCurrentSlot;
+    private SaveSlot saveCurrentSlotView;
     // テキスト
     [SerializeField] private TextMeshProUGUI text;
 
@@ -63,7 +64,7 @@ public class SaveDataConfirmation : MonoBehaviour
     }
 
 
-    public void ShowConfirmationSaveDialog(int slotId)
+    public void ShowConfirmationSaveDialog(int slotId, SaveSlot saveSlot)
     {
         if (slotId == 1)
         {
@@ -77,6 +78,7 @@ public class SaveDataConfirmation : MonoBehaviour
         lastSelectedButton = EventSystem.current.currentSelectedGameObject;
         // slotIDを記憶する
         saveCurrentSlot = slotId;
+        saveCurrentSlotView = saveSlot;
         confirmationDialogPanel.SetActive(true);
         // フォーカスを強制的に「いいえ」ボタンに移す
         EventSystem.current.SetSelectedGameObject(noButton);
@@ -88,8 +90,10 @@ public class SaveDataConfirmation : MonoBehaviour
         Debug.Log("セーブを実行します。");
         // ここで実際のセーブ処理を呼び出す
         //SoundManager.Instance.PlaySE(14); // 11はUI決定音のインデックス
-        //gameDataManager.SetCurrentSlot(saveCurrentSlot);
-        //gameDataManager.SaveGame(saveCurrentSlot);
+        if (saveCurrentSlotView != null)
+        {
+            saveCurrentSlotView.ExecuteSave();
+        }
         //itemManager.SyncStageToInventory(); // ステージのアイテムシングルトンとタイトル用のシングルトンを同期
         CloseDialog();
 
