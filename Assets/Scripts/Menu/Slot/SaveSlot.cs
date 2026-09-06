@@ -78,17 +78,19 @@ public class SaveSlot : Button
     // このセーブ欄のUIを更新するための公開関数
     private void UpdateSlotUI()
     {
-        dataGroup.SetActive(false);
-        noDataGroup.SetActive(true);
+        if (saveData == null)
+        {
+            dataGroup.SetActive(false);
+            noDataGroup.SetActive(true);
+            return;
+        }
 
-        /*
-        // もしセーブデータが存在するなら...
-        if (saveData != null)
+        bool hasData = saveData.TryLoadGame(saveDataNum, out SaveData.SaveFileData loadedData);
+        if (hasData && loadedData != null)
         {
             dataGroup.SetActive(true);
             noDataGroup.SetActive(false);
 
-            // データ名と現在地を表示
             if (saveDataNum == 1)
             {
                 dataNameText.text = "オートセーブ";
@@ -98,6 +100,7 @@ public class SaveSlot : Button
                 dataNameText.text = "セーブデータ " + (saveDataNum - 1);
             }
 
+            /*
             int stageNumber = gameDataManager.LoadSaveData(saveDataNum).stageNumber;
             locationText.text = "現在地：B" + (6 - stageNumber) + "F";
 
@@ -122,15 +125,20 @@ public class SaveSlot : Button
                 default:
                     Debug.LogWarning("不明なステージ番号: " + stageNumber);
                     break;
+
+            }
+            */
+            locationText.text = "現在地：" + loadedData.lastMapId;
+            if (locationIcon != null)
+            {
+                locationIcon.enabled = false;
             }
         }
-        // もしセーブデータが存在しない (null) なら...
         else
         {
             dataGroup.SetActive(false);
             noDataGroup.SetActive(true);
         }
-        */
     }
 
     public override void OnClick()
@@ -159,6 +167,32 @@ public class SaveSlot : Button
         }
 
         saveData.SaveGame(saveDataNum, stageProgress, unlockedCharacterIds, collectedItemIds, lastMapId);
+        UpdateSlotUI();
+    }
+
+    public void ExecuteLoad()
+    {
+        if (saveData == null)
+        {
+            Debug.LogWarning("SaveData が設定されていないためロードできません。");
+            return;
+        }
+
+        SaveData.SaveFileData loadedData = saveData.LoadGame(saveDataNum, true);
+        if (loadedData == null)
+        {
+            Debug.LogWarning($"Save slot {saveDataNum} にデータが存在しません。");
+            return;
+        }
+
+        SetSaveContent(
+            loadedData.stageProgress,
+            loadedData.unlockedCharacterIds,
+            loadedData.collectedItemIds,
+            loadedData.lastMapId
+        );
+
+        UpdateSlotUI();
     }
 
     public void SetSaveContent(int stageProgress, List<int> unlockedCharacterIds, List<int> collectedItemIds, int lastMapId)

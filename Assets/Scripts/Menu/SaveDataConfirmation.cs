@@ -54,12 +54,11 @@ public class SaveDataConfirmation : MonoBehaviour
         {
             if (text != null) text.text = "セーブデータ" + (slotId-1) + "を\nロードしますか？";
         }
-        // 現在選択されているUI要素を記憶する
+
+        saveCurrentSlotView = null;
         lastSelectedButton = EventSystem.current.currentSelectedGameObject;
-        // slotIDを記憶する
         saveCurrentSlot = slotId;
         confirmationDialogPanel.SetActive(true);
-        // フォーカスを強制的に「いいえ」ボタンに移す
         EventSystem.current.SetSelectedGameObject(noButton);
     }
 
@@ -87,47 +86,52 @@ public class SaveDataConfirmation : MonoBehaviour
     // 「はい」ボタンが押された時の処理
     public void OnYesButtonClickedSave()
     {
-        Debug.Log("セーブを実行します。");
-        // ここで実際のセーブ処理を呼び出す
-        //SoundManager.Instance.PlaySE(14); // 11はUI決定音のインデックス
         if (saveCurrentSlotView != null)
         {
+            Debug.Log("セーブを実行します。");
             saveCurrentSlotView.ExecuteSave();
+            CloseDialog();
+            return;
         }
-        //itemManager.SyncStageToInventory(); // ステージのアイテムシングルトンとタイトル用のシングルトンを同期
-        CloseDialog();
 
-        /*
-        // セーブスロットの見た目に反映
+        OnYesButtonClickedLoad();
+    }
+
+    public void OnYesButtonClickedLoad()
+    {
+        Debug.Log("ロードを実行します。");
+        Debug.Log($"[LoadCheck] CurrentSlot: {saveCurrentSlot}");
+
+        SaveData saveDataManager = FindFirstObjectByType<SaveData>();
+        
+        if (saveDataManager == null)
+        {
+            Debug.LogWarning("SaveData が見つからないためロードできませんでした。");
+            CloseDialog();
+            return;
+        }
+
+        SaveData.SaveFileData loadedData = saveDataManager.LoadGame(saveCurrentSlot, true);
+       
+        if (loadedData == null)
+        {
+            Debug.LogWarning($"Slot {saveCurrentSlot} にロードデータがありません。");
+            CloseDialog();
+            return;
+        }
+
         foreach (SaveSlot slot in saveSlots)
         {
-            if (slot.getSaveDataNum() == saveCurrentSlot)
+            if (slot != null && slot.getSaveDataNum() == saveCurrentSlot)
             {
-                slot.Reload();
+                Debug.Log($"[LoadCheck] Found target slot: {slot}");
+                slot.ExecuteLoad();
                 break;
             }
         }
-        */
 
-        // シーンの遷移
+        CloseDialog();
     }
-
-    /*
-    public async void OnYesButtonClickedLoad()
-    {
-        EventSystem.current.SetSelectedGameObject(null);
-        clickable.DisClickable();
-
-        Debug.Log("ロードを実行します。");
-        Debug.Log($"GameDataManager: {gameDataManager != null}");
-        Debug.Log($"ItemManager: {itemManager != null}");
-        Debug.Log($"CurrentSlot: {saveCurrentSlot}");
-        // ここで実際のロード処理を呼び出す
-        //SoundManager.Instance.PlaySE(14); // 11はUI決定音のインデックス
-        gameDataManager.SetCurrentSlot(saveCurrentSlot);
-        gameDataManager.LoadGame(saveCurrentSlot);
-    }
-    */
 
     // 「いいえ」ボタンが押された時の処理
     public void OnNoButtonClicked()
