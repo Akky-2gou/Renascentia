@@ -76,6 +76,36 @@ public class SaveData : MonoBehaviour
         return saveData != null;
     }
 
+    public SaveFileData LoadGame(int slotId, bool logDebug = false)
+    {
+        if (TryLoadGame(slotId, out SaveFileData loadedData))
+        {
+            if (logDebug)
+            {
+                string unlocked = loadedData.unlockedCharacterIds != null ? string.Join(", ", loadedData.unlockedCharacterIds) : "[]";
+                string collected = loadedData.collectedItemIds != null ? string.Join(", ", loadedData.collectedItemIds) : "[]";
+
+                Debug.Log(
+                    $"[SaveData] Loaded slot {slotId}: " +
+                    $"stageProgress={loadedData.stageProgress}, " +
+                    $"lastMapId={loadedData.lastMapId}, " +
+                    $"unlockedCharacterIds=[{unlocked}], " +
+                    $"collectedItemIds=[{collected}], " +
+                    $"lastSavedAtJst={loadedData.lastSavedAtJst}"
+                );
+            }
+
+            return loadedData;
+        }
+
+        if (logDebug)
+        {
+            Debug.Log($"[SaveData] No save data found for slot {slotId}");
+        }
+
+        return null;
+    }
+
     public bool HasSaveData(int slotId)
     {
         return File.Exists(GetSaveFilePath(slotId));
