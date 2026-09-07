@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd0fe441b9b545ca88dfb50611c9561, type: 3}
+  m_Name: CharacterDialogDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterDialogDatabase
+  _characters:
+  - _characterName: "\u5343\u8449\u3000\u307F\u306A\u3068"
+    _expressions:
+    - {fileID: 21300000, guid: a960b5ddaa1f444ed8e40c17ba5e1c1c, type: 3}
+    - {fileID: 21300000, guid: 256961d6e83be4b8f933e2e871befb4f, type: 3}
+  - _characterName: "\u98EF\u5C71\u3000\u6E80"
+    _expressions:
+    - {fileID: 21300000, guid: 02bf32c2ee4064f4d878be4ea0932392, type: 3}
+    - {fileID: 21300000, guid: c9da9cfd142db4ab9b023e4d57c596c6, type: 3}
+    - {fileID: 21300000, guid: d8d343ce02d6c4a2e87b6d2b3861372f, type: 3}
+    - {fileID: 21300000, guid: 841a0459a86c84f0087d289f14ee3dfa, type: 3}
