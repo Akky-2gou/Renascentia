@@ -18,6 +18,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     int _attack; // 攻撃力
     int _defense; // 防御力
     int _healAmount; // 回復量
+    bool _alive; // 生存判定 
 
     BattleUnitType _battleUnitType; // バトルユニットのタイプ
 
@@ -83,6 +84,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         _characterType = characterData.CharacterType;
         _passiveType = characterData.PassiveType;
         _hp = _maxHp;
+        _alive = true;
 
         _animator = this.GetComponent<Animator>();
     }
@@ -116,6 +118,12 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         set { _healAmount = value; }
     }
 
+    public bool Alive
+    {
+        get { return _alive; }
+        set { _alive = value; }
+    }
+
     public BattleUnitType BattleUnitType
     {
         get { return _battleUnitType; }
@@ -146,9 +154,10 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
 
         _hp -= damage;
 
-        if (_hp < 0)
+        if (_hp <= 0)
         {
             _hp = 0; // HPが0未満にならないようにする
+            _alive = false; // 死んだ判定にする
         }
 
         return;

@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using Unity.VisualScripting;
 
 /*
  * バトルシステムマネージャー
@@ -74,9 +75,9 @@ public class BattleManager : MonoBehaviour
 
         foreach (CharacterStatus defender in defenders)
         {
-            if (defender.Hp <= 0)
+            if (!defender.Alive)
             {
-                continue; // HPが0以下のキャラクターは攻撃しない
+                continue; // 死んだキャラには攻撃をしない
             }
 
             int defensePower = defender.Defense;
@@ -137,7 +138,7 @@ public class BattleManager : MonoBehaviour
         // ゲームオーバーの条件をチェックする
         foreach (CharacterStatus character in _characterQueue)
         {
-            if (character.BattleUnitType == BattleUnitType.Player)
+            if (character.BattleUnitType == BattleUnitType.Player && character.Alive)
             {
                 isGameOver = false;
             }
@@ -154,7 +155,7 @@ public class BattleManager : MonoBehaviour
         // クリアの条件をチェックする
         foreach (CharacterStatus character in _characterQueue)
         {
-            if (character.BattleUnitType == BattleUnitType.Enemy)
+            if (character.BattleUnitType == BattleUnitType.Enemy && character.Alive)
             {
                 isClear = false;
             }
@@ -166,45 +167,57 @@ public class BattleManager : MonoBehaviour
     // ターン経過処理。敵味方関わらず、1人の行動が終わったら呼び出され、次の順番に回す
     void NextTurn()
     {
-        // ターンの終了処理を行う
-        if (IsGameOver())
+        while (true)
         {
-            Debug.Log("Game Over!");
-            return; // ゲームオーバーの場合は次のターンに進まない
+            // ターンの終了処理を行う
+            if (IsGameOver())
+            {
+                Debug.Log("Game Over!");
+                return; // ゲームオーバーの場合は次のターンに進まない
+            }
+            else if (IsGameClear())
+            {
+                Debug.Log("Game Clear!");
+                return; // ゲームクリアの場合は次のターンに進まない
+            }
+
+            while (true) // 死亡しているキャラの順番を飛ばす
+            {
+                CharacterStatus currentCharacter = _characterQueue.Dequeue(); // キューから現在のキャラクターを取り出す
+                _characterQueue.Enqueue(currentCharacter); // 現在のキャラクターをキューの最後に戻す
+
+                if (_characterQueue.Peek().BattleUnitType == BattleUnitType.EndPoint)
+                {
+                    _turnCount++; // ターン数を増加させる
+                    Debug.Log("Turn " + _turnCount);
+
+                    CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
+                    _characterQueue.Enqueue(endPoint); // 終了点をキューの最後に
+                }
+
+                if (_characterQueue.Peek().Alive) break;
+            }
+
+            foreach (var character in _characterQueue)
+            {
+                character.OnClicked -= OnNormalAttackClicked;
+                character.OnClicked -= OnSkillAttackClicked;
+            }
+
+            TestDisplayCharactersHelth();
+            //TestDisplaySP();
+
+            // 全敵の行動が終わるまでループする
+            if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
+            {
+                TestEnemyAction();
+                continue;
+            }
+
+            // プレイヤーの番になったらボタンを表示して入力待ちにする
+            ButtunUISetActive(true);
+            return;
         }
-        else if (IsGameClear())
-        {
-            Debug.Log("Game Clear!");
-            return; // ゲームクリアの場合は次のターンに進まない
-        }
-
-        CharacterStatus currentCharacter = _characterQueue.Dequeue(); // キューから現在のキャラクターを取り出す
-        _characterQueue.Enqueue(currentCharacter); // 現在のキャラクターをキューの最後に戻す
-
-        if (_characterQueue.Peek().BattleUnitType == BattleUnitType.EndPoint)
-        {
-            _turnCount++; // ターン数を増加させる
-            Debug.Log("Turn " + _turnCount);
-
-            CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
-            _characterQueue.Enqueue(endPoint); // 終了点をキューの最後に
-        }
-
-        foreach (var character in _characterQueue)
-        {
-            character.OnClicked -= OnNormalAttackClicked;
-            character.OnClicked -= OnSkillAttackClicked;
-        }
-
-        //TestDisplayCharactersHelth();
-        TestDisplaySP();
-
-        if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
-        {
-            TestEnemyAction();
-        }
-
-        ButtunUISetActive(true);
     }
 
     // 通常攻撃ボタンが押された時に呼ばれる関数
@@ -409,7 +422,7 @@ public class BattleManager : MonoBehaviour
         CharacterStatus defender = null;
         foreach (var character in _characterQueue)
         {
-            if (character.BattleUnitType == BattleUnitType.Player)
+            if (character.BattleUnitType == BattleUnitType.Player && character.Alive)
             {
                 defender = character;
                 break;
@@ -417,7 +430,6 @@ public class BattleManager : MonoBehaviour
         }
         CharacterStatus[] defenders = {defender}; // 配列を生成
         TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
-        NextTurn();
     }
 
     // キャラの体力を表示するテスト処理
@@ -434,7 +446,7 @@ public class BattleManager : MonoBehaviour
             }
 
             // $"文字列 {変数}" の形式で書くと、綺麗にデータを出力できます
-            Debug.Log($"【{character.BattleUnitType}】 {character.gameObject.name} : HP {character.Hp} / {character.MaxHp}");
+            Debug.Log($"【{character.BattleUnitType}】 {character.gameObject.name} : HP {character.Hp} / {character.MaxHp} Alive: {character.Alive}");
         }
 
         Debug.Log("============================");
