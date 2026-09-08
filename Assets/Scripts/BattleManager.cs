@@ -198,12 +198,6 @@ public class BattleManager : MonoBehaviour
                 if (_characterQueue.Peek().Alive) break;
             }
 
-            foreach (var character in _characterQueue)
-            {
-                character.OnClicked -= OnNormalAttackClicked;
-                character.OnClicked -= OnSkillAttackClicked;
-            }
-
             TestDisplayCharactersHelth();
             //TestDisplaySP();
 
@@ -223,6 +217,11 @@ public class BattleManager : MonoBehaviour
     // 通常攻撃ボタンが押された時に呼ばれる関数
     private void OnNormalAttackClicked(CharacterStatus defender)
     {
+        foreach (var character in _characterQueue)
+        {
+            character.OnClicked -= OnNormalAttackClicked;
+            character.OnClicked -= OnSkillAttackClicked;
+        }
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         NormalAttack(defender).Forget(); 
     }
@@ -269,6 +268,11 @@ public class BattleManager : MonoBehaviour
     // スキル攻撃ボタンが押された時に呼ばれる関数
     private void OnSkillAttackClicked(CharacterStatus defender)
     {
+        foreach (var character in _characterQueue)
+        {
+            character.OnClicked -= OnNormalAttackClicked;
+            character.OnClicked -= OnSkillAttackClicked;
+        }
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         SkillAttack(defender).Forget(); 
     }
