@@ -21,6 +21,7 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private Color _originalColor;
     private bool _isPopupOpen;
+    private bool _isSelected;
 
     private void Awake()
     {
@@ -36,6 +37,17 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
+    public void SetSelected(bool selected)
+    {
+        _isSelected = selected;
+        ApplyVisualState();
+    }
+
+    public bool IsSelected()
+    {
+        return _isSelected;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (targetImage != null)
@@ -46,15 +58,22 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (targetImage != null)
-        {
-            targetImage.color = normalColor;
-        }
+        ApplyVisualState();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         OpenConfirmation();
+    }
+
+    private void ApplyVisualState()
+    {
+        if (targetImage == null)
+        {
+            return;
+        }
+
+        targetImage.color = _isSelected ? hoverColor : normalColor;
     }
 
     public void OpenConfirmation()
