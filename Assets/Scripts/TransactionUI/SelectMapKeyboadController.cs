@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/*
+ * マップ選択用のキーボードコントローラー
+ */
 public class SelectMapKeyboadController : MonoBehaviour
 {
     [Header("選択対象のマップ")]

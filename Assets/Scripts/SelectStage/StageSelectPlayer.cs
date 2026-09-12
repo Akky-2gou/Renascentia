@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * ステージ選択画面でのプレイヤーキャラクターの移動を制御するスクリプト
+ */
 public class StageSelectPlayer : MonoBehaviour
 {
     [Serializable]
