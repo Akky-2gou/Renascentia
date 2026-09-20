@@ -5,7 +5,7 @@ using TMPro;
 /*
  * 移動するマップを選択するボタンのスクリプト
  */
-public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class MapButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("Map settings")]
     [SerializeField] private int mapNumber = 1;
@@ -48,6 +48,16 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public bool IsSelected()
     {
         return _isSelected;
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        SetSelected(true);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        SetSelected(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

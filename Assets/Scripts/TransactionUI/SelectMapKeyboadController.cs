@@ -14,12 +14,6 @@ public class SelectMapKeyboadController : MonoBehaviour
     [Header("初期選択")]
     [SerializeField] private MapButton initialSelection;
 
-    [Header("WASD での移動先")]
-    [SerializeField] private MapButton upTarget;
-    [SerializeField] private MapButton leftTarget;
-    [SerializeField] private MapButton downTarget;
-    [SerializeField] private MapButton rightTarget;
-
     private MapButton currentSelection;
 
     private void Start()
@@ -46,28 +40,55 @@ public class SelectMapKeyboadController : MonoBehaviour
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
-            MoveSelection(upTarget);
+            MoveSelection(SelectableDirection.Up);
         }
         else if (Keyboard.current.aKey.wasPressedThisFrame)
         {
-            MoveSelection(leftTarget);
+            MoveSelection(SelectableDirection.Left);
         }
         else if (Keyboard.current.sKey.wasPressedThisFrame)
         {
-            MoveSelection(downTarget);
+            MoveSelection(SelectableDirection.Down);
         }
         else if (Keyboard.current.dKey.wasPressedThisFrame)
         {
-            MoveSelection(rightTarget);
+            MoveSelection(SelectableDirection.Right);
         }
-        else if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
+        else if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             ConfirmCurrentSelection();
         }
     }
 
-    public void MoveSelection(MapButton nextTarget)
+    private void MoveSelection(SelectableDirection direction)
     {
+        MapButton sourceSelection = currentSelection != null ? currentSelection : initialSelection;
+        if (sourceSelection == null)
+        {
+            return;
+        }
+
+        Selectable selectable = sourceSelection.GetComponent<Selectable>();
+        if (selectable == null)
+        {
+            return;
+        }
+
+        Selectable nextSelectable = direction switch
+        {
+            SelectableDirection.Up => selectable.FindSelectableOnUp(),
+            SelectableDirection.Left => selectable.FindSelectableOnLeft(),
+            SelectableDirection.Down => selectable.FindSelectableOnDown(),
+            SelectableDirection.Right => selectable.FindSelectableOnRight(),
+            _ => null
+        };
+
+        if (nextSelectable == null)
+        {
+            return;
+        }
+
+        MapButton nextTarget = nextSelectable.GetComponent<MapButton>();
         if (nextTarget == null)
         {
             return;
@@ -78,34 +99,29 @@ public class SelectMapKeyboadController : MonoBehaviour
 
     public void ConfirmCurrentSelection()
     {
-        if (currentSelection == null)
+        if (currentSelection != null)
+        {
+            currentSelection.OnPointerClick(null);
+            return;
+        }
+
+        if (EventSystem.current == null)
         {
             return;
         }
 
-        if (EventSystem.current != null)
+        GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
+        if (currentSelected == null)
         {
-            var pointerEvent = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(currentSelection.gameObject, pointerEvent, ExecuteEvents.pointerClickHandler);
             return;
         }
 
-        currentSelection.OnPointerClick(null);
+        var pointerEvent = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(currentSelected, pointerEvent, ExecuteEvents.pointerClickHandler);
     }
 
     private void SetCurrentSelection(MapButton target)
     {
-        if (mapButtons != null)
-        {
-            foreach (var mapButton in mapButtons)
-            {
-                if (mapButton != null)
-                {
-                    mapButton.SetSelected(mapButton == target);
-                }
-            }
-        }
-
         currentSelection = target;
 
         if (target == null)
@@ -117,6 +133,28 @@ public class SelectMapKeyboadController : MonoBehaviour
         if (uiButton != null && EventSystem.current != null)
         {
             EventSystem.current.SetSelectedGameObject(uiButton.gameObject);
+            return;
         }
+
+        if (mapButtons == null)
+        {
+            return;
+        }
+
+        foreach (var mapButton in mapButtons)
+        {
+            if (mapButton != null)
+            {
+                mapButton.SetSelected(mapButton == target);
+            }
+        }
+    }
+
+    private enum SelectableDirection
+    {
+        Up,
+        Left,
+        Down,
+        Right
     }
 }
