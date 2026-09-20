@@ -5,6 +5,10 @@ using TMPro;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using System;
+/*
+ * セーブデータのセーブとロードの確認画面用のスクリプト
+ */ 
+
 public class SaveDataConfirmation : MonoBehaviour
 {
     /// <summary>

@@ -4,6 +4,10 @@ using UnityEngine.UI; // Textを使うため
 using TMPro;
 using System.Collections.Generic;
 
+/*
+ * セーブスロットを表すスクリプト
+ */
+
 public class SaveSlot : Button
 {
     //private SaveData saveData; // セーブデータの参照
