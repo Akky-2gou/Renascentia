@@ -23,12 +23,17 @@ public class PlayerController : MonoBehaviour
     
     // エレベーターのタグ
     [SerializeField] private string _elevatorTag = "Elevator";
+    // 会話可能オブジェクトのタグ
+    [SerializeField] private string _talkableTag = "Talkable";
 
     // Animatorを参照
     [SerializeField] private Animator _playerAnimator; 
 
     // ChangeVisualDirectionを参照
     [SerializeField] private ChangeVisualDirection _changeVisualDirection; 
+
+    // PlayerInputの参照
+    [SerializeField] private PlayerInput _playerInput;
 
     Vector2 _moveInput; // 移動入力を格納する変数
     bool _isFacingRight; // プレイヤーが右を向いているかどうか
@@ -42,7 +47,7 @@ public class PlayerController : MonoBehaviour
     // 接触しているコライダー
     private Collider2D _touchingCollision = null;
 
-    public bool _isInputEnabled = true; // 入力を受け付けるかどうかのフラグ
+    private bool _isInputEnabled = true; // 入力を受け付けるかどうかのフラグ
 
     private void Awake()
     {
@@ -250,6 +255,20 @@ public class PlayerController : MonoBehaviour
                         HandleElevatorInteraction(component).Forget();
                     }
                 }
+                else if (_touchingCollision.gameObject.CompareTag(_talkableTag)) // 会話可能なオブジェクト
+                {
+                    var component = _touchingCollision.gameObject.GetComponent<TalkableObject>();
+                    if (component != null)
+                    {
+                        // フラグをセットして実行開始
+                        _isInteracting = true;
+
+                        StopMove(); // 移動を止める
+                        _isInputEnabled = false; // 入力を無効化
+
+                        HandleTalkableObjectInteraction(component).Forget();
+                    }
+                }
             }
         }
         finally
@@ -269,9 +288,22 @@ public class PlayerController : MonoBehaviour
         _isInteracting = false; // インタラクション終了
     }
 
+    // 会話可能なオブジェクトのインタラクション処理
+    private async UniTask HandleTalkableObjectInteraction(TalkableObject component)
+    {
+        _playerInput.SwitchCurrentActionMap("UI"); // UIアクションマップに切り替え
+
+        await component.TalkAsync(_cancellationTokenSource.Token); // 会話終了まで待機
+
+        _playerInput.SwitchCurrentActionMap("Player"); // Playerアクションマップに切り替え
+
+        _isInputEnabled = true; // 入力を有効化
+        _isInteracting = false; // インタラクション終了
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(_interactableTag) || collision.gameObject.CompareTag(_elevatorTag))
+        if (collision.gameObject.CompareTag(_interactableTag) || collision.gameObject.CompareTag(_elevatorTag) || collision.gameObject.CompareTag(_talkableTag))
         {
             Debug.Log("接触！");
             _touchingCollision = collision;

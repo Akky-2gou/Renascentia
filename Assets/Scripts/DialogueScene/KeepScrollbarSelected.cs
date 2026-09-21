@@ -18,6 +18,12 @@ public class KeepScrollbarSelected : MonoBehaviour, IDeselectHandler
         _scrollbar = GetComponent<Scrollbar>();
     }
 
+    // アクティブにした時に呼ばれる
+    void OnEnable() {
+        // フォーカスを強制的にログのスライダーに移す
+        EventSystem.current.SetSelectedGameObject(this.gameObject);
+	}
+
     // 選択が外れた瞬間に呼ばれる
     public void OnDeselect(BaseEventData eventData)
     {
