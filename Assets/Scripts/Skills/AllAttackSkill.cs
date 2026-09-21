@@ -7,5 +7,5 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game/Skills/AllAttack")]
 public class AllAttackSkill : AttackSkillBase
 {
-    void Reset() => _targetType = SkillTargetType.None; // アセット作成時のデフォルト設定
+    void Reset() => _targetType = SkillTargetType.AllEnemies; // アセット作成時のデフォルト設定
 }

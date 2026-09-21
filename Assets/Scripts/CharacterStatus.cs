@@ -19,6 +19,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     int _defense; // 防御力
     int _healAmount; // 回復量
     bool _alive; // 生存判定 
+    SkillData[] _skills; // 所持スキル
 
     BattleUnitType _battleUnitType; // バトルユニットのタイプ
 
@@ -85,6 +86,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         _passiveType = characterData.PassiveType;
         _hp = _maxHp;
         _alive = true;
+        _skills = characterData.Skills;
 
         _animator = this.GetComponent<Animator>();
     }
@@ -141,6 +143,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         get { return _passiveType; }
         set { _passiveType = value; }
     }
+
+    public SkillData[] Skills => _skills;
 
     /// <summary>
     /// ダメージを受けるときにHPを減らす関数
