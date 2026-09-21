@@ -29,17 +29,16 @@ public class DialogueDisplay : MonoBehaviour
     [SerializeField] private BackGround _backGround; // 背景のデータを格納するスクリプタブルオブジェクト
     [SerializeField] private TextBoxBackGround _textBoxBackGround; // テキストボックスの背景データを格納するスクリプタブルオブジェクト
 
+    [SerializeField] private GameObject _dialoguePanel; // ダイアログパネルを参照するための変数
+    [SerializeField] private GameObject _menuPanel; // メニューパネルを参照するための変数
+
     [SerializeField] private LogManager _logManager;
 
     [SerializeField] private GameObject _logPanel; // ログのパネルを参照するための変数
 
-    [SerializeField] private GameObject _logSlider; // ログのスライダーを参照するための変数
-
     [SerializeField] private float _letterDelay = 0.05f; // 1文字ごとの表示遅延時間
     [SerializeField] private float _autoPlayDelay = 1f; // セリフ表示後の待ち時間
     [SerializeField] private float _fastForwardDelay = 0.05f; // 早送り中のセリフ間隔
-
-    [SerializeField] private int _episodeIndex = 1; // 現在のエピソードのインデックス
 
 
     private IEnumerator<DialogueData> _dialogueIterator; // 現在のエピソードのセリフデータを順に取得するためのイテレーター
@@ -49,12 +48,18 @@ public class DialogueDisplay : MonoBehaviour
     private bool _isAutoPlaying = false; // 自動再生中かどうかのフラグ
     private bool _isFastForwarding = false; // 高速自動再生中かどうかのフラグ
     private bool _isEpisodeCompleted = false; // エピソードが終了したかどうかのフラグ
-    private bool _isLogDisplaied = false;
+    private bool _isLogDisplaied = false; // ログが表示されているかどうかのフラグ
+    private bool _isInTown = false; // 街探索での会話かどうかのフラグ
+
+    public bool IsEpisodeCompleted => _isEpisodeCompleted; // 会話終了フラグのプロパティ
 
     private int _currentBGM = -1; // 現在のBGM番号
    
     private CancellationTokenSource _textTypingCts; // テキスト表示のキャンセレーショントークンソース
     private CancellationToken _dct; // DestroyCancellationToken
+
+
+    private static readonly Color _inTownBackGroundColor = new Color(0f, 0f, 0f, 0.5f); // 街探索の時の背景色
 
     private void Awake()
     {
@@ -62,11 +67,35 @@ public class DialogueDisplay : MonoBehaviour
         _dct = this.GetCancellationTokenOnDestroy(); // DestroyCancellationTokenの取得（このオブジェクトが破棄されるとキャンセル）
         _textTypingCts = new CancellationTokenSource(); // CancellationTokenSourceの生成
 
+        // ダイアログパネルを非アクティブ化
+        _dialoguePanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// 会話を開始するメソッド
+    /// </summary>
+    public void StartTalking(int episodeIndex, bool isInTown)
+    {
+        // 各フラグの初期化
+        _isTextTyping = false;
+        _isAutoPlaying = false;
+        _isFastForwarding = false;
+        _isEpisodeCompleted = false;
+        _isInTown = isInTown;
+
+        // ダイアログパネルをアクティブ化し，（街探索中なら）メニューパネルを非アクティブ化
+        _dialoguePanel.SetActive(true);
+        if (_isInTown) _menuPanel.SetActive(false);
+
+        // 前の会話をキャンセル
+        _textTypingCts.Cancel(); // 現在の表示をキャンセル
+        _textTypingCts = new CancellationTokenSource(); // 新しいCancellationTokenSourceを作成
+
         // 現在のエピソードデータを取得
-        _dialogueIterator = ((IEnumerable<DialogueData>)_episodeDatabase._data[_episodeIndex]._data).GetEnumerator();
+        _dialogueIterator = ((IEnumerable<DialogueData>)_episodeDatabase._data[episodeIndex]._data).GetEnumerator();
 
         // ログを生成する
-        _logManager.Setup(_episodeDatabase._data[_episodeIndex], _characterDialogDatabase);
+        _logManager.Setup(_episodeDatabase._data[episodeIndex], _characterDialogDatabase);
 
         // ログを非表示
         _logPanel.SetActive(false);
@@ -135,7 +164,17 @@ public class DialogueDisplay : MonoBehaviour
             }
 
             // 背景やテキストボックスを更新
-            _backgroundImage.sprite = _backGround.GetBackgroundSprite(_currentDialogueData._backgroundId);
+            if (_isInTown) 
+            {
+                // 背景を半透明の黒にする
+                _backgroundImage.color = _inTownBackGroundColor;
+                _backgroundImage.sprite = null;
+            }
+            else
+            {
+                _backgroundImage.color = Color.white; // 通常表示
+                _backgroundImage.sprite = _backGround.GetBackgroundSprite(_currentDialogueData._backgroundId);
+            }
             _textBoxImage.sprite = _textBoxBackGround.GetBackgroundSprite(_currentDialogueData._textBoxType);
 
             // BGMの再生
@@ -172,6 +211,14 @@ public class DialogueDisplay : MonoBehaviour
             _isFastForwarding = false;
 
             UnityEngine.Debug.Log("エピソード終了．次のシーンに遷移");
+
+            // 街探索中ならダイアログパネルを無効化し，メニューパネルをアクティブ化
+            if (_isInTown)
+            {
+                _menuPanel.SetActive(true);
+                _dialoguePanel.SetActive(false);
+            }
+
             return;
         }
     }
@@ -313,9 +360,6 @@ public class DialogueDisplay : MonoBehaviour
             // 自動再生・早送りは無効にする
             _isAutoPlaying = false;
             _isFastForwarding = false;
-
-            // フォーカスを強制的にログのスライダーに移す
-            EventSystem.current.SetSelectedGameObject(_logSlider);
 
             _logPanel.SetActive(true);
             _isLogDisplaied = true;

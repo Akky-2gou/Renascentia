@@ -14,11 +14,27 @@ public class LogManager : MonoBehaviour
 
     private IEnumerator<GameObject> _createdLogSlotIterator;
 
+    // ログを全削除する
+    private void ClearLog()
+    {
+        // リストに格納したログスロットを削除
+        foreach (GameObject logSlot in _createdLogSlotList)
+        {
+            Destroy(logSlot);
+        }
+
+        // リスト自体を初期化
+        _createdLogSlotList.Clear();
+    }
+
     /// <summary>
     /// 現在のエピソードのデータを使って，そのログUIを作成する関数
     /// </summary>
     public void Setup(EpisodeData episodeData, CharacterDialogDatabase characterDialogDatabase)
     {
+        // ログの初期化
+        ClearLog();
+
         // このスクリプトがアタッチされたオブジェクトのトランスフォームを取得
         Transform logSlotParentTransform = this.transform;
 
