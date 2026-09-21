@@ -2,7 +2,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI; // Textを使うため
 using TMPro;
-using System.Collections.Generic;
 
 /*
  * セーブスロットを表すスクリプト
@@ -14,12 +13,6 @@ public class SaveSlot : Button
 
     [Header("保存処理")]
     [SerializeField] private SaveData saveData;
-
-    [Header("保存するデータ")]
-    [SerializeField] private int stageProgress;
-    [SerializeField] private List<int> unlockedCharacterIds = new List<int>();
-    [SerializeField] private List<int> collectedItemIds = new List<int>();
-    [SerializeField] private int lastMapId;
 
     [Header("セーブデータ番号")]
     [SerializeField] private int saveDataNum;
@@ -132,7 +125,7 @@ public class SaveSlot : Button
 
             }
             */
-            locationText.text = "現在地：" + loadedData.lastMapId;
+            locationText.text = "現在地：" + loadedData.lastMapId.ToString();
             if (locationIcon != null)
             {
                 locationIcon.enabled = false;
@@ -170,7 +163,7 @@ public class SaveSlot : Button
             return;
         }
 
-        saveData.SaveGame(saveDataNum, stageProgress, unlockedCharacterIds, collectedItemIds, lastMapId);
+        saveData.SaveGame(saveDataNum);
         UpdateSlotUI();
     }
 
@@ -189,22 +182,7 @@ public class SaveSlot : Button
             return;
         }
 
-        SetSaveContent(
-            loadedData.stageProgress,
-            loadedData.unlockedCharacterIds,
-            loadedData.collectedItemIds,
-            loadedData.lastMapId
-        );
-
         UpdateSlotUI();
-    }
-
-    public void SetSaveContent(int stageProgress, List<int> unlockedCharacterIds, List<int> collectedItemIds, int lastMapId)
-    {
-        this.stageProgress = stageProgress;
-        this.unlockedCharacterIds = unlockedCharacterIds != null ? new List<int>(unlockedCharacterIds) : new List<int>();
-        this.collectedItemIds = collectedItemIds != null ? new List<int>(collectedItemIds) : new List<int>();
-        this.lastMapId = lastMapId;
     }
 
     /*
