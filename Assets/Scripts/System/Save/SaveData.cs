@@ -8,10 +8,10 @@ public class SaveData : MonoBehaviour
     [Serializable]
     public class SaveFileData
     {
-        public int stageProgress;
+        public MapId stageProgress;
         public List<int> unlockedCharacterIds = new List<int>();
         public List<int> collectedItemIds = new List<int>();
-        public int lastMapId;
+        public MapId lastMapId;
         public int dataVersion = 1;
         public string lastSavedAtJst;
     }
@@ -25,14 +25,20 @@ public class SaveData : MonoBehaviour
         Debug.Log($"Save folder path: {SaveFolderPath}");
     }
 
-    public void SaveGame(int slotId, int stageProgress, List<int> unlockedCharacterIds, List<int> collectedItemIds, int lastMapId)
+    public void SaveGame(int slotId)
     {
+        if (GameProgress.Instance == null)
+        {
+            Debug.LogWarning("GameProgress が見つからないため保存できませんでした。");
+            return;
+        }
+
         SaveFileData saveData = new SaveFileData
         {
-            stageProgress = stageProgress,
-            unlockedCharacterIds = unlockedCharacterIds != null ? new List<int>(unlockedCharacterIds) : new List<int>(),
-            collectedItemIds = collectedItemIds != null ? new List<int>(collectedItemIds) : new List<int>(),
-            lastMapId = lastMapId,
+            stageProgress = GameProgress.Instance.StageProgress,
+            unlockedCharacterIds = new List<int>(GameProgress.Instance.UnlockedCharacterIds),
+            collectedItemIds = new List<int>(GameProgress.Instance.CollectedItemIds),
+            lastMapId = GameProgress.Instance.LastMapId,
             lastSavedAtJst = GetJapanTimeNow().ToString("yyyy-MM-dd HH:mm:ss")
         };
 
@@ -93,6 +99,14 @@ public class SaveData : MonoBehaviour
                     $"collectedItemIds=[{collected}], " +
                     $"lastSavedAtJst={loadedData.lastSavedAtJst}"
                 );
+            }
+
+            if (GameProgress.Instance != null)
+            {
+                GameProgress.Instance.SetStageProgress(loadedData.stageProgress);
+                GameProgress.Instance.SetLastMapId(loadedData.lastMapId);
+                GameProgress.Instance.SetUnlockedCharacterIds(loadedData.unlockedCharacterIds);
+                GameProgress.Instance.SetCollectedItemIds(loadedData.collectedItemIds);
             }
 
             return loadedData;

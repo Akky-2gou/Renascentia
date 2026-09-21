@@ -106,32 +106,21 @@ public class SaveDataConfirmation : MonoBehaviour
         Debug.Log("ロードを実行します。");
         Debug.Log($"[LoadCheck] CurrentSlot: {saveCurrentSlot}");
 
-        SaveData saveDataManager = FindFirstObjectByType<SaveData>();
-        
-        if (saveDataManager == null)
-        {
-            Debug.LogWarning("SaveData が見つからないためロードできませんでした。");
-            CloseDialog();
-            return;
-        }
-
-        SaveData.SaveFileData loadedData = saveDataManager.LoadGame(saveCurrentSlot, true);
-       
-        if (loadedData == null)
-        {
-            Debug.LogWarning($"Slot {saveCurrentSlot} にロードデータがありません。");
-            CloseDialog();
-            return;
-        }
-
+        bool foundTargetSlot = false;
         foreach (SaveSlot slot in saveSlots)
         {
             if (slot != null && slot.getSaveDataNum() == saveCurrentSlot)
             {
                 Debug.Log($"[LoadCheck] Found target slot: {slot}");
                 slot.ExecuteLoad();
+                foundTargetSlot = true;
                 break;
             }
+        }
+
+        if (!foundTargetSlot)
+        {
+            Debug.LogWarning($"Slot {saveCurrentSlot} に対応する SaveSlot が見つかりませんでした。");
         }
 
         CloseDialog();
