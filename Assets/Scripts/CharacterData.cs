@@ -29,4 +29,8 @@ public class CharacterData : ScriptableObject
     // [Header("キャラクターPreafab")]
     [SerializeField] GameObject _characterPrefab;
     public GameObject CharacterPrefab => _characterPrefab;
+
+    [Header("スキル")]
+    [SerializeField] SkillData[] _skills;
+    public SkillData[] Skills => _skills;
 }

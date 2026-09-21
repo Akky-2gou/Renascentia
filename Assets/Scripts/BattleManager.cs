@@ -266,22 +266,25 @@ public class BattleManager : MonoBehaviour
     }
 
     // スキル攻撃ボタンが押された時に呼ばれる関数
-    private void OnSkillAttackClicked(CharacterStatus defender)
+    private void OnSkillAttackClicked(CharacterStatus target)
     {
         foreach (var character in _characterQueue)
         {
             character.OnClicked -= OnNormalAttackClicked;
             character.OnClicked -= OnSkillAttackClicked;
         }
+        CharacterStatus attacker = _characterQueue.Peek();
+        SkillData skill = GetSkillByCost(attacker, _skillCost); // スキルの取得
+        if (skill == null) return;
+
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
-        SkillAttack(defender).Forget(); 
+        SkillAttack(new[] { target }, skill).Forget();
     }
 
     // スキル攻撃処理
-    async UniTaskVoid SkillAttack(CharacterStatus defender)
+    async UniTaskVoid SkillAttack(CharacterStatus[] targets, SkillData skill)
     {
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
-        CharacterStatus[] defenders = {defender}; // 配列を生成
 
         // イベントを await するための準備
         // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
@@ -302,10 +305,13 @@ public class BattleManager : MonoBehaviour
         // await skillAnimTcs;
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
-        TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
+        skill.Execute(attacker, targets); // 通常攻撃はダメージを与えるだけ
         DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
         ResetSkillCost();
-        defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
+        foreach (var target in targets)
+        {
+            target.PlayDamagedAnimation(); // 被弾アニメーション
+        }
 
         // 攻撃アニメーションが最後まで終わるまで待つ
         // await endTcs.Task;
@@ -357,6 +363,20 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 現在のスキルの中から、指定したSPコストのものを探す
+    /// </summary>
+    private SkillData GetSkillByCost(CharacterStatus attacker, int cost)
+    {
+        foreach (var skill in attacker.Skills)
+        {
+            if (skill.Cost == cost) return skill;
+        }
+
+        Debug.LogError($"SPコスト{cost}のスキルが見つかりませんでした: {attacker.gameObject.name}");
+        return null;
+    }
+
+    /// <summary>
     /// 攻撃ボタンが押された際の処理
     /// </summary>
     public void OnClickedAttackButton()
@@ -394,15 +414,88 @@ public class BattleManager : MonoBehaviour
     {
         if (_skillCost == 0) return;
 
+        CharacterStatus attacker = _characterQueue.Peek();
+        SkillData skill = GetSkillByCost(attacker, _skillCost);
+        if (skill == null) return; // 見つからなければ何もしない
+
         ButtunUISetActive(false);
 
-        foreach (var character in _characterQueue)
+        switch (skill.TargetType)
         {
-            if (character.BattleUnitType == BattleUnitType.Enemy)
+            // 敵単体攻撃
+            case SkillTargetType.SingleEnemy:
+                foreach (var character in _characterQueue)
+                {
+                    if (character.BattleUnitType == BattleUnitType.Enemy)
+                    {
+                        character.OnClicked += OnSkillAttackClicked; // 一旦、通常攻撃処理と同じにするが、実際は変更させる
+                    }
+                }
+                break;
+
+            // 敵全体攻撃
+            case SkillTargetType.AllEnemies:
+                SkillAttack(GetAliveCharacters(BattleUnitType.Enemy), skill).Forget();
+                break;
+
+            // 味方単体
+            case SkillTargetType.SingleAlly:
+                foreach (var character in _characterQueue)
+                {
+                    if (character.BattleUnitType == BattleUnitType.Player)
+                    {
+                        character.OnClicked += OnSkillAttackClicked;
+                    }
+                }
+                break;
+
+            // 味方全体
+            case SkillTargetType.AllAllies:
+                SkillAttack(GetAliveCharacters(BattleUnitType.Player), skill).Forget();
+                break;
+
+            // 自分自身
+            case SkillTargetType.Self:
+                // あるならここに処理を書く
+                break;
+
+            // スキルでNoneが選ばれた場合の処理
+            default:
+                Debug.LogError($"不明な対象が選択されました: attacker: {attacker}, skill: {skill}");
+                break;
+        }
+    }
+
+    // 生きている指定タイプのキャラを全員集めるヘルパー
+    private CharacterStatus[] GetAliveCharacters(BattleUnitType type)
+    {
+        List<CharacterStatus> queueList = new List<CharacterStatus>(_characterQueue); // 現在の並び順のまま複製
+
+        int endIndex = queueList.FindIndex(c => c.BattleUnitType == BattleUnitType.EndPoint);
+
+        List<CharacterStatus> ordered = new List<CharacterStatus>();
+
+        // EndPointの次から、リストの末尾まで
+        for (int i = endIndex + 1; i < queueList.Count; i++)
+        {
+            ordered.Add(queueList[i]);
+        }
+        // リストの先頭から、EndPointの手前まで
+        for (int i = 0; i < endIndex; i++)
+        {
+            ordered.Add(queueList[i]);
+        }
+
+        List<CharacterStatus> result = new List<CharacterStatus>();
+        foreach (var character in ordered)
+        {
+            if (character.BattleUnitType == type && character.Alive)
             {
-                character.OnClicked += OnSkillAttackClicked; // 一旦、通常攻撃処理と同じにするが、実際は変更させる
+                result.Add(character);
             }
         }
+
+        return result.ToArray();
     }
 
     // ボタンUIの表示と非表示
