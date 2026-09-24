@@ -35,6 +35,8 @@ public class BattleManager : MonoBehaviour
 
     // スキルゲージの取得
     [SerializeField] SkillGauge skillGauge;
+    // スキルゲージバーの取得
+    [SerializeField] SPGaugeBar skillGaugeBar;
 
     void Start()
     {
@@ -66,6 +68,8 @@ public class BattleManager : MonoBehaviour
         CharacterStatus endPoint = dummyObj.AddComponent<CharacterStatus>();
         endPoint.BattleUnitType = BattleUnitType.EndPoint;
         _characterQueue.Enqueue(endPoint);
+
+        skillGaugeBar.SetGaugeImmediate(_currentSP, MAX_SP); // ゲージ更新
     }
 
     // ダメージを与える処理
@@ -200,6 +204,8 @@ public class BattleManager : MonoBehaviour
 
             TestDisplayCharactersHelth();
             //TestDisplaySP();
+
+            skillGaugeBar.SetGauge(_currentSP, MAX_SP); // ゲージ更新
 
             // 全敵の行動が終わるまでループする
             if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
