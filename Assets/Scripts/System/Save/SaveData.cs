@@ -103,10 +103,19 @@ public class SaveData : MonoBehaviour
 
             if (GameProgress.Instance != null)
             {
-                GameProgress.Instance.SetStageProgress(loadedData.stageProgress);
-                GameProgress.Instance.SetLastMapId(loadedData.lastMapId);
-                GameProgress.Instance.SetUnlockedCharacterIds(loadedData.unlockedCharacterIds);
-                GameProgress.Instance.SetCollectedItemIds(loadedData.collectedItemIds);
+                GameProgress.Instance.StageProgress = loadedData.stageProgress;
+                GameProgress.Instance.LastMapId = loadedData.lastMapId;
+                GameProgress.Instance.UnlockedCharacterIds.Clear();
+                if (loadedData.unlockedCharacterIds != null)
+                {
+                    GameProgress.Instance.UnlockedCharacterIds.AddRange(loadedData.unlockedCharacterIds);
+                }
+
+                GameProgress.Instance.CollectedItemIds.Clear();
+                if (loadedData.collectedItemIds != null)
+                {
+                    GameProgress.Instance.CollectedItemIds.AddRange(loadedData.collectedItemIds);
+                }
             }
 
             return loadedData;
