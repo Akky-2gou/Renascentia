@@ -4,101 +4,84 @@ using UnityEngine;
 /*
  * ゲームの進行度を管理するシングルトン(セーブ・ロードの参照場所)
  */
+
 public class GameProgress : MonoBehaviour
 {
+    // シングルトンのインスタンス
     public static GameProgress Instance { get; private set; }
 
-    [SerializeField] private MapId stageProgress;
-    [SerializeField] private List<int> unlockedCharacterIds = new List<int>();
-    [SerializeField] private List<int> collectedItemIds = new List<int>();
-    [SerializeField] private MapId lastMapId;
+    private MapId _stageProgress;
+    private MapId _lastMapId;
+    private List<int> _unlockedCharacterIds = new List<int>();
+    private List<int> _collectedItemIds = new List<int>();
 
-    public MapId StageProgress => stageProgress;
-    public IReadOnlyList<int> UnlockedCharacterIds => unlockedCharacterIds;
-    public IReadOnlyList<int> CollectedItemIds => collectedItemIds;
-    public MapId LastMapId => lastMapId;
+  
+    public MapId StageProgress
+    {
+        get { return _stageProgress; }
+        set 
+        { 
+            _stageProgress = value;
+        }
+    }
+
+    public MapId LastMapId
+    {
+        get { return _lastMapId; }
+        set { _lastMapId = value; }
+    }
+
+    //外部からリストを直接変更しないために、プロパティを通してアクセスする
+    public List<int> UnlockedCharacterIds => _unlockedCharacterIds;
+    public List<int> CollectedItemIds => _collectedItemIds;
+
+    // 開放されたキャラクターIDを追加するメソッド
+    public void AddUnlockedCharacter(int characterId)
+    {
+        // 重複して追加されないようにチェック
+        if (!_unlockedCharacterIds.Contains(characterId))
+        {
+            _unlockedCharacterIds.Add(characterId);
+        }
+    }
+
+    // 収集されたアイテムIDを追加するメソッド
+    public void AddCollectedItem(int itemId)
+    {
+        // 重複して追加されないようにチェック
+        if (!_collectedItemIds.Contains(itemId))
+        {
+            _collectedItemIds.Add(itemId);
+        }
+    }
+
+    //開放キャラクターのリストを初期化するメソッド
+    public void ResetUnlockedCharacters()
+    {
+        // 単一の値を初期値に戻す
+        _stageProgress = default; // または初期のMapId
+        // リストの中身を空にする
+        _unlockedCharacterIds.Clear();
+    }
+      //収集アイテムのリストを初期化するメソッド
+    public void ResetCollectedItems()
+    {
+        // 単一の値を初期値に戻す
+        _unlockedCharacterIds  = default; 
+        // リストの中身を空にする
+        _collectedItemIds.Clear();
+    }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
         {
             Destroy(gameObject);
-            return;
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void SetStageProgress(MapId value)
-    {
-        stageProgress = value;
-    }
-
-    public void SetUnlockedCharacterIds(IEnumerable<int> values)
-    {
-        unlockedCharacterIds.Clear();
-        if (values == null)
-        {
-            return;
-        }
-
-        unlockedCharacterIds.AddRange(values);
-    }
-
-    public void SetCollectedItemIds(IEnumerable<int> values)
-    {
-        collectedItemIds.Clear();
-        if (values == null)
-        {
-            return;
-        }
-
-        collectedItemIds.AddRange(values);
-    }
-
-    public void SetLastMapId(MapId value)
-    {
-        lastMapId = value;
-    }
-
-    public bool UnlockCharacter(int characterId)
-    {
-        if (unlockedCharacterIds.Contains(characterId))
-        {
-            return false;
-        }
-
-        unlockedCharacterIds.Add(characterId);
-        return true;
-    }
-
-    public bool CollectItem(int itemId)
-    {
-        if (collectedItemIds.Contains(itemId))
-        {
-            return false;
-        }
-
-        collectedItemIds.Add(itemId);
-        return true;
-    }
-
-    public bool IsCharacterUnlocked(int characterId)
-    {
-        return unlockedCharacterIds.Contains(characterId);
-    }
-
-    public bool IsItemCollected(int itemId)
-    {
-        return collectedItemIds.Contains(itemId);
-    }
-
-    public void ResetProgress()
-    {
-        stageProgress = MapId.None;
-        lastMapId = MapId.None;
-        unlockedCharacterIds.Clear();
-        collectedItemIds.Clear();
     }
 }
