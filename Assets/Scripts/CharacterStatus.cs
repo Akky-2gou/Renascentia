@@ -11,7 +11,7 @@ using System.Threading;
  */
 
 
-public class CharacterStatus : MonoBehaviour, IPointerClickHandler
+public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     int _maxHp; // 最大ヒットポイント
     int _hp; // ヒットポイント
@@ -39,6 +39,18 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     public event Action OnHitEvent;
     public event Action OnSkillAnimEvent;
     public event Action OnAnimationEndEvent;
+
+    [SerializeField] private GameObject _targetMarkRoot; // 標的マークの画像
+    private bool _hoverEnabled = false; // ホバーで標的マークを出してよい状態かどうか
+
+    void Awake()
+    {
+        if (_targetMarkRoot != null)
+        {
+            _targetMarkRoot.SetActive(false);
+            _hoverEnabled = false;
+        }
+    }
 
     /// <summary>
     /// マウスクリック時にUnityが自動で呼んでくれる関数
@@ -238,5 +250,55 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log("スキルアニメーション再生");
         _animator.SetTrigger("SkillTrigger");
+    }
+
+    // ====================================================
+    // ターゲットマークに関する処理
+    // ====================================================
+
+    /// <summary>
+    /// 単体選択スキルの対象になりうる間だけ、ホバーでの標的マーク表示を許可する
+    /// </summary>
+    public void SetHoverEnabled(bool enabled)
+    {
+        _hoverEnabled = enabled;
+        if (!enabled)
+        {
+            HideTargetMark(); // 選択不可になったら、表示中のマークも消す
+        }
+    }
+
+    // カーソルに乗ったら
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!_hoverEnabled) return;
+        ShowTargetMark();
+    }
+
+    // カーソルが外れたら
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!_hoverEnabled) return;
+        HideTargetMark();
+    }
+
+    /// <summary>
+    /// 標的マークを表示し、HPバーも広げる
+    /// </summary>
+    public void ShowTargetMark()
+    {
+        if (_battleUnitType == BattleUnitType.EndPoint) return;
+        _targetMarkRoot.SetActive(true);
+        _hpBar?.SetTargeted(true);
+    }
+
+    /// <summary>
+    /// 標的マークを非表示にし、HPバーも元に戻す
+    /// </summary>
+    public void HideTargetMark()
+    {
+        if (_battleUnitType == BattleUnitType.EndPoint) return;
+        _targetMarkRoot.SetActive(false);
+        _hpBar?.SetTargeted(false);
     }
 }

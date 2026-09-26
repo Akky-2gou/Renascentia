@@ -31,6 +31,9 @@ public class CharacterHPBar : MonoBehaviour
     private CancellationTokenSource _heightCts; // コンテナーアニメーション用のトークン
     private CancellationTokenSource _hpCts; // HPアニメーション用のトークン
 
+    private bool _isCurrentTurn;  // 行動予定キャラかどうか
+    private bool _isTargeted;     // 標的として狙われているかどうか
+
     void Awake()
     {
         // 自分のRectTransformを取得
@@ -110,24 +113,17 @@ public class CharacterHPBar : MonoBehaviour
     /// <param name="isActiveTurn"></param>
     public void SetActiveTurn(bool isActiveTurn)
     {
-        _narrowRoot.SetActive(!isActiveTurn);
-        _wideRoot.SetActive(isActiveTurn);
+        _isCurrentTurn = isActiveTurn;
+        UpdateWideState();
+    }
 
-        // 表示するフレームの高さに自身の高さを合わせる
-        float targetHeight = isActiveTurn
-            ? _wideFrameImage.rectTransform.rect.height
-            : _narrowFrameImage.rectTransform.rect.height;
-
-        // アニメーションの有無
-        if (_ContainerAnimateHeight)
-        {
-            AnimateHeight(targetHeight).Forget(); // アニメーションさせる
-        }
-        else
-        {
-            SetHeightImmediate(targetHeight); // 即時変位
-            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>()); // 配置場所の再計算
-        }
+    /// <summary>
+    /// 標的として選択されている状態かどうかを設定する
+    /// </summary>
+    public void SetTargeted(bool isTargeted)
+    {
+        _isTargeted = isTargeted;
+        UpdateWideState();
     }
 
     /// <summary>
@@ -176,5 +172,32 @@ public class CharacterHPBar : MonoBehaviour
         Vector2 size = _rectTransform.sizeDelta;
         size.y = height;
         _rectTransform.sizeDelta = size;
+    }
+
+    /// <summary>
+    /// 「行動予定」か「狙われている」のどちらかがtrueなら広い枠にする
+    /// </summary>
+    private void UpdateWideState()
+    {
+        bool wide = _isCurrentTurn || _isTargeted;
+
+        _narrowRoot.SetActive(!wide);
+        _wideRoot.SetActive(wide);
+
+        // 表示するフレームの高さに自身の高さを合わせる
+        float targetHeight = wide
+            ? _wideFrameImage.rectTransform.rect.height
+            : _narrowFrameImage.rectTransform.rect.height;
+
+        // アニメーションの有無
+        if (_ContainerAnimateHeight)
+        {
+            AnimateHeight(targetHeight).Forget(); // アニメーションさせる
+        }
+        else
+        {
+            SetHeightImmediate(targetHeight); // 即時変位
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>()); // 配置場所の再計算
+        }
     }
 }
