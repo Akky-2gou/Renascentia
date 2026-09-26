@@ -97,6 +97,11 @@ public class BattleManager : MonoBehaviour
         _turnText.text = "1 turn"; // ターン表示の初期化
     }
 
+    void OnDestroy()
+    {
+        Time.timeScale = 1f; // シーンを離れるときにスピードを元に戻す
+    }
+
     // ダメージを与える処理
     void TakeDamage(CharacterStatus attacker, CharacterStatus[] defenders)
     {
