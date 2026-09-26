@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using Unity.VisualScripting;
+using TMPro;
 
 /*
  * バトルシステムマネージャー
@@ -46,6 +47,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private CharacterHPBar _enemyHpBarPrefab;  // 敵用プレハブ
     [SerializeField] private Transform _playerHpBarContainer;   // 味方のVertical Layout Group付きの親
     [SerializeField] private Transform _enemyHpBarContainer;    // 敵のVertical Layout Group付きの親
+
+    [Header("ターン表示テキスト")]
+    [SerializeField] private TextMeshProUGUI _turnText; // ターン表示テキスト
 
     void Start()
     {
@@ -89,6 +93,8 @@ public class BattleManager : MonoBehaviour
         UpdateActiveHpBars(); // 行動キャラのハイライトを反映
 
         skillGaugeBar.SetGaugeImmediate(_currentSP, MAX_SP); // ゲージ更新
+
+        _turnText.text = "1 turn"; // ターン表示の初期化
     }
 
     // ダメージを与える処理
@@ -212,6 +218,7 @@ public class BattleManager : MonoBehaviour
                 if (_characterQueue.Peek().BattleUnitType == BattleUnitType.EndPoint)
                 {
                     _turnCount++; // ターン数を増加させる
+                    _turnText.text = _turnCount + " turn"; // ターン数に応じて、テキストを直す
                     Debug.Log("Turn " + _turnCount);
 
                     CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
