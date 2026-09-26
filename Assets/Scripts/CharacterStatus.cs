@@ -21,6 +21,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
     bool _alive; // 生存判定 
     SkillData[] _skills; // 所持スキル
 
+    CharacterHPBar _hpBar; // HPバーの参照
+
     BattleUnitType _battleUnitType; // バトルユニットのタイプ
 
     GameTypes.CharacterType _characterType; // キャラクターのタイプ
@@ -126,6 +128,18 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         set { _alive = value; }
     }
 
+    // Setし、HPの反映までさせる
+    public void SetHpBar(CharacterHPBar hpBar)
+    {
+        _hpBar = hpBar;
+        _hpBar.SetHp(_hp, _maxHp); // 紐付けた瞬間に、今のHPを表示に反映しておく
+    }
+
+    public CharacterHPBar HpBar
+    {
+        get { return _hpBar; }
+    }
+
     public BattleUnitType BattleUnitType
     {
         get { return _battleUnitType; }
@@ -164,6 +178,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
             _alive = false; // 死んだ判定にする
         }
 
+        _hpBar?.SetHp(_hp, _maxHp); // HPバーへの反映
+
         return;
     }
 
@@ -183,6 +199,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler
         {
             _hp = _maxHp; // HPが最大HPを超えないようにする
         }
+
+        _hpBar?.SetHp(_hp, _maxHp); // HPバーへの反映
 
         return;
     }
