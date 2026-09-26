@@ -43,9 +43,9 @@ public class BattleManager : MonoBehaviour
 
     [Header("HPバー")]
     [SerializeField] private CharacterHPBar _playerHpBarPrefab; // 味方用プレハブ
-    //[SerializeField] private CharacterHPBar _enemyHpBarPrefab;  // 敵用プレハブ
+    [SerializeField] private CharacterHPBar _enemyHpBarPrefab;  // 敵用プレハブ
     [SerializeField] private Transform _playerHpBarContainer;   // 味方のVertical Layout Group付きの親
-    //[SerializeField] private Transform _enemyHpBarContainer;    // 敵のVertical Layout Group付きの親
+    [SerializeField] private Transform _enemyHpBarContainer;    // 敵のVertical Layout Group付きの親
 
     void Start()
     {
@@ -73,6 +73,10 @@ public class BattleManager : MonoBehaviour
             GameObject character = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
             characterStatus.Initialize(enemy); // ベースキャラのキャラクターステータスにデータ注入
+            
+            CharacterHPBar hpBar = Instantiate(_enemyHpBarPrefab, _enemyHpBarContainer); // HPバーの生成
+            characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
+            
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
 
@@ -545,7 +549,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (var character in _characterQueue)
         {
-            if (character.BattleUnitType == BattleUnitType.EndPoint || character.BattleUnitType == BattleUnitType.Enemy) continue; // 番兵は対象外
+            if (character.BattleUnitType == BattleUnitType.EndPoint) continue; // 番兵は対象外
 
             character.HpBar.SetActiveTurn(character == current);
         }
