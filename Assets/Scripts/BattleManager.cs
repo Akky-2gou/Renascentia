@@ -248,6 +248,7 @@ public class BattleManager : MonoBehaviour
         {
             character.OnClicked -= OnNormalAttackClicked;
             character.OnClicked -= OnSkillAttackClicked;
+            character.SetHoverEnabled(false); // ターゲットアイコンの非表示
         }
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         NormalAttack(defender).Forget(); 
@@ -299,6 +300,7 @@ public class BattleManager : MonoBehaviour
         {
             character.OnClicked -= OnNormalAttackClicked;
             character.OnClicked -= OnSkillAttackClicked;
+            character.SetHoverEnabled(false); // ターゲットアイコンの非表示
         }
         CharacterStatus attacker = _characterQueue.Peek();
         SkillData skill = GetSkillByCost(attacker, _skillCost); // スキルの取得
@@ -415,6 +417,7 @@ public class BattleManager : MonoBehaviour
             if (character.BattleUnitType == BattleUnitType.Enemy)
             {
                 character.OnClicked += OnNormalAttackClicked; 
+                character.SetHoverEnabled(true); // ターゲットアイコンの表示
             }
         }
     }
@@ -456,13 +459,14 @@ public class BattleManager : MonoBehaviour
                     if (character.BattleUnitType == BattleUnitType.Enemy)
                     {
                         character.OnClicked += OnSkillAttackClicked; // 一旦、通常攻撃処理と同じにするが、実際は変更させる
+                        character.SetHoverEnabled(true); // ターゲットアイコンの表示
                     }
                 }
                 break;
 
             // 敵全体攻撃
             case SkillTargetType.AllEnemies:
-                SkillAttack(GetAliveCharacters(BattleUnitType.Enemy), skill).Forget();
+                ShowAllTargetsAndConfirm(GetAliveCharacters(BattleUnitType.Enemy), skill);
                 break;
 
             // 味方単体
@@ -472,13 +476,14 @@ public class BattleManager : MonoBehaviour
                     if (character.BattleUnitType == BattleUnitType.Player)
                     {
                         character.OnClicked += OnSkillAttackClicked;
+                        character.SetHoverEnabled(true); // ターゲットアイコンの表示
                     }
                 }
                 break;
 
             // 味方全体
             case SkillTargetType.AllAllies:
-                SkillAttack(GetAliveCharacters(BattleUnitType.Player), skill).Forget();
+                ShowAllTargetsAndConfirm(GetAliveCharacters(BattleUnitType.Player), skill);
                 break;
 
             // 自分自身
@@ -523,6 +528,32 @@ public class BattleManager : MonoBehaviour
         }
 
         return result.ToArray();
+    }
+
+    /// <summary>
+    /// 対象全員に標的マークを表示し、誰か1人クリックされたら全体攻撃を実行する
+    /// </summary>
+    private void ShowAllTargetsAndConfirm(CharacterStatus[] targets, SkillData skill)
+    {
+        // クリックされたときの処理を1つの変数として用意しておく(全員に同じものを登録するため)
+        Action<CharacterStatus> handler = null;
+        handler = (clicked) =>
+        {
+            // 選択が確定したので、全員分の登録とマークを解除する
+            foreach (var t in targets)
+            {
+                t.OnClicked -= handler;
+                t.HideTargetMark();
+            }
+
+            SkillAttack(targets, skill).Forget(); // 全員に対して効果を発動する
+        };
+
+        foreach (var t in targets)
+        {
+            t.ShowTargetMark(); // ★ホバーなしで、最初から常時表示する
+            t.OnClicked += handler;
+        }
     }
 
     // ボタンUIの表示と非表示
