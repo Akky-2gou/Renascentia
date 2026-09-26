@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
 
         UpdateActiveHpBars(); // 行動キャラのハイライトを反映
 
-        skillGaugeBar.SetGaugeImmediate(_currentSP, MAX_SP); // ゲージ更新
+        skillGaugeBar.SetGaugeImmediate((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
 
         _turnText.text = "1 turn"; // ターン表示の初期化
     }
@@ -145,6 +145,8 @@ public class BattleManager : MonoBehaviour
         {
             _currentSP = MAX_SP; // SPが最大値を超えないようにする
         }
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // SP消費処理
@@ -155,6 +157,8 @@ public class BattleManager : MonoBehaviour
         {
             _currentSP = 0; // SPが0未満にならないようにする
         }
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // 消費SP量のリセット
@@ -162,6 +166,7 @@ public class BattleManager : MonoBehaviour
     {
         _skillCost = 0;
         skillGauge.SetGaugeImmediate(0);
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // ゲームオーバー判定処理
@@ -238,7 +243,7 @@ public class BattleManager : MonoBehaviour
             TestDisplayCharactersHelth();
             //TestDisplaySP();
 
-            skillGaugeBar.SetGauge(_currentSP, MAX_SP); // ゲージ更新
+            skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
 
             // 全敵の行動が終わるまでループする
             if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
@@ -445,6 +450,8 @@ public class BattleManager : MonoBehaviour
             _skillCost = 0;
         }
         skillGauge.SetGauge(_skillCost);
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP); // 点滅表示
 
         TestDisplaySP();
     }
