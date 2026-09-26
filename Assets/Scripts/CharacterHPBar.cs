@@ -26,6 +26,11 @@ public class CharacterHPBar : MonoBehaviour
     [SerializeField] private float _HpAnimationDuration = 1.0f; // ゲージが動く時間(s)
     [SerializeField] private float _HpAnimationSpeed = 5.0f; // 動かす速さ(n乗)
 
+    [Header("Fill範囲の補正(スプライトの余白対応)")]
+    [SerializeField, Range(0f, 1f)] private float _fillRangeStart = 0f;  // 色が始まる位置
+    [SerializeField, Range(0f, 1f)] private float _fillRangeEnd = 0.85f; // 色が終わる位置(満タン時のfillAmount)
+
+
     private RectTransform _rectTransform; // RectTransformの取得
 
     private CancellationTokenSource _heightCts; // コンテナーアニメーション用のトークン
@@ -47,6 +52,12 @@ public class CharacterHPBar : MonoBehaviour
         SetHeightImmediate(_narrowFrameImage.rectTransform.rect.height);
     }
 
+    /// HPの割合(0〜1)を、実際のスプライトの見た目に合わせたfillAmountの値に変換する
+    private float ConvertToVisualFill(float hpRatio)
+    {
+        return Mathf.Lerp(_fillRangeStart, _fillRangeEnd, hpRatio);
+    }
+
     /// <summary>
     /// 新しいHP値に更新する
     /// </summary>
@@ -54,7 +65,8 @@ public class CharacterHPBar : MonoBehaviour
     /// <param name="maxHp"></param>
     public void SetHp(float currentHp, float maxHp)
     {
-        float targetFill = maxHp > 0f ? Mathf.Clamp01(currentHp / maxHp) : 0f;
+        float hpRatio = maxHp > 0f ? Mathf.Clamp01(currentHp / maxHp) : 0f;
+        float targetFill = ConvertToVisualFill(hpRatio); // 変換
         AnimateFill(targetFill).Forget(); // HPバーのアニメーション
     }
 
@@ -102,7 +114,8 @@ public class CharacterHPBar : MonoBehaviour
     public void SetHpImmediate(float currentHp, float maxHp)
     {
         _hpCts?.Cancel();
-        float fill = maxHp > 0f ? Mathf.Clamp01(currentHp / maxHp) : 0f;
+        float hpRatio = maxHp > 0f ? Mathf.Clamp01(currentHp / maxHp) : 0f;
+        float fill = ConvertToVisualFill(hpRatio); // 変換
         _narrowFillImage.fillAmount = fill;
         _wideFillImage.fillAmount = fill;
     }

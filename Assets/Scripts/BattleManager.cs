@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using Unity.VisualScripting;
+using TMPro;
 
 /*
  * バトルシステムマネージャー
@@ -46,6 +47,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private CharacterHPBar _enemyHpBarPrefab;  // 敵用プレハブ
     [SerializeField] private Transform _playerHpBarContainer;   // 味方のVertical Layout Group付きの親
     [SerializeField] private Transform _enemyHpBarContainer;    // 敵のVertical Layout Group付きの親
+
+    [Header("ターン表示テキスト")]
+    [SerializeField] private TextMeshProUGUI _turnText; // ターン表示テキスト
 
     void Start()
     {
@@ -88,7 +92,14 @@ public class BattleManager : MonoBehaviour
 
         UpdateActiveHpBars(); // 行動キャラのハイライトを反映
 
-        skillGaugeBar.SetGaugeImmediate(_currentSP, MAX_SP); // ゲージ更新
+        skillGaugeBar.SetGaugeImmediate((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
+
+        _turnText.text = "1 turn"; // ターン表示の初期化
+    }
+
+    void OnDestroy()
+    {
+        Time.timeScale = 1f; // シーンを離れるときにスピードを元に戻す
     }
 
     // ダメージを与える処理
@@ -134,6 +145,8 @@ public class BattleManager : MonoBehaviour
         {
             _currentSP = MAX_SP; // SPが最大値を超えないようにする
         }
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // SP消費処理
@@ -144,6 +157,8 @@ public class BattleManager : MonoBehaviour
         {
             _currentSP = 0; // SPが0未満にならないようにする
         }
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // 消費SP量のリセット
@@ -151,6 +166,7 @@ public class BattleManager : MonoBehaviour
     {
         _skillCost = 0;
         skillGauge.SetGaugeImmediate(0);
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
     }
 
     // ゲームオーバー判定処理
@@ -212,6 +228,7 @@ public class BattleManager : MonoBehaviour
                 if (_characterQueue.Peek().BattleUnitType == BattleUnitType.EndPoint)
                 {
                     _turnCount++; // ターン数を増加させる
+                    _turnText.text = _turnCount + " turn"; // ターン数に応じて、テキストを直す
                     Debug.Log("Turn " + _turnCount);
 
                     CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
@@ -226,7 +243,7 @@ public class BattleManager : MonoBehaviour
             TestDisplayCharactersHelth();
             //TestDisplaySP();
 
-            skillGaugeBar.SetGauge(_currentSP, MAX_SP); // ゲージ更新
+            skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
 
             // 全敵の行動が終わるまでループする
             if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
@@ -433,6 +450,8 @@ public class BattleManager : MonoBehaviour
             _skillCost = 0;
         }
         skillGauge.SetGauge(_skillCost);
+
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP); // 点滅表示
 
         TestDisplaySP();
     }
