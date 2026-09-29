@@ -17,6 +17,12 @@ public class ReadCharacterDetail : MonoBehaviour
 	private void OnEnable()
 	{
 		RefreshCanShowDetail();
+		
+		CharacterDetailRecord record = characterDetailDatabase.GetByCharacterId(1);
+		if (record != null)
+		{
+			characterDescription.SetCharacterDetail(record);
+		}
 	}
 
 	private void Start()
