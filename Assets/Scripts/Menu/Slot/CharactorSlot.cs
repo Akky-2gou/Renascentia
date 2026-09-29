@@ -19,4 +19,5 @@ public class CharactorSlot : Button
         Debug.Log(this.gameObject.name + "が押されました");
         if (_teamConpositionManager != null) _teamConpositionManager.SelectCharactor(_charactorID);
     }
+
 }
