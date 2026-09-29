@@ -45,6 +45,7 @@ public class GameProgress : MonoBehaviour
         }
     }
 
+
     // 収集されたアイテムIDを追加するメソッド
     public void AddCollectedItem(int itemId)
     {
@@ -58,16 +59,12 @@ public class GameProgress : MonoBehaviour
     //開放キャラクターのリストを初期化するメソッド
     public void ResetUnlockedCharacters()
     {
-        // 単一の値を初期値に戻す
-        _stageProgress = default; // または初期のMapId
         // リストの中身を空にする
         _unlockedCharacterIds.Clear();
     }
       //収集アイテムのリストを初期化するメソッド
     public void ResetCollectedItems()
     {
-        // 単一の値を初期値に戻す
-        _unlockedCharacterIds  = default; 
         // リストの中身を空にする
         _collectedItemIds.Clear();
     }
@@ -83,5 +80,15 @@ public class GameProgress : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    // テスト用Inspectorのコンテキストメニューから実行可能
+    [ContextMenu("Test/Unlock Characters 1 to 15")]
+    public void TestUnlockCharacters()
+    {
+        for (int i = 1; i <= 15; i++)
+        {
+            AddUnlockedCharacter(i);
+        }
+        Debug.Log("テスト: キャラクターID 1〜15を開放しました。");
     }
 }
