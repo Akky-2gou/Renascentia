@@ -171,13 +171,13 @@ public class PlayerController : MonoBehaviour
                 {
                     // 移動方向に応じてプレイヤー画像を反転
                     // 右向きならx軸の大きさを正、左向きなら負
-                    if (_moveInput.x == 1 && !_isFacingRight)
+                    if (_moveInput.x > 0 && !_isFacingRight)
                     {
                         // 右向きにする
                         _isFacingRight = true;
                         _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right, transform);
                     }
-                    else if (_moveInput.x == -1 && _isFacingRight)
+                    else if (_moveInput.x < 0 && _isFacingRight)
                     {
                         // 左向きにする
                         _isFacingRight = false;
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
                     }
                     
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる
-                    targetVelocityX = _maxSpeed * _moveInput.x;
+                    targetVelocityX = _maxSpeed * (_moveInput.x > 0 ? 1 : (_moveInput.x < 0 ? -1 : 0));
                     // (目標速度 - 現在の速度) / 時間 = 必要な加速度
                     // これに質量を掛けたものが力になる (AddForceは質量を考慮してくれる)
                     // Mathf.Clampで最大加速度を制限
