@@ -114,26 +114,9 @@ public class BattleManager : MonoBehaviour
                 continue; // 死んだキャラには攻撃をしない
             }
 
-            int defensePower = defender.Defense;
-            int damage = attackPower - defensePower; // ダメージは攻撃力 - 防御力で計算する
+            int damage = DamageCalculator.Calculate(attacker, defender); // ダメージ処理
 
             defender.DecreaseHp(damage); // ダメージを与える
-        }
-    }
-
-    // 体力を回復する処理
-    void TakeHealing(CharacterStatus healer, CharacterStatus[] targets)
-    {
-        int healingPower = healer.HealAmount;
-
-        foreach (CharacterStatus target in targets)
-        {
-            if (target.Hp <= 0)
-            {
-                continue; // HPが0以下のキャラクターは回復しない
-            }
-
-            target.IncreaseHp(healingPower); // 回復する
         }
     }
 
@@ -366,45 +349,6 @@ public class BattleManager : MonoBehaviour
         // attacker.OnHitEvent -= onSkillAnim;
         // attacker.OnAnimationEndEvent -= onEnd;
 
-        NextTurn(); // ターンを終了する
-    }
-
-    // スキル処理
-    void UseSkill(CharacterStatus user, CharacterStatus[] targets, SkillType skillType, int skillCost)
-    {
-        // スキルの使用処理を行う
-        // 例えば、SPを消費して強力な攻撃を行ったり、味方を回復したりする
-
-        if (_currentSP < skillCost)
-        {
-            Debug.Log("Not enough SP to use the skill! Current SP: " + _currentSP);
-            return; // SPが足りない場合はスキルを使用できない
-        }
-
-        DecreaseSP(skillCost); // スキルを使用するとSPが減少する
-
-        switch (skillType)
-        {
-            case SkillType.attack:
-                // attackのスキルの効果を実装する
-                TakeDamage(user, targets);
-                break;
-            case SkillType.heal:
-                // healのスキルの効果を実装する
-                TakeHealing(user, targets);
-                break;
-            case SkillType.buff:
-                // buffのスキルの効果を実装する
-                break;
-            case SkillType.debuff:
-                // debuffのスキルの効果を実装する
-                break;
-            default:
-                // Noneやその他のタイプの場合の処理を実装する
-                Debug.LogError("Invalid skill type: " + skillType);
-                break;
-        }
-        
         NextTurn(); // ターンを終了する
     }
 

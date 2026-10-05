@@ -17,6 +17,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     int _hp; // ヒットポイント
     int _attack; // 攻撃力
     int _defense; // 防御力
+    int _normalAttackPower; // 通常攻撃威力
     int _healAmount; // 回復量
     bool _alive; // 生存判定 
     SkillData[] _skills; // 所持スキル
@@ -94,6 +95,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _maxHp = characterData.MaxHp;
         _attack = characterData.Attack;
         _defense = characterData.Defense;
+        _normalAttackPower = characterData.NormalAttackPower;
         _healAmount = characterData.HealAmount;
         _battleUnitType = characterData.BattleUnitType;
         _characterType = characterData.CharacterType;
@@ -126,6 +128,12 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         get { return _defense; }
         set { _defense = value; }
+    }
+
+    public int NormalAttackPower
+    {
+        get { return _normalAttackPower; }
+        set { _normalAttackPower = value; }
     }
 
     public int HealAmount
