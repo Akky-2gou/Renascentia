@@ -68,6 +68,7 @@ public class BattleManager : MonoBehaviour
 
             CharacterHPBar hpBar = Instantiate(_playerHpBarPrefab, _playerHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
+            hpBar.SetIcon(characterData); // HPバーのアイコン設定
 
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
@@ -80,6 +81,7 @@ public class BattleManager : MonoBehaviour
             
             CharacterHPBar hpBar = Instantiate(_enemyHpBarPrefab, _enemyHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
+            hpBar.SetIcon(enemy); // HPバーのアイコン設定
             
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 

@@ -29,7 +29,17 @@ public class CharacterData : ScriptableObject
     [SerializeField] BattleUnitType _battleUnitType;
     public BattleUnitType BattleUnitType => _battleUnitType;
 
-    // [Header("キャラクターPreafab")]
+    [Header("HPバー用アイコン")]
+    [SerializeField] private Sprite _icon; // キャラのアイコン画像
+    public Sprite Icon => _icon;
+
+    [SerializeField] private Vector2 _iconOffset; // 表示位置の補正(中心からのズレ)
+    public Vector2 IconOffset => _iconOffset;
+
+    [SerializeField] private float _iconScale = 1f; // 表示スケールの補正(画像ごとの余白の違いを吸収)
+    public float IconScale => _iconScale;
+
+    [Header("キャラクターPreafab")]
     [SerializeField] GameObject _characterPrefab;
     public GameObject CharacterPrefab => _characterPrefab;
 
