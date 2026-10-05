@@ -30,6 +30,11 @@ public class CharacterHPBar : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float _fillRangeStart = 0f;  // 色が始まる位置
     [SerializeField, Range(0f, 1f)] private float _fillRangeEnd = 0.85f; // 色が終わる位置(満タン時のfillAmount)
 
+    [Header("キャラアイコン")]
+    [SerializeField] private Image _narrowIconImage; // アイコンを表示するImage
+    [SerializeField] private Image _wideIconImage;
+    [SerializeField] private RectTransform _narrowIconRectTransform; // アイコンのRectTransform
+    [SerializeField] private RectTransform _wideIconRectTransform;
 
     private RectTransform _rectTransform; // RectTransformの取得
 
@@ -50,6 +55,19 @@ public class CharacterHPBar : MonoBehaviour
 
         // 初期表示はアニメーションさせず、即座に高さを合わせる
         SetHeightImmediate(_narrowFrameImage.rectTransform.rect.height);
+    }
+
+    /// <summary>
+    /// キャラのアイコンを設定する
+    /// </summary>
+    public void SetIcon(CharacterData characterData)
+    {
+        _narrowIconImage.sprite = characterData.Icon; // アイコンの設定
+        _wideIconImage.sprite = characterData.Icon;
+        _narrowIconRectTransform.anchoredPosition = characterData.IconOffset; // 補正値を反映
+        _narrowIconRectTransform.localScale = Vector3.one * characterData.IconScale; // 補正値を反映
+        _wideIconRectTransform.anchoredPosition = characterData.IconOffset; // 補正値を反映
+        _wideIconRectTransform.localScale = Vector3.one * characterData.IconScale; // 補正値を反映
     }
 
     /// HPの割合(0〜1)を、実際のスプライトの見た目に合わせたfillAmountの値に変換する
