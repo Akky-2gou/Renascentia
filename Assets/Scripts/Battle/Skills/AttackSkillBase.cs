@@ -8,7 +8,7 @@ public abstract class AttackSkillBase : SkillData
     protected void DealDamage(CharacterStatus user, CharacterStatus target)
     {
         if (!target.Alive) return;
-        int damage = Power - target.Defense; // ダメージ計算
+        int damage = DamageCalculator.Calculate(user, target, Power); // ダメージ計算
         target.DecreaseHp(damage);
     }
 

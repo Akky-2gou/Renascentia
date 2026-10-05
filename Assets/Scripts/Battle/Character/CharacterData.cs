@@ -14,6 +14,9 @@ public class CharacterData : ScriptableObject
     [SerializeField] int _defense;
     public int Defense => _defense;
 
+    [SerializeField] int _normalAttackPower;
+    public int NormalAttackPower => _normalAttackPower;
+
     [SerializeField] int _healAmount;
     public int HealAmount => _healAmount;
 
