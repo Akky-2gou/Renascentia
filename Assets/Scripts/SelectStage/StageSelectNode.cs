@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/*
+ * ステージ選択画面の各ステージノードを表すスクリプト
+ */
 public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private MapId stageId;
@@ -15,6 +18,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     public MapId StageId => stageId;
 
+    // 初期化して参照先と表示を整える
     private void Awake()
     {
         if (stageSelectPlayer == null)
@@ -33,12 +37,14 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
         Debug.Log("StageSelectNode 準備完了: " + name + " / stageId: " + stageId);
     }
 
+    // 選択状態を切り替える
     public void SetSelected(bool selected)
     {
         isSelected = selected;
         RefreshAlpha();
     }
 
+    // 透明度表示を更新する
     private void RefreshAlpha()
     {
         if (spriteRenderer == null)
@@ -51,6 +57,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
         spriteRenderer.color = color;
     }
 
+    // ステージ選択の共通処理を実行する
     public void TrySelect()
     {
         if (stageSelectPlayer == null)
@@ -79,22 +86,26 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
         stageSelectPlayer.MoveToStage(stageId);
     }
 
+    // クリック操作で選択する
     private void OnMouseDown()
     {
         TrySelect();
     }
 
+    // ポインタークリックで選択する
     public void OnPointerClick(PointerEventData eventData)
     {
         TrySelect();
     }
 
+    // ポインターが乗ったときに見た目を変える
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
         RefreshAlpha();
     }
 
+    // ポインターが離れたときに見た目を戻す
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovered = false;

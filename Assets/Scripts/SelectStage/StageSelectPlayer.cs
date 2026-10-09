@@ -44,6 +44,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
+    // 移動用の初期状態を設定する
     private void Awake()
     {
         if (moveTarget == null)
@@ -69,6 +70,7 @@ public class StageSelectPlayer : MonoBehaviour
         Debug.Log("初期ノード: " + currentStageId);
     }
 
+    // 移動中のキャラクター位置を更新する
     private void Update()
     {
         if (!isMoving || pendingRouteIndices.Count == 0 || !HasValidSelection())
@@ -94,6 +96,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
+    // 指定インデックスのステージを選択する
     public void SelectStage(int index)
     {
         if (stageTargets.Count == 0)
@@ -105,6 +108,7 @@ public class StageSelectPlayer : MonoBehaviour
         PrepareTargetPosition();
     }
 
+    // 次のステージを選択する
     public void SelectNextStage()
     {
         if (stageTargets.Count == 0)
@@ -121,6 +125,7 @@ public class StageSelectPlayer : MonoBehaviour
         PrepareTargetPosition();
     }
 
+    // 前のステージを選択する
     public void SelectPreviousStage()
     {
         if (stageTargets.Count == 0)
@@ -137,11 +142,18 @@ public class StageSelectPlayer : MonoBehaviour
         PrepareTargetPosition();
     }
 
+    // 選択中のステージへ移動を開始する
     public void MoveToSelectedStage()
     {
         if (!HasValidSelection())
         {
             Debug.LogWarning("ステージが選択されていません。");
+            return;
+        }
+
+        if (GameProgress.Instance != null && !GameProgress.Instance.IsStageUnlocked(SelectedStageId))
+        {
+            Debug.Log($"まだ開放されていないステージのため移動できません: {SelectedStageId}");
             return;
         }
 
@@ -159,6 +171,7 @@ public class StageSelectPlayer : MonoBehaviour
         BeginRoute(route);
     }
 
+    // 指定ステージへ移動する
     public void MoveToStage(MapId stageId)
     {
         if (stageTargets.Count == 0)
@@ -176,6 +189,13 @@ public class StageSelectPlayer : MonoBehaviour
             if (stageTargets[i].stageId == stageId)
             {
                 selectedIndex = i;
+
+                if (GameProgress.Instance != null && !GameProgress.Instance.IsStageUnlocked(stageId))
+                {
+                    Debug.LogWarning($"まだ開放されていないステージのため移動できません: {stageId}");
+                    return;
+                }
+
                 MoveToSelectedStage();
                 return;
             }
@@ -184,16 +204,19 @@ public class StageSelectPlayer : MonoBehaviour
         Debug.LogWarning("指定したステージIDが見つかりません: " + stageId);
     }
 
+    // 選択状態が有効か確認する
     private bool HasValidSelection()
     {
         return stageTargets != null && stageTargets.Count > 0 && selectedIndex >= 0 && selectedIndex < stageTargets.Count;
     }
 
+    // インデックスが有効か確認する
     private bool HasValidIndex(int index)
     {
         return stageTargets != null && index >= 0 && index < stageTargets.Count;
     }
 
+    // ステージIDからインデックスを探す
     private int GetStageIndexById(MapId stageId)
     {
         if (stageTargets == null)
@@ -212,6 +235,7 @@ public class StageSelectPlayer : MonoBehaviour
         return -1;
     }
 
+    // 現在のインデックスを範囲内に収める
     private void ClampSelection()
     {
         if (stageTargets == null || stageTargets.Count == 0)
@@ -225,11 +249,13 @@ public class StageSelectPlayer : MonoBehaviour
         selectedIndex = Mathf.Clamp(selectedIndex, 0, stageTargets.Count - 1);
     }
 
+    // 選択中ステージの目標位置を再計算する
     private void PrepareTargetPosition()
     {
         PrepareTargetPositionForIndex(selectedIndex);
     }
 
+    // 指定インデックスの目標位置を設定する
     private bool PrepareTargetPositionForIndex(int index)
     {
         if (!HasValidIndex(index))
@@ -248,6 +274,7 @@ public class StageSelectPlayer : MonoBehaviour
         return true;
     }
 
+    // 現在地から目的地までの移動ルートを作る
     private List<int> BuildRouteIndices(int fromIndex, int toIndex)
     {
         List<int> route = new List<int>();
@@ -271,6 +298,7 @@ public class StageSelectPlayer : MonoBehaviour
         return route;
     }
 
+    // ルート移動を開始する
     private void BeginRoute(List<int> route)
     {
         pendingRouteIndices.Clear();
@@ -291,6 +319,7 @@ public class StageSelectPlayer : MonoBehaviour
         Debug.Log("ステージ移動開始: 現在=" + currentStageId + " / 目的地=" + SelectedStageId);
     }
 
+    // ルートの次地点へ進める
     private void AdvanceRoute()
     {
         if (pendingRouteIndices.Count == 0)
@@ -316,6 +345,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
+    // 目的地にぴったり合わせる
     private void SnapToTarget()
     {
         if (targetRb != null)
@@ -329,6 +359,7 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
+    // インデックスからステージIDを取得する
     private MapId GetStageId(int index)
     {
         if (!HasValidIndex(index))
@@ -345,6 +376,7 @@ public class StageSelectPlayer : MonoBehaviour
         return target.stageId;
     }
 
+    // 最後に到達したマップIDを保存する
     private void UpdateGameProgressLastMapId(MapId mapId)
     {
         if (GameProgress.Instance == null)
@@ -355,6 +387,7 @@ public class StageSelectPlayer : MonoBehaviour
         GameProgress.Instance.LastMapId = mapId;
     }
 
+    // 移動完了時の後始末をする
     private void FinishMovement()
     {
         isMoving = false;
