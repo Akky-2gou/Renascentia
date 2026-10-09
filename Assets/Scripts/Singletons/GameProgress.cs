@@ -10,7 +10,7 @@ public class GameProgress : MonoBehaviour
     // シングルトンのインスタンス
     public static GameProgress Instance { get; private set; }
 
-    private MapId _stageProgress;
+    [SerializeField] private MapId _stageProgress = MapId.None; // テスト用に初期値をinspectorで設定可能にする
     private MapId _lastMapId;
     private List<int> _unlockedCharacterIds = new List<int>();
     private List<int> _collectedItemIds = new List<int>();
@@ -23,6 +23,16 @@ public class GameProgress : MonoBehaviour
         { 
             _stageProgress = value;
         }
+    }
+
+    public bool IsStageUnlocked(MapId stageId)
+    {
+        if (stageId == MapId.None)
+        {
+            return false;
+        }
+
+        return (int)stageId <= (int)_stageProgress;
     }
 
     public MapId LastMapId
