@@ -1,3 +1,4 @@
+using Battle;
 using UnityEngine;
 
 public abstract class AttackSkillBase : SkillData
@@ -12,11 +13,11 @@ public abstract class AttackSkillBase : SkillData
         target.DecreaseHp(damage);
     }
 
-    public override void Execute(CharacterStatus user, CharacterStatus[] targets)
+    public override void Execute(BattleContext battleContext)
     {
-        foreach (var target in targets)
+        foreach (var target in battleContext.Targets)
         {
-            DealDamage(user, target);
+            DealDamage(battleContext.Attacker, target);
         }
     }
 }

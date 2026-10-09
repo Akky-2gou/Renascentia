@@ -1,3 +1,4 @@
+using Battle;
 using UnityEngine;
 
 /*
@@ -33,5 +34,5 @@ public abstract class SkillData : ScriptableObject
     public SkillTargetType TargetType => _targetType;
 
     // 実際の効果。targetsはBattleManager側で TargetType に応じて集めたものを渡す
-    public abstract void Execute(CharacterStatus user, CharacterStatus[] targets);
+    public abstract void Execute(BattleContext battleContext);
 }
