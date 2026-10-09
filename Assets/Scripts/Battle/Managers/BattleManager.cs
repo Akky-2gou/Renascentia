@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System;
 using Unity.VisualScripting;
 using TMPro;
+using Battle;
 
 /*
  * バトルシステムマネージャー
@@ -27,6 +28,7 @@ public class BattleManager : MonoBehaviour
     int _turnCount = 1; // ターン数を管理する変数
 
     Queue<CharacterStatus> _characterQueue; // ターンの順番を管理するキュー
+    BattleContext _context; // 戦闘情報
 
     [Header("敵の参照")]
     [SerializeField] private CharacterData[] _enemys; // 敵の参照
@@ -54,6 +56,7 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
+        _context = new BattleContext(_characterQueue); // 同じキューを渡す
 
         CharacterData[] partyMembers = FindAnyObjectByType<Party>().Members; // パーティーメンバーのステータスを取得する
         foreach (CharacterData characterData in partyMembers)
@@ -261,6 +264,7 @@ public class BattleManager : MonoBehaviour
     {
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         CharacterStatus[] defenders = {defender}; // 配列を生成
+        _context.BeginAction(attacker, defenders); // 攻撃者と標的をバトル情報に追加
 
         // イベントを await するための準備
         var hitTcs = new UniTaskCompletionSource();
@@ -284,6 +288,7 @@ public class BattleManager : MonoBehaviour
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
         defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
+        _context.AddNormalAttackHistory(_turnCount); // 行動履歴の追加
 
         // 攻撃アニメーションが最後まで終わるまで待つ
         await endTcs.Task;
@@ -316,6 +321,7 @@ public class BattleManager : MonoBehaviour
     async UniTaskVoid SkillAttack(CharacterStatus[] targets, SkillData skill)
     {
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
+        _context.BeginAction(attacker, targets); // 攻撃者と標的をバトル情報に追加
 
         // イベントを await するための準備
         // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
@@ -336,7 +342,8 @@ public class BattleManager : MonoBehaviour
         // await skillAnimTcs;
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
-        skill.Execute(attacker, targets); // 通常攻撃はダメージを与えるだけ
+        skill.Execute(_context); // 通常攻撃はダメージを与えるだけ
+        _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
         DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
         ResetSkillCost();
         foreach (var target in targets)
@@ -564,7 +571,10 @@ public class BattleManager : MonoBehaviour
             }
         }
         CharacterStatus[] defenders = {defender}; // 配列を生成
+        
+        _context.BeginAction(_characterQueue.Peek(), defenders); // 敵の攻撃者と標的をバトル情報に追加
         TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
+        _context.AddNormalAttackHistory(_turnCount); // 敵の行動履歴の追加
     }
 
     // キャラの体力を表示するテスト処理
