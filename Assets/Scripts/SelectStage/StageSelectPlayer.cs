@@ -10,13 +10,13 @@ public class StageSelectPlayer : MonoBehaviour
     [Serializable]
     public class StageTarget
     {
-        public string stageId;
+        public MapId stageId;
         public Transform marker;
         public Vector3 offset;
     }
 
     [SerializeField] private List<StageTarget> stageTargets = new List<StageTarget>();
-    [SerializeField] private string initialStageId = "1";
+    [SerializeField] private MapId initialStageId = MapId.Map1_1;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
@@ -24,20 +24,20 @@ public class StageSelectPlayer : MonoBehaviour
     private Rigidbody2D targetRb;
     private readonly List<int> pendingRouteIndices = new List<int>();
     private int currentIndex;
-    private string currentStageId = string.Empty;
+    private MapId currentStageId = MapId.None;
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
 
     public bool IsMoving => isMoving;
 
-    public string SelectedStageId
+    public MapId SelectedStageId
     {
         get
         {
             if (!HasValidSelection())
             {
-                return string.Empty;
+                return MapId.None;
             }
 
             return stageTargets[selectedIndex].stageId;
@@ -159,7 +159,7 @@ public class StageSelectPlayer : MonoBehaviour
         BeginRoute(route);
     }
 
-    public void MoveToStage(string stageId)
+    public void MoveToStage(MapId stageId)
     {
         if (stageTargets.Count == 0)
         {
@@ -194,9 +194,9 @@ public class StageSelectPlayer : MonoBehaviour
         return stageTargets != null && index >= 0 && index < stageTargets.Count;
     }
 
-    private int GetStageIndexById(string stageId)
+    private int GetStageIndexById(MapId stageId)
     {
-        if (stageTargets == null || string.IsNullOrEmpty(stageId))
+        if (stageTargets == null)
         {
             return -1;
         }
@@ -329,26 +329,42 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
-    private void FinishMovement()
-    {
-        isMoving = false;
-        pendingRouteIndices.Clear();
-        Debug.Log("ステージ移動完了: 現在=" + currentStageId);
-    }
-
-    private string GetStageId(int index)
+    private MapId GetStageId(int index)
     {
         if (!HasValidIndex(index))
         {
-            return string.Empty;
+            return MapId.None;
         }
 
         StageTarget target = stageTargets[index];
         if (target == null)
         {
-            return string.Empty;
+            return MapId.None;
         }
 
         return target.stageId;
+    }
+
+    private void UpdateGameProgressLastMapId(MapId mapId)
+    {
+        if (GameProgress.Instance == null)
+        {
+            return;
+        }
+
+        GameProgress.Instance.LastMapId = mapId;
+    }
+
+    private void FinishMovement()
+    {
+        isMoving = false;
+        pendingRouteIndices.Clear();
+
+        if (currentStageId != MapId.None)
+        {
+            UpdateGameProgressLastMapId(currentStageId);
+        }
+
+        Debug.Log("ステージ移動完了: 現在=" + currentStageId);
     }
 }

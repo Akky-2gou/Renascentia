@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class StageSelectKeyboardController : MonoBehaviour
 {
-    [SerializeField] private string initialStageId = "1";
+    [SerializeField] private MapId initialStageId = MapId.Map1_1;
 
     private readonly List<StageSelectNode> stageNodes = new List<StageSelectNode>();
     private StageSelectPlayer stageSelectPlayer;
@@ -63,7 +63,7 @@ public class StageSelectKeyboardController : MonoBehaviour
         }
     }
 
-    public void SelectStageById(string stageId)
+    public void SelectStageById(MapId stageId)
     {
         int nextIndex = FindNodeIndexByStageId(stageId);
         if (nextIndex < 0 || nextIndex == selectedIndex)
@@ -77,33 +77,12 @@ public class StageSelectKeyboardController : MonoBehaviour
 
     private int CompareNodesByStageId(StageSelectNode left, StageSelectNode right)
     {
-        int leftId = ParseStageId(left);
-        int rightId = ParseStageId(right);
-
-        if (leftId != int.MinValue && rightId != int.MinValue)
-        {
-            return leftId.CompareTo(rightId);
-        }
-
-        return string.Compare(left != null ? left.StageId : string.Empty, right != null ? right.StageId : string.Empty, StringComparison.Ordinal);
+        return left != null && right != null
+            ? left.StageId.CompareTo(right.StageId)
+            : string.Compare(left != null ? left.StageId.ToString() : string.Empty, right != null ? right.StageId.ToString() : string.Empty, StringComparison.Ordinal);
     }
 
-    private int ParseStageId(StageSelectNode node)
-    {
-        if (node == null || string.IsNullOrEmpty(node.StageId))
-        {
-            return int.MinValue;
-        }
-
-        if (int.TryParse(node.StageId, out int parsedId))
-        {
-            return parsedId;
-        }
-
-        return int.MinValue;
-    }
-
-    private int FindNodeIndexByStageId(string stageId)
+    private int FindNodeIndexByStageId(MapId stageId)
     {
         for (int i = 0; i < stageNodes.Count; i++)
         {
@@ -134,7 +113,7 @@ public class StageSelectKeyboardController : MonoBehaviour
             return;
         }
 
-        selectedIndex++;
+        selectedIndex++;        
         ApplySelection();
     }
 

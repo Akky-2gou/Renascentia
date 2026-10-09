@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private string stageId;
+    [SerializeField] private MapId stageId;
     [SerializeField] private StageSelectPlayer stageSelectPlayer;
     [SerializeField] private StageSelectKeyboardController stageSelectKeyboardController;
     [SerializeField] private float selectedAlpha = 1f;
@@ -13,7 +13,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
     private bool isSelected;
     private bool isHovered;
 
-    public string StageId => stageId;
+    public MapId StageId => stageId;
 
     private void Awake()
     {
@@ -63,7 +63,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
             return;
         }
 
-        if (string.IsNullOrEmpty(stageId))
+        if (stageId == MapId.None)
         {
             Debug.LogWarning(name + " に stageId が設定されていません。");
             return;
