@@ -25,7 +25,7 @@ public abstract class SkillData : ScriptableObject
     [SerializeField] private int _cost; // 消費SP
     [SerializeField][TextArea] private string _description; // スキル説明
 
-    [SerializeField] protected SkillTargetType _targetType; // 対象範囲
+    [SerializeField] protected SkillTargetType _targetType = SkillTargetType.None; // 対象範囲
 
     // プロパティ
     public string SkillName => _skillName;
@@ -33,6 +33,6 @@ public abstract class SkillData : ScriptableObject
     public string Description => _description;
     public SkillTargetType TargetType => _targetType;
 
-    // 実際の効果。targetsはBattleManager側で TargetType に応じて集めたものを渡す
+    // 発動関数
     public abstract void Execute(BattleContext battleContext);
 }

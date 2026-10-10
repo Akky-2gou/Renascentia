@@ -21,6 +21,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     int _healAmount; // 回復量
     bool _alive; // 生存判定 
     SkillData[] _skills; // 所持スキル
+    PassiveData _passive; // パッシブ
 
     CharacterHPBar _hpBar; // HPバーの参照
 
@@ -103,6 +104,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _hp = _maxHp;
         _alive = true;
         _skills = characterData.Skills;
+        _passive = characterData.Passive;
 
         _animator = this.GetComponent<Animator>();
     }
@@ -179,6 +181,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     }
 
     public SkillData[] Skills => _skills;
+
+    public PassiveData Passive => _passive;
 
     /// <summary>
     /// ダメージを受けるときにHPを減らす関数

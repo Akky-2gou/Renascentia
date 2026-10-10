@@ -100,6 +100,16 @@ public class BattleManager : MonoBehaviour
         skillGaugeBar.SetGaugeImmediate((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
 
         _turnText.text = "1 turn"; // ターン表示の初期化
+
+        // バトル開始時のパッシブ発動
+        foreach (CharacterStatus character in _characterQueue)
+        {
+            if (character.Passive.PassiveTiming == PassiveTiming.Invalid) 
+                Debug.LogError("パッシブが入力されていません");
+
+            if (character.Passive.PassiveTiming == PassiveTiming.BattleStart) 
+                character.Passive.Execute(_context);
+        } 
     }
 
     void OnDestroy()
@@ -242,6 +252,11 @@ public class BattleManager : MonoBehaviour
 
             // プレイヤーの番になったらボタンを表示して入力待ちにする
             ButtunUISetActive(true);
+
+            // ターン開始時のパッシブの発動
+            if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.TurnStart)
+                _characterQueue.Peek().Passive.Execute(_context);
+
             return;
         }
     }
@@ -262,6 +277,11 @@ public class BattleManager : MonoBehaviour
     // 通常攻撃処理
     async UniTaskVoid NormalAttack(CharacterStatus defender)
     {
+        // 攻撃開始前のパッシブの発動
+            if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeNormalAttack
+             || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
+                _characterQueue.Peek().Passive.Execute(_context);
+
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         CharacterStatus[] defenders = {defender}; // 配列を生成
         _context.BeginAction(attacker, defenders); // 攻撃者と標的をバトル情報に追加
@@ -297,6 +317,11 @@ public class BattleManager : MonoBehaviour
         attacker.OnHitEvent -= onHit;
         attacker.OnAnimationEndEvent -= onEnd;
 
+        // 攻撃終了後のパッシブの発動
+        if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterNormalAttack
+            || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterAction)
+            _characterQueue.Peek().Passive.Execute(_context);
+
         NextTurn(); // ターンを終了する
     }
 
@@ -320,6 +345,11 @@ public class BattleManager : MonoBehaviour
     // スキル攻撃処理
     async UniTaskVoid SkillAttack(CharacterStatus[] targets, SkillData skill)
     {
+        // スキル開始前のパッシブの発動
+        if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeSkillAttack
+            || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
+            _characterQueue.Peek().Passive.Execute(_context);
+
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         _context.BeginAction(attacker, targets); // 攻撃者と標的をバトル情報に追加
 
@@ -357,6 +387,11 @@ public class BattleManager : MonoBehaviour
         // イベントの登録を解除
         // attacker.OnHitEvent -= onSkillAnim;
         // attacker.OnAnimationEndEvent -= onEnd;
+
+        // スキル終了後のパッシブの発動
+        if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterSkillAttack
+            || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterAction)
+            _characterQueue.Peek().Passive.Execute(_context);
 
         NextTurn(); // ターンを終了する
     }
