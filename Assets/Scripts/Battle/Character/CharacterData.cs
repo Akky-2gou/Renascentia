@@ -46,4 +46,8 @@ public class CharacterData : ScriptableObject
     [Header("スキル")]
     [SerializeField] SkillData[] _skills;
     public SkillData[] Skills => _skills;
+
+    [Header("パッシブ")]
+    [SerializeField] PassiveData _passive;
+    public PassiveData Passive => _passive;
 }
