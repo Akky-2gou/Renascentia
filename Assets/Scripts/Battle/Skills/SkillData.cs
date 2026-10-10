@@ -33,6 +33,6 @@ public abstract class SkillData : ScriptableObject
     public string Description => _description;
     public SkillTargetType TargetType => _targetType;
 
-    // 実際の効果。targetsはBattleManager側で TargetType に応じて集めたものを渡す
+    // 発動関数
     public abstract void Execute(BattleContext battleContext);
 }
