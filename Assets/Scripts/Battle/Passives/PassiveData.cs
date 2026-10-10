@@ -21,14 +21,14 @@ public enum EffectTiming
 /// <summary>
 /// 基幹パッシブのスクリプタブルオブジェクト
 /// </summary>
-public class PassiveData : ScriptableObject
+public abstract class PassiveData : ScriptableObject
 {
     // 確変数
     [SerializeField] private string _passiveName; // パッシブ名
     [SerializeField][TextArea] private string _description; // パッシブ説明
 
     // プロパティ
-    public string PassiveName => _passivelName;
+    public string PassiveName => _passiveName;
     public string Description => _description;
 
     // 発動関数
