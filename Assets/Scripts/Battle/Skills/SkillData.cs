@@ -25,7 +25,7 @@ public abstract class SkillData : ScriptableObject
     [SerializeField] private int _cost; // 消費SP
     [SerializeField][TextArea] private string _description; // スキル説明
 
-    [SerializeField] protected SkillTargetType _targetType; // 対象範囲
+    [SerializeField] protected SkillTargetType _targetType = SkillTargetType.None; // 対象範囲
 
     // プロパティ
     public string SkillName => _skillName;
