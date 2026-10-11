@@ -129,7 +129,8 @@ public class BattleManager : MonoBehaviour
                 continue; // 死んだキャラには攻撃をしない
             }
 
-            int damage = DamageCalculator.Calculate(attacker, defender); // ダメージ処理
+            var ctx = new DamageContext(attacker, defender, attacker.NormalAttackPower);
+            int damage = DamageCalculator.Calculate(_context, ctx); // ダメージ処理
 
             defender.DecreaseHp(damage); // ダメージを与える
         }
@@ -284,7 +285,7 @@ public class BattleManager : MonoBehaviour
 
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         CharacterStatus[] defenders = {defender}; // 配列を生成
-        _context.BeginAction(attacker, defenders); // 攻撃者と標的をバトル情報に追加
+        _context.BeginNormalAction(attacker, defenders, _turnCount); // 攻撃者と標的をバトル情報に追加
 
         // イベントを await するための準備
         var hitTcs = new UniTaskCompletionSource();
@@ -351,7 +352,7 @@ public class BattleManager : MonoBehaviour
             _characterQueue.Peek().Passive.Execute(_context);
 
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
-        _context.BeginAction(attacker, targets); // 攻撃者と標的をバトル情報に追加
+        _context.BeginSkillAction(attacker, targets, skill, _turnCount); // 攻撃者と標的をバトル情報に追加
 
         // イベントを await するための準備
         // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
@@ -607,7 +608,7 @@ public class BattleManager : MonoBehaviour
         }
         CharacterStatus[] defenders = {defender}; // 配列を生成
         
-        _context.BeginAction(_characterQueue.Peek(), defenders); // 敵の攻撃者と標的をバトル情報に追加
+        _context.BeginNormalAction(_characterQueue.Peek(), defenders, _turnCount); // 敵の攻撃者と標的をバトル情報に追加
         TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
         _context.AddNormalAttackHistory(_turnCount); // 敵の行動履歴の追加
     }
