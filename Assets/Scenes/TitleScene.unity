@@ -222,51 +222,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &321667731
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 321667733}
-  - component: {fileID: 321667732}
-  m_Layer: 0
-  m_Name: SelectFirstButton
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &321667732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321667731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 553bf0c5a847f5a418eebd5a89008c8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SelectFirstButton
-  firstSelectedButton: {fileID: 1366729570}
---- !u!4 &321667733
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321667731}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 656.3601, y: 389.58505, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &363690868
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,12 +326,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 363690869}
   _animationDuration: 1.6
   _animationStartDelay: 0.2
   _initailTransparent: 0.5
   _moveVec: {x: 0, y: -100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 0
 --- !u!1 &401612244
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,8 +418,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: -228}
-  m_SizeDelta: {x: 300, y: 80}
+  m_AnchoredPosition: {x: -220, y: -120}
+  m_SizeDelta: {x: 170, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &414609095
 MonoBehaviour:
@@ -565,15 +524,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 414609093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 097d31d046be30c46b519b1edf32adcc, type: 3}
+  m_Script: {fileID: 11500000, guid: b05c93603612646a2926a3b48b2c3da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimationButton
+  _rectTransform: {fileID: 414609094}
+  _image: {fileID: 414609096}
   _animationDuration: 0.5
   _animationStartDelay: 0
   _initailTransparent: 0
-  _moveVec: {x: 0, y: 0}
+  _moveVec: {x: 0, y: 1000}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
 --- !u!114 &414609099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,8 +633,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
-  m_fontSizeBase: 42
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -725,97 +686,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 580026518}
   m_CullTransparentMesh: 1
---- !u!1 &582290400
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 582290402}
-  - component: {fileID: 582290401}
-  m_Layer: 0
-  m_Name: KeyVisual
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!212 &582290401
-SpriteRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582290400}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: e0ea69d4b40405c469af21b0b9a64d74, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 76.799995, y: 43.199997}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
---- !u!4 &582290402
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582290400}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2315, y: 0.2315, z: 0.2315}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &667441391
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,12 +790,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 667441392}
   _animationDuration: 1.2
   _animationStartDelay: 0.1
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: 0}
   _scaleRate: {x: 0, y: 0.5}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 0
 --- !u!1 &701004637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,12 +904,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 701004638}
   _animationDuration: 1
   _animationStartDelay: 0
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: -100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0.005, y: 0.005}
+  _hoverDuration: 6
 --- !u!1 &859335121
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,12 +1018,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 859335122}
   _animationDuration: 1
   _animationStartDelay: 0
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: -100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0.005, y: 0.005}
+  _hoverDuration: 6
 --- !u!1 &906845748
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,12 +1132,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 906845749}
   _animationDuration: 1
   _animationStartDelay: 0
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: -100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0.005, y: 0.005}
+  _hoverDuration: 6
 --- !u!1 &1234058740
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,8 +1307,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
-  m_fontSizeBase: 42
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1512,8 +1398,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -228}
-  m_SizeDelta: {x: 300, y: 80}
+  m_AnchoredPosition: {x: 0, y: -120}
+  m_SizeDelta: {x: 170, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1291295742
 MonoBehaviour:
@@ -1618,15 +1504,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291295740}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 097d31d046be30c46b519b1edf32adcc, type: 3}
+  m_Script: {fileID: 11500000, guid: b05c93603612646a2926a3b48b2c3da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimationButton
+  _rectTransform: {fileID: 1291295741}
+  _image: {fileID: 1291295743}
   _animationDuration: 0.5
   _animationStartDelay: 0
   _initailTransparent: 0
-  _moveVec: {x: 0, y: 0}
+  _moveVec: {x: 0, y: 1000}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
 --- !u!114 &1291295746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1743,12 +1631,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 1295048153}
   _animationDuration: 1.2
   _animationStartDelay: 0.1
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: 0}
   _scaleRate: {x: 0, y: 0.5}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0.1
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 7
 --- !u!1 &1320078839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1814,6 +1706,7 @@ GameObject:
   - component: {fileID: 1366729575}
   - component: {fileID: 1366729572}
   - component: {fileID: 1366729574}
+  - component: {fileID: 1366729576}
   m_Layer: 5
   m_Name: ButtonShowButton
   m_TagString: Untagged
@@ -1949,6 +1842,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1366729576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366729570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc61846978b194294ad77664f15fb2f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeepSelected
 --- !u!1 &1399286679
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,12 +1958,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 1399286680}
   _animationDuration: 1
   _animationStartDelay: 0
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: 100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 1
+  _CustomAnimationCurve: {fileID: 11400000, guid: 7943f610b964c4b4894c9c32a1f8525d, type: 2}
+  _hoverOffsetY: 0.5
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 3
 --- !u!1 &1527050540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2071,7 +1980,7 @@ GameObject:
   - component: {fileID: 1527050544}
   - component: {fileID: 1527050543}
   - component: {fileID: 1527050542}
-  - component: {fileID: 1527050545}
+  - component: {fileID: 1527050547}
   - component: {fileID: 1527050546}
   m_Layer: 5
   m_Name: Settings
@@ -2097,8 +2006,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 400, y: -228}
-  m_SizeDelta: {x: 300, y: 80}
+  m_AnchoredPosition: {x: 220, y: -120}
+  m_SizeDelta: {x: 170, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1527050542
 MonoBehaviour:
@@ -2194,24 +2103,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527050540}
   m_CullTransparentMesh: 1
---- !u!114 &1527050545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1527050540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 097d31d046be30c46b519b1edf32adcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TitleAnimationButton
-  _animationDuration: 0.5
-  _animationStartDelay: 0
-  _initailTransparent: 0
-  _moveVec: {x: 0, y: 0}
-  _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
 --- !u!114 &1527050546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2224,6 +2115,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6422d98e4660e34c958724431190b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestButton
+--- !u!114 &1527050547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527050540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b05c93603612646a2926a3b48b2c3da8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleAnimationButton
+  _rectTransform: {fileID: 1527050541}
+  _image: {fileID: 1527050543}
+  _animationDuration: 0.5
+  _animationStartDelay: 0
+  _initailTransparent: 0
+  _moveVec: {x: 0, y: 1000}
+  _scaleRate: {x: 0, y: 0}
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
 --- !u!1 &1541896970
 GameObject:
   m_ObjectHideFlags: 0
@@ -2328,12 +2239,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 1541896971}
   _animationDuration: 1.2
   _animationStartDelay: 0.1
   _initailTransparent: 0.7
   _moveVec: {x: 0, y: -100}
   _scaleRate: {x: 0.7, y: 1}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: -0.2
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 5
 --- !u!1 &1596726191
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,7 +2261,7 @@ GameObject:
   - component: {fileID: 1596726192}
   - component: {fileID: 1596726194}
   m_Layer: 0
-  m_Name: Renascentia_logo
+  m_Name: RenascentiaLogo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2438,12 +2353,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 1596726192}
   _animationDuration: 3
   _animationStartDelay: 1
   _initailTransparent: 0
   _moveVec: {x: 0, y: 100}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0.1
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 11
 --- !u!1 &1682603881
 GameObject:
   m_ObjectHideFlags: 0
@@ -2530,8 +2449,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
-  m_fontSizeBase: 42
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2824,18 +2743,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851f9f42bb33cec45b3b9acfd422fea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  _spriteRenderer: {fileID: 2107149105}
   _animationDuration: 3
   _animationStartDelay: 0
   _initailTransparent: 0
   _moveVec: {x: 0, y: 0}
   _scaleRate: {x: 0, y: 0}
-  _animationCurveNum: 0
+  _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
+  _hoverOffsetY: 0
+  _hoverScale: {x: 0, y: 0}
+  _hoverDuration: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2104775469}
-  - {fileID: 582290402}
   - {fileID: 2107149106}
   - {fileID: 906845750}
   - {fileID: 1399286681}
@@ -2849,4 +2771,3 @@ SceneRoots:
   - {fileID: 1234058743}
   - {fileID: 1596726193}
   - {fileID: 401612246}
-  - {fileID: 321667733}
