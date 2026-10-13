@@ -19,7 +19,7 @@ public class EpisodeDatabase : ScriptableObject {
 [System.Serializable]
 public class EpisodeData
 {
-    public DialogueData[] _data; // セリフデータの配列
+    [SerializeReference] public DialogueData[] _data; // セリフデータの配列
 }
 
 /// <summary>
@@ -45,4 +45,8 @@ public class DialogueData
     public int _bgmId; // BGMのID
 
     public int _seId; // SEのID
+
+    public bool _isChoice; // 選択肢かどうか（true: 選択肢、false: 通常のセリフ）
+
+    [SerializeReference] public List<DialogueData> _nextDialogue; // 次のセリフデータへの参照
 }
