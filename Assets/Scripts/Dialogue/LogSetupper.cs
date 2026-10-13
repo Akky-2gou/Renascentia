@@ -30,10 +30,10 @@ public class LogSlotSetupper : MonoBehaviour
             _nameText.text = characterDialogDatabase.GetCharacterName(dialogueData._rightCharacterId);
             _characterImage.sprite = characterDialogDatabase.GetCharacterExpressionSprite(dialogueData._rightCharacterId, dialogueData._rightCharacterExpressionId);
         }
-        else if (dialogueData._isCharacterSpeaking == -1) // どちらも話していない場合
+        else if (dialogueData._isCharacterSpeaking == -1) // どちらも話していないか，選択肢の場合
         {
-            // 名前・画像を非表示
-            _nameText.text = "";
+            // 名前・画像を非表示（選択肢の場合は「あなた」と表示）
+            _nameText.text = (dialogueData._isChoice) ? "あなた" : "";
             _characterImage.color = Color.clear; 
         }
 

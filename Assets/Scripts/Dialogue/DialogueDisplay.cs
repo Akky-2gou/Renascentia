@@ -36,12 +36,13 @@ public class DialogueDisplay : MonoBehaviour
 
     [SerializeField] private GameObject _logPanel; // ログのパネルを参照するための変数
 
+    [SerializeField] private ChoiceButtonManager _choiceButtonManager; // 選択肢ボタン管理スクリプトの参照
+
     [SerializeField] private float _letterDelay = 0.05f; // 1文字ごとの表示遅延時間
     [SerializeField] private float _autoPlayDelay = 1f; // セリフ表示後の待ち時間
     [SerializeField] private float _fastForwardDelay = 0.05f; // 早送り中のセリフ間隔
 
 
-    private IEnumerator<DialogueData> _dialogueIterator; // 現在のエピソードのセリフデータを順に取得するためのイテレーター
     private DialogueData _currentDialogueData; // 現在のセリフデータ
 
     private bool _isTextTyping = false; // テキストが表示中かどうかのフラグ
@@ -50,6 +51,8 @@ public class DialogueDisplay : MonoBehaviour
     private bool _isEpisodeCompleted = false; // エピソードが終了したかどうかのフラグ
     private bool _isLogDisplaied = false; // ログが表示されているかどうかのフラグ
     private bool _isInTown = false; // 街探索での会話かどうかのフラグ
+    private bool _isChoiceDisplayed = false; // 選択肢が表示されているかどうかのフラグ
+    private bool _isChoiceButtonPressing = false; // 選択肢が押されているかどうかのフラグ（セリフ送りの誤爆防止）
 
     public bool IsEpisodeCompleted => _isEpisodeCompleted; // 会話終了フラグのプロパティ
 
@@ -82,6 +85,7 @@ public class DialogueDisplay : MonoBehaviour
         _isFastForwarding = false;
         _isEpisodeCompleted = false;
         _isInTown = isInTown;
+        _isChoiceDisplayed = false;
 
         // ダイアログパネルをアクティブ化し，（街探索中なら）メニューパネルを非アクティブ化
         _dialoguePanel.SetActive(true);
@@ -91,11 +95,13 @@ public class DialogueDisplay : MonoBehaviour
         _textTypingCts.Cancel(); // 現在の表示をキャンセル
         _textTypingCts = new CancellationTokenSource(); // 新しいCancellationTokenSourceを作成
 
-        // 現在のエピソードデータを取得
-        _dialogueIterator = ((IEnumerable<DialogueData>)_episodeDatabase._data[episodeIndex]._data).GetEnumerator();
+        // 現在のエピソードにおける最初のセリフデータを（仮データの次のデータとして）取得
+        _currentDialogueData = new DialogueData();
+        _currentDialogueData._nextDialogue = new List<DialogueData>();
+        _currentDialogueData._nextDialogue.Add(_episodeDatabase._data[episodeIndex]._data[0]);
 
         // ログを生成する
-        _logManager.Setup(_episodeDatabase._data[episodeIndex], _characterDialogDatabase);
+        _logManager.Setup(_episodeDatabase._data[episodeIndex]._data.Length);
 
         // ログを非表示
         _logPanel.SetActive(false);
@@ -108,6 +114,8 @@ public class DialogueDisplay : MonoBehaviour
     // 次のセリフを表示するメソッド
     private async void ShowNextDialogue(bool isFast) // isFastがtrueの場合，一文字ずつ表示せずに即座に表示
     {
+        if (_isChoiceDisplayed) return; // 選択肢が表示されている場合は次のセリフに進まない
+
         if (_isTextTyping) // 表示途中で押されたら
         {
             _textTypingCts.Cancel(); // 現在の表示をキャンセル
@@ -117,12 +125,36 @@ public class DialogueDisplay : MonoBehaviour
             return;
         }
 
-        if (_dialogueIterator.MoveNext()) // 次のセリフがある場合
+        if (_currentDialogueData._nextDialogue.Count > 0) // 次のセリフがある場合
         {
-            _logManager.ShowNextDialogue();
+            if (_currentDialogueData._nextDialogue.Count > 1) // 次のセリフが選択肢の場合（次のセリフが複数ある場合）
+            {   
+                // 自動再生・早送りを停止
+                _isAutoPlaying = false;
+                _isFastForwarding = false;
 
-            // 現在のセリフデータを取得
-            _currentDialogueData = _dialogueIterator.Current;
+                // 選択肢テキストのリストを作成
+                List<string> choiceTexts = new List<string>();
+
+                // 各選択肢のテキストを追加
+                foreach (DialogueData nextDialogue in _currentDialogueData._nextDialogue) 
+                {
+                    choiceTexts.Add(nextDialogue._dialogueText);
+                }
+
+                // 選択肢ボタンを表示する
+                _choiceButtonManager.UpdateChoiceButtons(choiceTexts.ToArray());
+
+                _isChoiceDisplayed = true; // 選択肢が表示されたことを記録
+
+                return; // 選択肢が表示されたら，次のセリフは表示しない
+            }
+
+            // 次のセリフデータに更新
+            _currentDialogueData = _currentDialogueData._nextDialogue[0];
+
+            // ログに現在のセリフを追加
+            _logManager.ShowNextDialogue(_currentDialogueData, _characterDialogDatabase);
 
             // 話しているキャラの名前を表示
             if (_currentDialogueData._isCharacterSpeaking == 1) // 左側のキャラクターが話している場合
@@ -377,6 +409,15 @@ public class DialogueDisplay : MonoBehaviour
         }
     }
 
+    // 選択肢が選択されたときの処理
+    private void SelectChoice(int choiceId)
+    {
+        _currentDialogueData = _currentDialogueData._nextDialogue[choiceId]; // 選択肢に対応するセリフデータに更新
+        _logManager.ShowNextDialogue(_currentDialogueData, _characterDialogDatabase); // ログに選択肢を追加
+        _isChoiceDisplayed = false; // 選択肢が表示されていない状態に戻す
+        ShowNextDialogue(false); // 選択されたセリフを表示
+    }
+
 
     /// <summary>
     /// 次に進むボタン（画面全体）をクリックした時
@@ -414,14 +455,32 @@ public class DialogueDisplay : MonoBehaviour
     }
 
     /// <summary>
+    /// 選択肢ボタンが押されたときの処理
+    /// </summary>
+    public void OnPressedChoiceButton(int choiceId)
+    {
+        // 選択肢が押されたことを記録（セリフ送りの誤爆防止）
+        _isChoiceButtonPressing = true; 
+
+        // 選択肢のIDを渡して選択された処理を呼び出す
+        SelectChoice(choiceId);
+    }
+
+    /// <summary>
     /// Submit入力があった時に呼ばれるメソッド
     /// </summary>
     public void OnSubmit(InputAction.CallbackContext context)
     {
         // ログ表示中なら無視
-        if (_isLogDisplaied) return;
+        if (_isLogDisplaied || _isChoiceDisplayed) return;
 
         if (context.performed) { // チャタリング防止
+            if (_isChoiceButtonPressing) // 選択肢ボタンが押されている場合は，セリフ送りを無視
+            {
+                _isChoiceButtonPressing = false; // フラグを下ろす
+                return;
+            }
+            
             ShowNextDialogue(false);
         }
     }

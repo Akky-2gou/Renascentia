@@ -12,6 +12,12 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
 {
     const string CSV_FILE_NAME = "EpisodeData.csv"; // 対象のCSVファイル名
 
+    private class DialogLink
+    {
+        public int _fromIndex;
+        public int _toIndex;
+    }
+
     // すべてのアセットに共通して行う処理を定義
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
@@ -49,8 +55,6 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
     // CSVの内容を解析してEpisodeDataの配列を生成するメソッド
     private static EpisodeData[] ParseDialogueCSV(string csvText)
     {
-        const int EXPECTED_COLUMN_COUNT = 10; // 期待される列数
-
         // CSVの内容を行ごとに分割
         string[] lines = csvText.Split('\n');
 
@@ -58,6 +62,14 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
         List<EpisodeData> episodeDataList = new List<EpisodeData>();
         List<DialogueData> dialogueDataList = null;
         int currentEpisodeId = -1;
+
+        // 選択肢とそれに対応する会話の始まり，分岐終了直前・直後の対応を格納するリストと現在のインデックス
+        List<DialogLink> DialogueLinkList = new List<DialogLink>();
+        int DialogueLinkIndex = -1;
+
+        int choiceCount = 0; // 選択肢の数
+
+        bool isBranchFinished = false; // 分岐終了直後かどうかを示すフラグ
 
         // 各データを格納する変数の宣言
         int leftCharacterId = -2, leftCharacterExpressionId = -2, rightCharacterId = -2, rightCharacterExpressionId = -2;
@@ -82,6 +94,80 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
             // 空でないデータ数が0の場合はスキップ
             if (availableDataCount == 0) continue;
 
+            // 選択肢（5つ目のデータが?）の場合
+            if (columns[4].Trim() == "?")
+            {
+                // 選択肢のインデックスを格納（from->現在のセリフのインデックス，to->不明なため-1で初期化）
+                DialogueLinkList.Add(new DialogLink{ _fromIndex = dialogueDataList.Count, _toIndex = -1 });
+
+                // 選択肢データをセリフデータに格納
+                dialogueDataList.Add(new DialogueData
+                {
+                    _leftCharacterId = leftCharacterId, _leftCharacterExpressionId = leftCharacterExpressionId,
+                    _rightCharacterId = rightCharacterId, _rightCharacterExpressionId = rightCharacterExpressionId,
+                    _isCharacterSpeaking = -1, _dialogueText = columns[5],
+                    _textBoxType = textBoxType, _backgroundId = backgroundId,
+                    _bgmId = bgmId, _seId = -1, _isChoice = true, _nextDialogue = new List<DialogueData>()
+                });
+                
+                // 選択肢の直前のセリフデータに選択肢データへの参照を設定
+                dialogueDataList[DialogueLinkList[0]._fromIndex - 1]._nextDialogue.Add(dialogueDataList[dialogueDataList.Count - 1]);
+
+                continue;
+            }
+
+            // 選択肢に対応する会話の始まり（5つ目のデータが!）の場合
+            if (columns[4].Trim() == "!")
+            {
+                // 選択肢がないのに，選択肢に対応する会話がある場合はエラーを出力してスキップ
+                if (DialogueLinkList.Count == 0)
+                {
+                    Debug.LogError($"選択肢のデータが不足しています（行：{i + 1}）");
+                    continue;
+                }
+
+                // 選択肢のインデックスが -1 の場合（選択肢に対応する会話の1つ目）
+                if (DialogueLinkIndex == -1) 
+                {
+                    // 選択肢の数，選択肢データのインデックスを更新
+                    choiceCount = DialogueLinkList.Count; 
+                    DialogueLinkIndex = 0;
+
+                    // １つ目の選択肢に対応する会話の始まりを示すインデックスを設定
+                    DialogueLinkList[0]._toIndex = dialogueDataList.Count;
+
+                    continue;
+                }
+
+                // 選択肢のインデックスを更新
+                DialogueLinkIndex++;
+
+                // 選択肢数 + 1 個目の!が付いた会話（分岐終了後の会話）に到達した場合
+                if (DialogueLinkIndex >= choiceCount)
+                {
+                    // 分岐終了直前のインデックスを格納（from->分岐終了直前のインデックス，to->不明なため-1で初期化）
+                    DialogueLinkList.Add(new DialogLink{ _fromIndex = dialogueDataList.Count - 1, _toIndex = -1 });
+                    
+                    // 各分岐について，分岐終了後の会話が始まるインデックスを設定
+                    for (int j = choiceCount; j < DialogueLinkList.Count; j++)
+                    {
+                        DialogueLinkList[j]._toIndex = dialogueDataList.Count;
+                    }
+
+                    isBranchFinished = true; // 分岐終了直後の会話に到達したことを示すフラグを設定
+
+                    continue;
+                }
+                
+                // 選択肢に対応する会話の始まりのインデックスを設定
+                DialogueLinkList[DialogueLinkIndex]._toIndex = dialogueDataList.Count;
+                
+                // 分岐終了直前のインデックスを格納（from->分岐終了直前のインデックス，to->不明なため-1で初期化）
+                DialogueLinkList.Add(new DialogLink{ _fromIndex = dialogueDataList.Count - 1, _toIndex = -1 });
+                
+                continue;
+            }
+
             // エピソードIDの行（空でないデータ数が1で，最初の列が空でない）の場合
             if (availableDataCount == 1 && !string.IsNullOrWhiteSpace(columns[0])) {
 
@@ -99,8 +185,31 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                     episodeDataList.Add(new EpisodeData());
                 }
 
-                // 前のエピソードがあれば，そのセリフデータを配列に変換して格納
+                // 前のエピソードがあれば，そのセリフデータ間をつなぎ，配列に変換して格納
                 if (currentEpisodeId >= 0) {
+
+                    DialogueData preDialogue = null; // 前のセリフデータを保持する変数
+
+                    // 選択肢関連で繋いだものを除き，セリフデータを順番に繋ぐ
+                    foreach (DialogueData dialogue in dialogueDataList)
+                    {
+                        // 前のセリフデータが存在していなければ，現在のデータを設定
+                        if (preDialogue == null)
+                        {
+                            preDialogue = dialogue;
+                            continue;
+                        }
+
+                        // 前のセリフデータに次への参照が設定されていない場合，現在のデータを設定
+                        if (preDialogue._nextDialogue == null)
+                        {
+                            preDialogue._nextDialogue.Add(dialogue);
+                        }
+                        
+                        preDialogue = dialogue; // 現在のデータを前のセリフデータとして設定
+                    }
+
+                    // 前のエピソードのセリフデータを配列に変換して格納
                     episodeDataList[currentEpisodeId]._data = dialogueDataList.ToArray();
                 }
 
@@ -171,12 +280,52 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                 _textBoxType = textBoxType,
                 _backgroundId = backgroundId,
                 _bgmId = bgmId,
-                _seId = seId
+                _seId = seId,
+                _isChoice = false,
+                _nextDialogue = new List<DialogueData>()
             });
+
+            // 選択肢の分岐終了直後の会話に到達した場合
+            if (isBranchFinished)
+            {
+                isBranchFinished = false; // 分岐終了直後の会話に到達したことを示すフラグをリセット
+
+                // 各リンクについて，ジャンプ元のセリフデータにジャンプ先のセリフデータへの参照を設定
+                foreach (var link in DialogueLinkList)
+                {
+                    dialogueDataList[link._fromIndex]._nextDialogue.Add(dialogueDataList[link._toIndex]);
+                }
+
+                DialogueLinkIndex = -1; // インデックスをリセット
+                DialogueLinkList.Clear(); // 選択肢リストをクリア
+            }
         }
 
-        // 前のエピソードがあれば，そのセリフデータを配列に変換して格納
+        // 前のエピソードがあれば，そのセリフデータ間をつなぎ，配列に変換して格納
         if (currentEpisodeId >= 0) {
+            
+            DialogueData preDialogue = null; // 前のセリフデータを保持する変数
+
+            // 選択肢関連で繋いだものを除き，セリフデータを順番に繋ぐ
+            foreach (DialogueData dialogue in dialogueDataList)
+            {
+                // 前のセリフデータが存在していなければ，現在のデータを設定
+                if (preDialogue == null)
+                {
+                    preDialogue = dialogue;
+                    continue;
+                }
+
+                // 前のセリフデータに次への参照が設定されていない場合，現在のデータを設定
+                if (preDialogue._nextDialogue.Count == 0)
+                {
+                    preDialogue._nextDialogue.Add(dialogue);
+                }
+                        
+                preDialogue = dialogue; // 現在のデータを前のセリフデータとして設定
+            }
+
+            // 前のエピソードのセリフデータを配列に変換して格納
             episodeDataList[currentEpisodeId]._data = dialogueDataList.ToArray();
         }
 
