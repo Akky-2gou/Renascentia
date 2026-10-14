@@ -8,57 +8,80 @@ using TMPro;
 public class TeamMemberSlot : Button
 {
     // スロットに割り当てられているキャラクターのID（-1は空欄）
-    [SerializeField] private int _charactorID = -1;
+    [SerializeField] private int _characterID = -1;
     // チーム編成を制御するマネージャー
     [SerializeField] private TeamConpositionManager _teamConpositionManager;
+    // 編成されたメンバーを管理するマネージャー
+    [SerializeField] private TeamMemberManager _teamMemberManager;
 
     // キャラクターIDのプロパティ
-    public int CharacterID => _charactorID;
+    public int CharacterID => _characterID;
     
     // デバッグ用：テキスト
     [SerializeField] private TextMeshProUGUI text;
+
+    private void Start()
+    {
+        // マネージャーにキャラクターIDの変更を通知
+        _teamMemberManager.OnTeamMemberIdChanged(-1, _characterID);
+
+        // スロットのテキストを初期化
+        if (_characterID == -1)
+        {
+            text.text = "空欄";
+        }
+        else
+        {
+            text.text = "キャラクターID: " + _characterID;
+        }
+    }
     
     /// <summary>
     /// スロットを空欄にする処理
     /// </summary>
     public void ClearSlot()
     {
-        _charactorID = -1;
+        // マネージャーにキャラクターIDの変更を通知
+        _teamMemberManager.OnTeamMemberIdChanged(_characterID, -1);
 
+        _characterID = -1;
         
-        if (_charactorID == -1)
+        if (_characterID == -1)
         {
             text.text = "空欄";
         }
         else
         {
-            text.text = "キャラクターID: " + _charactorID;
+            text.text = "キャラクターID: " + _characterID;
         }
     }
     
     /// <summary>
     /// スロットにキャラIDで指定されたキャラをアサインする処理
     /// </summary>
-    public void AssignCharactor(int ID)
+    public void AssignCharacter(int ID)
     {
-        _charactorID = ID;
+        // マネージャーにキャラクターIDの変更を通知
+        _teamMemberManager.OnTeamMemberIdChanged(_characterID, ID);
 
-        if (_charactorID == -1)
+        _characterID = ID;
+
+        if (_characterID == -1)
         {
             text.text = "空欄";
         }
         else
         {
-            text.text = "キャラクターID: " + _charactorID;
+            text.text = "キャラクターID: " + _characterID;
         }
     }
 
     /// <summary>
     /// スロットが押されたときに，キャラ詳細またはキャラ一覧に遷移する処理
     /// </summary>
-    public void OnClick()
+    public override void OnClick()
     {
-        if (_charactorID == -1) // 空欄の場合
+        if (_characterID == -1) // 空欄の場合
         {
             _teamConpositionManager.SelectEmptyTeamMemberSlot(this);
         } 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /*
  * チーム編成を制御するスクリプト
@@ -8,14 +9,15 @@ using UnityEngine;
 public class TeamConpositionManager : MonoBehaviour
 {
     [SerializeField] private GameObject _teamCompositionPanel; // チーム編成パネルを参照するための変数
-    [SerializeField] private GameObject _charactorDetailPanel; // キャラクター詳細パネルを参照するための変数
-    [SerializeField] private GameObject _charactorListPanel; // キャラクター一覧パネルを参照するための変数
+    [SerializeField] private GameObject _characterDetailPanel; // キャラクター詳細パネルを参照するための変数
+    [SerializeField] private GameObject _characterListPanel; // キャラクター一覧パネルを参照するための変数
     
-    [SerializeField] private GameObject _removeCharactorButton; // キャラクターを外すボタンを参照するための変数
+    [SerializeField] private GameObject _removeCharacterButton; // キャラクターを外すボタンを参照するための変数
+
 
     private TeamMemberSlot _selectedTeamMemberSlot = null; // 選択されたチームメンバースロットを保持する変数
 
-    private bool _isSelectedTeamMemberSlotEmpty; // 選択されたチームメンバースロットが空欄か
+    private bool _isSelectedTeamMemberSlotEmpty; // 選択されたチームメンバースロットが空欄か 
 
     
     /// <summary>
@@ -24,9 +26,9 @@ public class TeamConpositionManager : MonoBehaviour
     public void SelectEmptyTeamMemberSlot(TeamMemberSlot slot)
     {
         _selectedTeamMemberSlot = slot; // 選択されたチームメンバースロットを保持
-        _removeCharactorButton.SetActive(false); // キャラクターを外すボタンを非アクティブに
+        _removeCharacterButton.SetActive(false); // キャラクターを外すボタンを非アクティブに
         _isSelectedTeamMemberSlotEmpty = true;
-        TeamCompositionToCharactorList(); // キャラクター一覧に画面遷移
+        TeamCompositionToCharacterList(); // キャラクター一覧に画面遷移
     }
 
     /// <summary>
@@ -35,9 +37,9 @@ public class TeamConpositionManager : MonoBehaviour
     public void SelectNotEmptyTeamMemberSlot(TeamMemberSlot slot)
     {
         _selectedTeamMemberSlot = slot; // 選択されたチームメンバースロットを保持
-        _removeCharactorButton.SetActive(true); // キャラクターを外すボタンをアクティブに
+        _removeCharacterButton.SetActive(true); // キャラクターを外すボタンをアクティブに
         _isSelectedTeamMemberSlotEmpty = false;
-        TeamCompositionToCharactorDetail(); // キャラクター詳細に画面遷移
+        TeamCompositionToCharacterDetail(); // キャラクター詳細に画面遷移
 
         // ここでキャラクター詳細の中身を，選択されたチームメンバースロットに割り当てられているキャラクターのものに変更
     }
@@ -45,12 +47,12 @@ public class TeamConpositionManager : MonoBehaviour
     /// <summary>
     /// キャラクター一覧でいずれかのキャラクターを選択した場合の処理
     /// </summary>
-    public void SelectCharactor(int selectedCharactorID)
+    public void SelectCharacter(int selectedCharacterID)
     {
-        CharactorListToTeamComposition(); // チーム編成に画面遷移
+        CharacterListToTeamComposition(); // チーム編成に画面遷移
 
         if (_selectedTeamMemberSlot != null) {
-            _selectedTeamMemberSlot.AssignCharactor(selectedCharactorID); // 選択されたチームメンバースロットに割り当て
+            _selectedTeamMemberSlot.AssignCharacter(selectedCharacterID); // 選択されたチームメンバースロットに割り当て
             _selectedTeamMemberSlot = null; // 選択されたチームメンバースロットを初期化
         }
     }
@@ -61,53 +63,53 @@ public class TeamConpositionManager : MonoBehaviour
     public void ReturnToPrePanel()
     {
         if (_isSelectedTeamMemberSlotEmpty) {
-            CharactorListToTeamComposition(); // スロットが空欄ならチーム編成に画面遷移
+            CharacterListToTeamComposition(); // スロットが空欄ならチーム編成に画面遷移
         }
         else
         {
-            CharactorListToCharactorDetail(); // スロットが空欄でないならキャラクター詳細に戻る
+            CharacterListToCharacterDetail(); // スロットが空欄でないならキャラクター詳細に戻る
         }
     }
 
     /// チーム編成からキャラクター詳細に遷移する処理
-    private void TeamCompositionToCharactorDetail()
+    private void TeamCompositionToCharacterDetail()
     {
         _teamCompositionPanel.SetActive(false);
-        _charactorDetailPanel.SetActive(true);
+        _characterDetailPanel.SetActive(true);
     }
 
     /// チーム編成からキャラクター一覧に遷移する処理
-    private void TeamCompositionToCharactorList()
+    private void TeamCompositionToCharacterList()
     {
         _teamCompositionPanel.SetActive(false);
-        _charactorListPanel.SetActive(true);
+        _characterListPanel.SetActive(true);
     }
 
     /// キャラクター詳細からチーム編成に遷移する処理
-    private void CharactorDetailToTeamComposition()
+    private void CharacterDetailToTeamComposition()
     {
-        _charactorDetailPanel.SetActive(false);
+        _characterDetailPanel.SetActive(false);
         _teamCompositionPanel.SetActive(true);
     }
 
     /// キャラクター詳細からキャラクター一覧に遷移する処理
-    private void CharactorDetailToCharactorList()
+    private void CharacterDetailToCharacterList()
     {
-        _charactorDetailPanel.SetActive(false);
-        _charactorListPanel.SetActive(true);
+        _characterDetailPanel.SetActive(false);
+        _characterListPanel.SetActive(true);
     }
 
     /// キャラクター一覧からチーム編成に遷移する処理
-    private void CharactorListToTeamComposition()
+    private void CharacterListToTeamComposition()
     {
-        _charactorListPanel.SetActive(false);
+        _characterListPanel.SetActive(false);
         _teamCompositionPanel.SetActive(true);
     }
 
     /// キャラクター一覧からキャラクター詳細に遷移する処理
-    private void CharactorListToCharactorDetail()
+    private void CharacterListToCharacterDetail()
     {
-        _charactorListPanel.SetActive(false);
-        _charactorDetailPanel.SetActive(true);
+        _characterListPanel.SetActive(false);
+        _characterDetailPanel.SetActive(true);
     }
 }
