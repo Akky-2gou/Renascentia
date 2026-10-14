@@ -26,14 +26,12 @@ public class PlayerController : MonoBehaviour
     // 会話可能オブジェクトのタグ
     [SerializeField] private string _talkableTag = "Talkable";
 
-    // Animatorを参照
-    [SerializeField] private Animator _playerAnimator; 
-
-    // ChangeVisualDirectionを参照
-    [SerializeField] private ChangeVisualDirection _changeVisualDirection; 
-
     // PlayerInputの参照
     [SerializeField] private PlayerInput _playerInput;
+
+
+    private Animator _playerAnimator; // Animatorを保持する変数
+    private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
 
     Vector2 _moveInput; // 移動入力を格納する変数
     bool _isFacingRight; // プレイヤーが右を向いているかどうか
@@ -80,15 +78,15 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("CapsuleCollider2D取得成功");
         }
+    }
 
-        if (_playerAnimator == null)
-        {
-            Debug.LogError("Animatorがアタッチされていません");
-        }
-        else
-        {
-            Debug.Log("Animator取得成功");
-        }
+    /// <summary>
+    /// プレイヤーの見た目となるオブジェクトのChangeVisualDirection，Animatorの取得
+    /// </summary>
+    public void SetPlayerVisualComponet(ChangeVisualDirection changeVisualDirection, Animator animator)
+    {
+        _changeVisualDirection = changeVisualDirection;
+        _playerAnimator = animator;
     }
 
     /// <summary>
@@ -114,8 +112,7 @@ public class PlayerController : MonoBehaviour
                 // Walkアニメーションの開始
                 if (_playerAnimator != null)
                 {
-                    //playerAnimator.SetBool("WalkingBool", true);
-                    Debug.Log("Walkアニメーション開始");
+                    _playerAnimator.SetBool("WalkBool", true);
                 }
                 else
                 {
@@ -148,8 +145,7 @@ public class PlayerController : MonoBehaviour
         // Walkアニメーションの停止
         if (_playerAnimator != null)
         {
-            //playerAnimator.SetBool("WalkingBool", false);
-            Debug.Log("Walkアニメーション停止");
+            _playerAnimator.SetBool("WalkBool", false);
         }
         else
         {

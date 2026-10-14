@@ -12,6 +12,8 @@ public class TeamMemberSlot : Button
     // チーム編成を制御するマネージャー
     [SerializeField] private TeamConpositionManager _teamConpositionManager;
 
+    // キャラクターIDのプロパティ
+    public int CharacterID => _charactorID;
     
     // デバッグ用：テキスト
     [SerializeField] private TextMeshProUGUI text;
