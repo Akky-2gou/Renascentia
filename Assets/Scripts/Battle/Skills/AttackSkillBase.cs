@@ -6,18 +6,19 @@ public abstract class AttackSkillBase : SkillData
     [SerializeField] private int _power; // 威力
     public int Power => _power; // プロパティ
 
-    protected void DealDamage(CharacterStatus user, CharacterStatus target)
+    protected void DealDamage(BattleContext battleContext, DamageContext damageContext)
     {
-        if (!target.Alive) return;
-        int damage = DamageCalculator.Calculate(user, target, Power); // ダメージ計算
-        target.DecreaseHp(damage);
+        if (!damageContext.Defender.Alive) return;
+        int damage = DamageCalculator.Calculate(battleContext, damageContext); // ダメージ計算
+        damageContext.Defender.DecreaseHp(damage);
     }
 
     public override void Execute(BattleContext battleContext)
     {
         foreach (var target in battleContext.Targets)
         {
-            DealDamage(battleContext.Attacker, target);
+            var ctx = new DamageContext(battleContext.Attacker, target, Power);
+            DealDamage(battleContext, ctx);
         }
     }
 }

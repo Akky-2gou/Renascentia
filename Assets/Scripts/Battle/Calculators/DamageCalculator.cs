@@ -1,3 +1,4 @@
+using Battle;
 using UnityEngine;
 
 /// <summary>
@@ -13,34 +14,31 @@ public static class DamageCalculator
     private const float RANDOM_VARIANCE_MAX = 1.0f; // 乱数の上限
 
     /// <summary>
-    /// 通常攻撃用:攻撃者自身のNormalAttackPowerを使う
+    /// ダメージ演算処理
     /// </summary>
-    public static int Calculate(CharacterStatus attacker, CharacterStatus defender)
+    public static int Calculate(BattleContext context, DamageContext ctx)
     {
-        // 攻撃計算(引数が異なるだけなので、中身の処理は同じにする)
-        return Calculate(attacker, defender, attacker.NormalAttackPower);
-    }
+        CharacterStatus attacker = ctx.Attacker;
+        CharacterStatus defender = ctx.Defender;
 
-    /// <summary>
-    /// スキル用:外部から威力を指定する
-    /// </summary>
-    public static int Calculate(CharacterStatus attacker, CharacterStatus defender, int power)
-    {
-        // ① 元ダメージ
-        float baseDamage = power * (attacker.Attack - defender.Defense / 2f);
+        // 1 元ダメージ
+        BuffTotals buffs = context.CurrentBuffs; // 今回の行動で使う強化の合計
+        Debug.Log($"{attacker.name} → {defender.name}  威力倍率: {buffs.PowerMultiplier}");
+        float power = ctx.Power * buffs.PowerMultiplier;          // 威力に強化を掛ける
+        float baseDamage = power * (attacker.Attack / defender.Defense);
         baseDamage = Mathf.Max(baseDamage, 1f); // 最低保証ダメージ
 
-        // ② 属性補正
+        // 2 属性補正
         float attributeMultiplier = GetAttributeMultiplier(attacker, defender);
 
-        // ③ クリティカル判定
-        bool isCritical = RollCritical(attacker);
-        float criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1f;
+        // 3 クリティカル判定
+        bool isCritical = RollCritical(CRITICAL_PROBABILITY + buffs.CritRateBonus); // 基礎クリ率に強化分を足す
+        float criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER + buffs.CritDamageBonus : 1f; // 基礎倍率に強化分を足す（1.5 → 1.8 など）
 
-        // ④ その他(パッシブ・収集物など)
+        // 4 その他(パッシブ・収集物など)
         float passiveMultiplier = GetPassiveMultiplier(attacker, defender);
 
-        // ⑤ 乱数補正
+        // 5 乱数補正
         float randomMultiplier = Random.Range(RANDOM_VARIANCE_MIN, RANDOM_VARIANCE_MAX);
 
         float total = baseDamage * attributeMultiplier * criticalMultiplier * passiveMultiplier * randomMultiplier;
@@ -54,11 +52,10 @@ public static class DamageCalculator
         return 1f;
     }
 
-    private static bool RollCritical(CharacterStatus attacker)
+    private static bool RollCritical(float probability)
     {
-        // クリティカル率に応じて判定する処理
-        bool result = Random.value < CRITICAL_PROBABILITY;
-        return result;
+        // 渡されたクリティカル率で判定する
+        return Random.value < probability;
     }
 
     private static float GetPassiveMultiplier(CharacterStatus attacker, CharacterStatus defender)

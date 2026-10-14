@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0198203e9c7f948b0533a762b51830, type: 3}
   m_Name: TestEnemyCharacter
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  _maxHp: 150
+  _maxHp: 300
   _attack: 10
-  _defense: 0
+  _defense: 10
   _normalAttackPower: 10
   _healAmount: 10
   _characterType: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f8e0e9dbd14ea004e840d312fcb07f14, type: 2}
   - {fileID: 11400000, guid: 90cbfbf3bd0ff8645b80f712bb949cde, type: 2}
   - {fileID: 11400000, guid: 73d7de819e6d02a419bca629c3cfae31, type: 2}
+  _passive: {fileID: 11400000, guid: 2702fee6aa071b845bf62acfe363633a, type: 2}
