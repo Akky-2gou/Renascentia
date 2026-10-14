@@ -1,10 +1,10 @@
 using UnityEngine;
 
 /*
- * 神奈川の方向を視覚的に変えるスクリプト
+ * キャラクターの方向を視覚的に変えるスクリプト
  */
 
-public class KanagawaChangeVisualDirection : ChangeVisualDirection
+public class CommonChangeVisualDirection : ChangeVisualDirection
 {
     /// <summary>
     /// 視覚的に方向を変える処理

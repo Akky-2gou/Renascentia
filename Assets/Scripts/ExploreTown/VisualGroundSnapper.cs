@@ -14,7 +14,7 @@ public class VisualGroundSnapper : MonoBehaviour
     [SerializeField] private List<LayerMask> _targetGroundLayers;
 
     // 見た目の高さのオフセット値
-    [SerializeField] private float _heightOffset = 0.4f; 
+    [SerializeField] private float _heightOffset = 0.45f; 
 
     // 地形に沿って高さを変更するRayの長さを設定
     [SerializeField] private float _rayLength = 15.0f;
@@ -29,13 +29,15 @@ public class VisualGroundSnapper : MonoBehaviour
     {
         if (transform.parent == null)
         {
-            Debug.LogError("VisualGroundSnapper: 親オブジェクトが設定されていません。");
+            //Debug.LogError("VisualGroundSnapper: 親オブジェクトが設定されていません。");
+            return;
         }
 
         _parentCollider = transform.parent.GetComponent<Collider2D>();
         if (_parentCollider == null)
         {
-            Debug.LogError("VisualGroundSnapper: 親オブジェクトにCollider2Dがアタッチされていません。");
+            //Debug.LogError("VisualGroundSnapper: 親オブジェクトにCollider2Dがアタッチされていません。");
+            return;
         }
 
         // オブジェクトが破棄されたときにキャンセルされるトークンソースを作成
