@@ -359,6 +359,7 @@ public class BattleManager : MonoBehaviour
             || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
             _characterQueue.Peek().Passive.Execute(_context);
 
+        skill.BeforeDamage(_context); // スキル自身が付ける強化（この攻撃に乗せるもの）
         _context.LockBuffs(); // パッシブが付けた強化も含めて、今回の行動で使う強化を確定する
 
         // イベントを await するための準備

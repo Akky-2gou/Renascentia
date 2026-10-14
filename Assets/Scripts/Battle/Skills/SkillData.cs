@@ -35,4 +35,7 @@ public abstract class SkillData : ScriptableObject
 
     // 発動関数
     public abstract void Execute(BattleContext battleContext);
+
+    // ダメージ計算の前に呼ばれる。その攻撃に乗せたい強化の付与などは、ここに書く（標準は何もしない）
+    public virtual void BeforeDamage(BattleContext battleContext) { }
 }
