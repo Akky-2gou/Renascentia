@@ -102,7 +102,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_DisabledColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
+    m_DisabledColor: {r: 0.12578613, g: 0.12578613, b: 0.12578613, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -145,5 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
-  _charactorID: 0
+  _characterID: -1
   _teamConpositionManager: {fileID: 0}
+  _button: {fileID: 5439892710797211960}
