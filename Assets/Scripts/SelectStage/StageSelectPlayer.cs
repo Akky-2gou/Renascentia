@@ -28,6 +28,8 @@ public class StageSelectPlayer : MonoBehaviour
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
+    private Animator _playerAnimator; // Animatorを保持する変数
+    private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
 
     public bool IsMoving => isMoving;
 
@@ -42,6 +44,15 @@ public class StageSelectPlayer : MonoBehaviour
 
             return stageTargets[selectedIndex].stageId;
         }
+    }
+
+    /// <summary>
+    /// プレイヤーの見た目となるオブジェクトのChangeVisualDirection，Animatorの取得
+    /// </summary>
+    public void SetPlayerVisualComponet(ChangeVisualDirection changeVisualDirection, Animator animator)
+    {
+        _changeVisualDirection = changeVisualDirection;
+        _playerAnimator = animator;
     }
 
     // 移動用の初期状態を設定する
@@ -271,6 +282,14 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         currentTargetPosition = target.marker.position + target.offset;
+
+        // 目標位置と現在位置を比較し，進行方向を向く
+        if (_changeVisualDirection != null)
+        {
+            if (currentTargetPosition.x < moveTarget.position.x) _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left, moveTarget); 
+            else _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right, moveTarget);
+        } 
+
         return true;
     }
 
@@ -313,6 +332,16 @@ public class StageSelectPlayer : MonoBehaviour
         {
             pendingRouteIndices.Clear();
             return;
+        }
+
+        // Walkアニメーションの開始
+        if (_playerAnimator != null)
+        {
+            _playerAnimator.SetBool("WalkBool", true);
+        }
+        else
+        {
+            Debug.LogError("playerAnimator is null in OnMove");
         }
 
         isMoving = true;
@@ -396,6 +425,16 @@ public class StageSelectPlayer : MonoBehaviour
         if (currentStageId != MapId.None)
         {
             UpdateGameProgressLastMapId(currentStageId);
+        }
+
+        // Walkアニメーションの終了
+        if (_playerAnimator != null)
+        {
+            _playerAnimator.SetBool("WalkBool", false);
+        }
+        else
+        {
+            Debug.LogError("playerAnimator is null in OnMove");
         }
 
         Debug.Log("ステージ移動完了: 現在=" + currentStageId);

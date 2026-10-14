@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public class WalkingCharactorSetupper : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _charactorPrefabs; // キャラクターのプレハブを格納するリスト
-    [SerializeField] private PlayerController _playerController; // キャラクターコントローラの参照
+    [SerializeField] private PlayerController _playerController = null; // キャラクターコントローラの参照
+    [SerializeField] private StageSelectPlayer _stageSelectPlayer = null; // ステージセレクトプレイヤーの参照
     [SerializeField] private float _characterVisualScale = 0.65f; // キャラクターの見た目のオブジェクトの大きさ
 
     private GameObject _characterVisualObj = null; // キャラクターの見た目のオブジェクトを保持する変数
@@ -39,7 +40,8 @@ public class WalkingCharactorSetupper : MonoBehaviour
         ChangeVisualDirection changeVisualDirection = _characterVisualObj.GetComponent<ChangeVisualDirection>();
         Animator animator = _characterVisualObj.GetComponent<Animator>();
 
-        // 取得したものをPlayerControllerに渡す
-        _playerController.SetPlayerVisualComponet(changeVisualDirection, animator);
+        // 取得したものをPlayerControllerまたはStageSelectPlayerに渡す
+        if (_playerController != null) _playerController.SetPlayerVisualComponet(changeVisualDirection, animator);
+        if (_stageSelectPlayer != null) _stageSelectPlayer.SetPlayerVisualComponet(changeVisualDirection, animator);
     }
 }
