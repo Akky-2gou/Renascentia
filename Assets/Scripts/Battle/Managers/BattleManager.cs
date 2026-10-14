@@ -104,6 +104,8 @@ public class BattleManager : MonoBehaviour
         // バトル開始時のパッシブ発動
         foreach (CharacterStatus character in _characterQueue)
         {
+            if (character.BattleUnitType == BattleUnitType.EndPoint) continue; // 終端ダミーはパッシブを持たない
+            
             if (character.Passive.PassiveTiming == PassiveTiming.Invalid) 
                 Debug.LogError("パッシブが入力されていません");
 
@@ -278,14 +280,16 @@ public class BattleManager : MonoBehaviour
     // 通常攻撃処理
     async UniTaskVoid NormalAttack(CharacterStatus defender)
     {
-        // 攻撃開始前のパッシブの発動
-            if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeNormalAttack
-             || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
-                _characterQueue.Peek().Passive.Execute(_context);
-
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         CharacterStatus[] defenders = {defender}; // 配列を生成
         _context.BeginNormalAction(attacker, defenders, _turnCount); // 攻撃者と標的をバトル情報に追加
+
+        // 攻撃開始前のパッシブの発動
+        if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeNormalAttack
+        || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
+            _characterQueue.Peek().Passive.Execute(_context);
+
+        _context.LockBuffs(); // パッシブが付けた強化も含めて、今回の行動で使う強化を確定する
 
         // イベントを await するための準備
         var hitTcs = new UniTaskCompletionSource();
@@ -307,6 +311,7 @@ public class BattleManager : MonoBehaviour
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
+        _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
         defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
         _context.AddNormalAttackHistory(_turnCount); // 行動履歴の追加
@@ -346,13 +351,15 @@ public class BattleManager : MonoBehaviour
     // スキル攻撃処理
     async UniTaskVoid SkillAttack(CharacterStatus[] targets, SkillData skill)
     {
+        CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
+        _context.BeginSkillAction(attacker, targets, skill, _turnCount); // 攻撃者と標的をバトル情報に追加
+
         // スキル開始前のパッシブの発動
         if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeSkillAttack
             || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.BeforeAction)
             _characterQueue.Peek().Passive.Execute(_context);
 
-        CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
-        _context.BeginSkillAction(attacker, targets, skill, _turnCount); // 攻撃者と標的をバトル情報に追加
+        _context.LockBuffs(); // パッシブが付けた強化も含めて、今回の行動で使う強化を確定する
 
         // イベントを await するための準備
         // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
@@ -374,7 +381,9 @@ public class BattleManager : MonoBehaviour
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
         skill.Execute(_context); // 通常攻撃はダメージを与えるだけ
+        _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
+
         DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
         ResetSkillCost();
         foreach (var target in targets)
@@ -609,7 +618,10 @@ public class BattleManager : MonoBehaviour
         CharacterStatus[] defenders = {defender}; // 配列を生成
         
         _context.BeginNormalAction(_characterQueue.Peek(), defenders, _turnCount); // 敵の攻撃者と標的をバトル情報に追加
+        _context.LockBuffs(); // 敵に付いている強化を確定（今は付いていないので「強化なし」になる）
         TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
+        _context.ConsumeLockedBuffs();
+
         _context.AddNormalAttackHistory(_turnCount); // 敵の行動履歴の追加
     }
 

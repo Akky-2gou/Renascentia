@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   _maxHp: 100
   _attack: 10
-  _defense: 0
+  _defense: 10
   _normalAttackPower: 10
   _healAmount: 10
   _characterType: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f8e0e9dbd14ea004e840d312fcb07f14, type: 2}
   - {fileID: 11400000, guid: 90cbfbf3bd0ff8645b80f712bb949cde, type: 2}
   - {fileID: 11400000, guid: 73d7de819e6d02a419bca629c3cfae31, type: 2}
+  _passive: {fileID: 11400000, guid: 406a426f95ccc164ba2aa5126cab1df9, type: 2}

@@ -68,7 +68,9 @@ namespace Battle
         public int Turn { get; private set; } // ターン
         readonly List<BattleRecord> _history = new List<BattleRecord>(); // 行動履歴
         public IReadOnlyList<BattleRecord> History => _history;     // 行動履歴のプロパティ
-        public float NextAttackPowerUp { get; private set; } // 次の攻撃時の追加効果（0 なら効果なし。0.5 なら威力+50%）
+        readonly List<PendingBuff> _buffs = new List<PendingBuff>();       // 戦闘中に付いている強化すべて（一時的なものも永続も）
+        readonly List<PendingBuff> _lockedBuffs = new List<PendingBuff>(); // 今回の行動で使うと確定した強化
+        public BuffTotals CurrentBuffs { get; private set; } = BuffTotals.None; // 今回の行動で使う強化の合計（ダメージ計算が読む）
         
         /// <summary>
         /// 通常攻撃時のcontext登録
@@ -108,16 +110,44 @@ namespace Battle
         public void AddSkillHistory(int turn, SkillData skill)
             => _history.Add(new BattleRecord(turn, Attacker, Targets, BattleActionType.Skill, skill));
 
-        // 追加効果を足す（重ねがけは加算）
-        public void AddNextAttackPowerUp(float amount)
+        /// <summary>段階の強化を付ける（パッシブやスキル効果から呼ぶ）。stage は +1 で 3/2 倍</summary>
+        public void AddStageBuff(CharacterStatus target, BuffStat stat, int stage, BuffDuration duration)
         {
-            NextAttackPowerUp += amount;
+            _buffs.Add(new PendingBuff(target, stat, stage, 0f, duration));
         }
 
-        // 追加効果を消す（使い終わったら呼ぶ）
-        public void ResetNextAttackPowerUp()
+        /// <summary>割合の強化を付ける（パッシブやスキル効果から呼ぶ）。rate が 0.1 なら +10%</summary>
+        public void AddRateBuff(CharacterStatus target, BuffStat stat, float rate, BuffDuration duration)
         {
-            NextAttackPowerUp = 0f;
+            _buffs.Add(new PendingBuff(target, stat, 0, rate, duration));
+        }
+
+        /// <summary>
+        /// 攻撃者に付いている強化を、今回の行動用に確定する。
+        /// 行動前パッシブが終わったあと、ダメージ計算の前に BattleManager が呼ぶ
+        /// </summary>
+        public void LockBuffs()
+        {
+            _lockedBuffs.Clear();
+            foreach (var buff in _buffs)
+            {
+                if (buff.Target == Attacker) _lockedBuffs.Add(buff); // 一時的なものも永続も、攻撃者のものを全部拾う
+            }
+            CurrentBuffs = new BuffTotals(_lockedBuffs); // 合計を計算して固定する
+        }
+
+        /// <summary>
+        /// 今回の行動で使った強化のうち、「次の攻撃だけ」のものを消す。
+        /// 標的全員のダメージ処理が終わったあとに、BattleManager が1回だけ呼ぶ
+        /// </summary>
+        public void ConsumeLockedBuffs()
+        {
+            foreach (var buff in _lockedBuffs)
+            {
+                if (buff.Duration == BuffDuration.NextAttack) _buffs.Remove(buff); // 永続は残る
+            }
+            _lockedBuffs.Clear();
+            CurrentBuffs = BuffTotals.None; // 行動外では強化なしに戻しておく
         }
         
         // コンストラクタ
