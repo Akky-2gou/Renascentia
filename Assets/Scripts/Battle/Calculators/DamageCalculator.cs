@@ -51,7 +51,7 @@ public static class DamageCalculator
     // エレメント属性による弱点計算
     private static float GetAttributeMultiplier(DamageContext ctx)
     {
-        if (ctx.Element == ElementType.None) Debug.LogError("攻撃属性が指定されていません");
+        if (ctx.Element == ElementType.None) Debug.LogError($"攻撃属性が指定されていません: {ctx.Attacker.name}");
         return ctx.Defender.IsWeakTo(ctx.Element) ? WEAKNESS_MULTIPLIER : 1f;
     }
 
