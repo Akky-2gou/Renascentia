@@ -25,7 +25,7 @@ public static class DamageCalculator
 
         // 1 元ダメージ
         BuffTotals buffs = context.CurrentBuffs; // 今回の行動で使う強化の合計
-        Debug.Log($"{attacker.name} → {defender.name}  威力倍率: {buffs.PowerMultiplier}");
+        
         float power = ctx.Power * buffs.PowerMultiplier;          // 威力に強化を掛ける
         float baseDamage = power * ((float)attacker.Attack / Mathf.Max(defender.Defense, 1));
         baseDamage = Mathf.Max(baseDamage, 1f); // 最低保証ダメージ
@@ -44,7 +44,7 @@ public static class DamageCalculator
         float randomMultiplier = Random.Range(RANDOM_VARIANCE_MIN, RANDOM_VARIANCE_MAX);
 
         float total = baseDamage * attributeMultiplier * criticalMultiplier * passiveMultiplier * randomMultiplier;
-
+    
         return Mathf.Max(1, Mathf.RoundToInt(total)); // 最低1ダメージは保
     }
 
