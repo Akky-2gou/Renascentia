@@ -30,3 +30,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90cbfbf3bd0ff8645b80f712bb949cde, type: 2}
   - {fileID: 11400000, guid: 73d7de819e6d02a419bca629c3cfae31, type: 2}
   _passive: {fileID: 11400000, guid: 2702fee6aa071b845bf62acfe363633a, type: 2}
+  _enemyBehavior:
+    _defaultActions:
+    - _skill: {fileID: 11400000, guid: 75a8a2550e8834a7a9ded7d4dd86ef69, type: 2}
+      _weight: 99
+    - _skill: {fileID: 11400000, guid: 106ff9505e3364b39a383364b35f8734, type: 2}
+      _weight: 1
+    _phases:
+    - _hpRatioBelow: 0.09
+      _actions:
+      - _skill: {fileID: 11400000, guid: 75a8a2550e8834a7a9ded7d4dd86ef69, type: 2}
+        _weight: 1
+      - _skill: {fileID: 11400000, guid: 106ff9505e3364b39a383364b35f8734, type: 2}
+        _weight: 99

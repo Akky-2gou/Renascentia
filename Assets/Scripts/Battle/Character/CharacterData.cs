@@ -54,4 +54,8 @@ public class CharacterData : ScriptableObject
     [Header("パッシブ")]
     [SerializeField] PassiveData _passive;
     public PassiveData Passive => _passive;
+
+    [Header("敵の行動パターン（敵のみ設定）")]
+    [SerializeField] EnemyBehavior _enemyBehavior;
+    public EnemyBehavior EnemyBehavior => _enemyBehavior;
 }

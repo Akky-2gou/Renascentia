@@ -33,6 +33,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     IReadOnlyList<ElementType> _weaknesses; // 苦手なエレメント属性
 
+    EnemyBehavior _enemyBehavior; // 敵の行動パターン（敵のみ使う）
+
     Animator _animator; // キャラクターのアニメーターコントローラー
 
     float time = 0;
@@ -109,6 +111,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _weaknesses = characterData.Weaknesses;
         _skills = characterData.Skills;
         _passive = characterData.Passive;
+        _enemyBehavior = characterData.EnemyBehavior;
 
         _animator = this.GetComponent<Animator>();
     }
@@ -185,6 +188,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     public ElementType AttackElement => _attackElement;
 
     public IReadOnlyList<ElementType> Weaknesses => _weaknesses;
+
+    public EnemyBehavior EnemyBehavior => _enemyBehavior;
 
     /// <summary>指定したエレメント属性が苦手か</summary>
     public bool IsWeakTo(ElementType element)

@@ -249,8 +249,8 @@ public class BattleManager : MonoBehaviour
             // 全敵の行動が終わるまでループする
             if (_characterQueue.Peek().BattleUnitType == BattleUnitType.Enemy)
             {
-                TestEnemyAction();
-                continue;
+                EnemyAction().Forget();
+                return;
             }
 
             // プレイヤーの番になったらボタンを表示して入力待ちにする
@@ -604,26 +604,40 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // 敵攻撃のテスト処理
-    void TestEnemyAction()
+    // 敵の行動処理。行動表からスキルと標的を選び、プレイヤーのスキルと同じ流れで発動する
+    async UniTaskVoid EnemyAction()
     {
-        CharacterStatus defender = null;
-        foreach (var character in _characterQueue)
-        {
-            if (character.BattleUnitType == BattleUnitType.Player && character.Alive)
-            {
-                defender = character;
-                break;
-            }
-        }
-        CharacterStatus[] defenders = {defender}; // 配列を生成
-        
-        _context.BeginNormalAction(_characterQueue.Peek(), defenders, _turnCount); // 敵の攻撃者と標的をバトル情報に追加
-        _context.LockBuffs(); // 敵に付いている強化を確定（今は付いていないので「強化なし」になる）
-        TakeDamage(_characterQueue.Peek(), defenders); // 通常攻撃はダメージを与えるだけ
-        _context.ConsumeLockedBuffs();
+        CharacterStatus attacker = _characterQueue.Peek(); // 行動する敵
 
-        _context.AddNormalAttackHistory(_turnCount); // 敵の行動履歴の追加
+        if (!EnemyAI.TryChooseSkill(attacker, out var skill))
+        {
+            NextTurn(); // スキルを選べなかったので、この敵は何もしない
+            return;
+        }
+
+        CharacterStatus[] targets = EnemyAI.ChooseTargets(
+            attacker, skill,
+            GetAliveCharacters(BattleUnitType.Player), // 敵から見た「敵」＝プレイヤー側
+            GetAliveCharacters(BattleUnitType.Enemy)); // 敵から見た「味方」＝敵側
+        _context.BeginSkillAction(attacker, targets, skill, _turnCount); // 攻撃者と標的をバトル情報に追加
+
+        // スキル開始前のパッシブの発動
+        if (attacker.Passive.PassiveTiming == PassiveTiming.BeforeAction) // 敵はスキル攻撃しかないので、BeforeActionのみ
+            attacker.Passive.Execute(_context);
+
+        skill.BeforeDamage(_context); // スキル自身が付ける強化
+        _context.LockBuffs();         // 今回の行動で使う強化を確定する
+
+        skill.Execute(_context);
+        _context.ConsumeLockedBuffs();               // 使った強化を消す
+        _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
+
+        // スキル終了後のパッシブの発動
+        if (attacker.Passive.PassiveTiming == PassiveTiming.AfterAction) // 敵はスキル攻撃しかないので、AfterActionのみ
+            attacker.Passive.Execute(_context);
+
+        await UniTask.Yield(); // 今はアニメーションがないので1フレーム待つだけ。アニメーションを入れるときは、ここを終了待ちに変える
+        NextTurn();
     }
 
     // キャラの体力を表示するテスト処理
