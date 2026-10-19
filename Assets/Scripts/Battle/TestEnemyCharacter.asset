@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: TestEnemyCharacter
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   _maxHp: 300
-  _attack: 10
+  _attack: 50
   _defense: 10
   _normalAttackPower: 10
   _healAmount: 10
-  _characterType: 0
-  _passiveType: 0
+  _characterType: 1
   _battleUnitType: 1
+  _attackElement: 1
+  _weaknesses: 02000000
   _icon: {fileID: 21300000, guid: a12aebfce4d75466bbe225b2f88adeb1, type: 3}
   _iconOffset: {x: 100, y: -255}
   _iconScale: 10

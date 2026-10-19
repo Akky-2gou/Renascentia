@@ -6,18 +6,18 @@ namespace Battle
     /// <summary>強化の種類</summary>
     public enum BuffStat
     {
+        None,
         Power,      // 威力
         CritRate,   // クリティカル率（割合のみ使う）
         CritDamage, // クリティカルダメージ（割合のみ使う）
-        None,
     }
 
     /// <summary>強化の期間</summary>
     public enum BuffDuration
     {
+        None,
         NextAttack, // 次の行動（通常攻撃またはスキル）が終わるまで
         Permanent,  // 戦闘中ずっと
-        None,
     }
 
     /// <summary>強化1件分。誰に、何を、どれだけ、いつまで</summary>
@@ -87,5 +87,39 @@ namespace Battle
         // 0段階=1.0、+1=3/2、+2=4/2、+3=5/2 ... / -1=2/3、-2=2/4 ...
         static float StageToMultiplier(int stage)
             => stage >= 0 ? (2f + stage) / 2f : 2f / (2f - stage);
+    }
+
+    [System.Serializable]
+    public class BuffEntry
+    {
+        [SerializeField] private BuffStat Stat = BuffStat.None;
+        [SerializeField] private int Stage;                    // 段階（0 なら使わない）
+        [SerializeField] private float Rate;                   // 割合（0 なら使わない）
+        [SerializeField] private BuffDuration Duration = BuffDuration.None;
+
+        // 自分に強化を付ける
+        public void ApplyTo(BattleContext ctx, CharacterStatus target)
+        {
+            if (Duration == BuffDuration.None)
+            {
+                Debug.LogError("強化の期間が設定されていません");
+                return;
+            }
+
+            switch (Stat)
+            {
+                case BuffStat.Power:
+                    if (Stage != 0) ctx.AddStageBuff(target, Stat, Stage, Duration);
+                    if (Rate != 0f) ctx.AddRateBuff(target, Stat, Rate, Duration);
+                    break;
+                case BuffStat.CritRate:
+                case BuffStat.CritDamage:
+                    if (Rate != 0f) ctx.AddRateBuff(target, Stat, Rate, Duration);
+                    break;
+                default:
+                    Debug.LogError($"不明なバフの種類です: {Stat}");
+                    break;
+            }
+        }
     }
 }

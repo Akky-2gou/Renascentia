@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameTypes;
 
 /// <summary>
 /// バトル情報を保存するクラス
@@ -45,12 +46,14 @@ namespace Battle
         public CharacterStatus Attacker { get; }
         public CharacterStatus Defender { get; }
         public float Power { get; }
+        public ElementType Element { get; }
 
-        public DamageContext(CharacterStatus attacker, CharacterStatus defender, float power)
+        public DamageContext(CharacterStatus attacker, CharacterStatus defender, float power, ElementType element)
         {
             Attacker = attacker;
             Defender = defender;
             Power = power;
+            Element = element;
         }
     }
 

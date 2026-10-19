@@ -1,5 +1,6 @@
 using Battle;
 using UnityEngine;
+using GameTypes;
 
 /// <summary>
 /// ダメージ計算を一手に引き受けるクラス。
@@ -12,6 +13,7 @@ public static class DamageCalculator
     private const float CRITICAL_PROBABILITY = 0.05f; // クリティカル倍率
     private const float RANDOM_VARIANCE_MIN = 0.85f; // 乱数の下限
     private const float RANDOM_VARIANCE_MAX = 1.0f; // 乱数の上限
+    private const float WEAKNESS_MULTIPLIER = 1.5f; // 苦手属性を突いたときの倍率
 
     /// <summary>
     /// ダメージ演算処理
@@ -25,11 +27,11 @@ public static class DamageCalculator
         BuffTotals buffs = context.CurrentBuffs; // 今回の行動で使う強化の合計
         Debug.Log($"{attacker.name} → {defender.name}  威力倍率: {buffs.PowerMultiplier}");
         float power = ctx.Power * buffs.PowerMultiplier;          // 威力に強化を掛ける
-        float baseDamage = power * (attacker.Attack / defender.Defense);
+        float baseDamage = power * ((float)attacker.Attack / Mathf.Max(defender.Defense, 1));
         baseDamage = Mathf.Max(baseDamage, 1f); // 最低保証ダメージ
 
         // 2 属性補正
-        float attributeMultiplier = GetAttributeMultiplier(attacker, defender);
+        float attributeMultiplier = GetAttributeMultiplier(ctx);
 
         // 3 クリティカル判定
         bool isCritical = RollCritical(CRITICAL_PROBABILITY + buffs.CritRateBonus); // 基礎クリ率に強化分を足す
@@ -46,10 +48,11 @@ public static class DamageCalculator
         return Mathf.Max(1, Mathf.RoundToInt(total)); // 最低1ダメージは保
     }
 
-    private static float GetAttributeMultiplier(CharacterStatus attacker, CharacterStatus defender)
+    // エレメント属性による弱点計算
+    private static float GetAttributeMultiplier(DamageContext ctx)
     {
-        // 属性相性表を見て倍率を返す処理(未実装)
-        return 1f;
+        if (ctx.Element == ElementType.None) Debug.LogError("攻撃属性が指定されていません");
+        return ctx.Defender.IsWeakTo(ctx.Element) ? WEAKNESS_MULTIPLIER : 1f;
     }
 
     private static bool RollCritical(float probability)
