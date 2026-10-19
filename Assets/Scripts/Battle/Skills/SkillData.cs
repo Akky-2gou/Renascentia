@@ -24,7 +24,7 @@ public abstract class SkillData : ScriptableObject
     // 確変数
     [SerializeField] private string _skillName; // スキル名
     [SerializeField] private int _cost; // 消費SP
-    public ElementType Element { get; }
+    [SerializeField] private ElementType _element; // エレメント属性
 
     [SerializeField][TextArea] private string _description; // スキル説明
 
@@ -35,6 +35,7 @@ public abstract class SkillData : ScriptableObject
     public int Cost => _cost;
     public string Description => _description;
     public SkillTargetType TargetType => _targetType;
+    public ElementType Element => _element;
 
     // 発動関数
     public abstract void Execute(BattleContext battleContext);
