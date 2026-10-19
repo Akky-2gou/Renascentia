@@ -1,5 +1,6 @@
 using UnityEngine;
 using GameTypes;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "GameData/CharacterData")]
 public class CharacterData : ScriptableObject
@@ -23,11 +24,14 @@ public class CharacterData : ScriptableObject
     [SerializeField] CharacterType _characterType;
     public CharacterType CharacterType => _characterType;
 
-    [SerializeField] PassiveType _passiveType;
-    public PassiveType PassiveType => _passiveType;
-
     [SerializeField] BattleUnitType _battleUnitType;
     public BattleUnitType BattleUnitType => _battleUnitType;
+
+    [SerializeField] ElementType _attackElement; // 通常攻撃のエレメント属性
+    public ElementType AttackElement => _attackElement;
+
+    [SerializeField] ElementType[] _weaknesses; // 苦手なエレメント属性（複数可）
+    public IReadOnlyList<ElementType> Weaknesses => _weaknesses;
 
     [Header("HPバー用アイコン")]
     [SerializeField] private Sprite _icon; // キャラのアイコン画像

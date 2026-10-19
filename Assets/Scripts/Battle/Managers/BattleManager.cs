@@ -131,7 +131,7 @@ public class BattleManager : MonoBehaviour
                 continue; // 死んだキャラには攻撃をしない
             }
 
-            var ctx = new DamageContext(attacker, defender, attacker.NormalAttackPower);
+            var ctx = new DamageContext(attacker, defender, attacker.NormalAttackPower, attacker.AttackElement);
             int damage = DamageCalculator.Calculate(_context, ctx); // ダメージ処理
 
             defender.DecreaseHp(damage); // ダメージを与える

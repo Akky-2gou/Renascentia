@@ -28,7 +28,10 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     BattleUnitType _battleUnitType; // バトルユニットのタイプ
 
     GameTypes.CharacterType _characterType; // キャラクターのタイプ
-    GameTypes.PassiveType _passiveType; // パッシブのタイプ
+
+    ElementType _attackElement; // 通常攻撃のエレメント属性
+
+    IReadOnlyList<ElementType> _weaknesses; // 苦手なエレメント属性
 
     Animator _animator; // キャラクターのアニメーターコントローラー
 
@@ -100,9 +103,10 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _healAmount = characterData.HealAmount;
         _battleUnitType = characterData.BattleUnitType;
         _characterType = characterData.CharacterType;
-        _passiveType = characterData.PassiveType;
         _hp = _maxHp;
         _alive = true;
+        _attackElement = characterData.AttackElement;
+        _weaknesses = characterData.Weaknesses;
         _skills = characterData.Skills;
         _passive = characterData.Passive;
 
@@ -174,15 +178,25 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         set { _characterType = value; }
     }
 
-    public PassiveType PassiveType
-    {
-        get { return _passiveType; }
-        set { _passiveType = value; }
-    }
-
     public SkillData[] Skills => _skills;
 
     public PassiveData Passive => _passive;
+
+    public ElementType AttackElement => _attackElement;
+
+    public IReadOnlyList<ElementType> Weaknesses => _weaknesses;
+
+    /// <summary>指定したエレメント属性が苦手か</summary>
+    public bool IsWeakTo(ElementType element)
+    {
+        if (element == ElementType.None) Debug.LogError("苦手属性が選択されていません");
+
+        foreach (var weakness in _weaknesses)
+        {
+            if (weakness == element) return true;
+        }
+        return false;
+    }
 
     /// <summary>
     /// ダメージを受けるときにHPを減らす関数

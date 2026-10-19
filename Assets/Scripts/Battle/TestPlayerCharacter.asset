@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0198203e9c7f948b0533a762b51830, type: 3}
   m_Name: TestPlayerCharacter
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  _maxHp: 100
-  _attack: 10
+  _maxHp: 300
+  _attack: 50
   _defense: 10
   _normalAttackPower: 10
   _healAmount: 10
-  _characterType: 0
-  _passiveType: 0
+  _characterType: 1
   _battleUnitType: 0
+  _attackElement: 1
+  _weaknesses: 01000000
   _icon: {fileID: 21300000, guid: a12aebfce4d75466bbe225b2f88adeb1, type: 3}
   _iconOffset: {x: 100, y: -255}
   _iconScale: 10

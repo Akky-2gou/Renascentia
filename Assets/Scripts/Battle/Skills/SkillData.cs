@@ -1,5 +1,6 @@
 using Battle;
 using UnityEngine;
+using GameTypes;
 
 /*
  * スキルのタイプを表す列挙型の名前空間
@@ -23,6 +24,8 @@ public abstract class SkillData : ScriptableObject
     // 確変数
     [SerializeField] private string _skillName; // スキル名
     [SerializeField] private int _cost; // 消費SP
+    public ElementType Element { get; }
+
     [SerializeField][TextArea] private string _description; // スキル説明
 
     [SerializeField] protected SkillTargetType _targetType = SkillTargetType.None; // 対象範囲
