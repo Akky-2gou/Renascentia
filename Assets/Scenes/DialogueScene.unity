@@ -348,7 +348,7 @@ MonoBehaviour:
   _rightCharacterImage: {fileID: 224482231}
   _backgroundImage: {fileID: 338075082}
   _textBoxImage: {fileID: 933682893}
-  _episodeDatabase: {fileID: 11400000, guid: 64c98c6c5c47740d5a52c425fc0c8cf9, type: 2}
+  _episodeDatabase: {fileID: 11400000, guid: 46604aadf1072494bbd7d43794192b42, type: 2}
   _characterDialogDatabase: {fileID: 11400000, guid: 9206ce36b7d8b478ea7f6da3a5133de2, type: 2}
   _backGround: {fileID: 11400000, guid: 693522944333a402781a694a34c69465, type: 2}
   _textBoxBackGround: {fileID: 11400000, guid: d56a5d2c0bff741369e352bf61ea546f, type: 2}
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueStarter
   _dialogueDisplay: {fileID: 1153302251}
-  _episodeIndex: 3
+  _episodeIndex: 14
 --- !u!114 &1279610751 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7172745783510154055, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
@@ -776,6 +776,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1153302251}
+    - target: {fileID: 1295582102576946337, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295582102576946337, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295582102576946337, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295582102576946337, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3319785311671059269, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -792,6 +808,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1153302251}
+    - target: {fileID: 5708719152134366560, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5708719152134366560, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5708719152134366560, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105895080422499182, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105895080422499182, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6879139212477295897, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
       propertyPath: m_Name
       value: DialogueCanvas
@@ -800,6 +836,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1153302251}
+    - target: {fileID: 7778732208726566020, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778732208726566020, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8300615065062975424, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

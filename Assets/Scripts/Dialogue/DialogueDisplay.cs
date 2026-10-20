@@ -119,7 +119,7 @@ public class DialogueDisplay : MonoBehaviour
         if (_isTextTyping) // 表示途中で押されたら
         {
             _textTypingCts.Cancel(); // 現在の表示をキャンセル
-            _dialogueText.text = _currentDialogueData._dialogueText; // 現在の行を完全に表示
+            SetDialogueTextFullyVisible(_currentDialogueData._dialogueText); // 現在の行を完全に表示
             _isTextTyping = false;
             _textTypingCts = new CancellationTokenSource(); // 新しいCancellationTokenSourceを作成
             return;
@@ -226,7 +226,7 @@ public class DialogueDisplay : MonoBehaviour
 
             if (isFast) // 早送り中の場合は一文字ずつ表示せずに即座に表示
             {
-                _dialogueText.text = _currentDialogueData._dialogueText;
+                SetDialogueTextFullyVisible(_currentDialogueData._dialogueText);
                 _isTextTyping = false;
                 return;
             }
@@ -260,7 +260,7 @@ public class DialogueDisplay : MonoBehaviour
     {
         if (_isFastForwarding)
         {
-            _dialogueText.text = line;
+            SetDialogueTextFullyVisible(line);
             _isTextTyping = false;
             return;
         }
@@ -272,17 +272,25 @@ public class DialogueDisplay : MonoBehaviour
         // 一文字ずつ表示中のフラグを立てる
         _isTextTyping = true;
 
-        // 指定時間ごとに一文字ずつ表示
-        int lineLength = line.Length;
-        _dialogueText.text = "";
-        for (int i = 0; i < lineLength; i++)
+        // 全文のレイアウトを確定してから，表示する文字数だけを増やす
+        _dialogueText.text = line;
+        _dialogueText.maxVisibleCharacters = 0;
+        _dialogueText.ForceMeshUpdate();
+        int characterCount = _dialogueText.textInfo.characterCount;
+        for (int i = 1; i <= characterCount; i++)
         {
-            _dialogueText.text += line[i];
+            _dialogueText.maxVisibleCharacters = i;
             await UniTask.Delay(TimeSpan.FromSeconds(_letterDelay), cancellationToken: linkedToken);
         }
 
         // 一文字ずつ表示が完了したらフラグを下ろす
         _isTextTyping = false;
+    }
+
+    private void SetDialogueTextFullyVisible(string line)
+    {
+        _dialogueText.text = line;
+        _dialogueText.maxVisibleCharacters = int.MaxValue;
     }
 
     // 自動再生をOnOffするメソッド
@@ -348,7 +356,7 @@ public class DialogueDisplay : MonoBehaviour
             if (_isTextTyping)
             {
                 _textTypingCts.Cancel();
-                _dialogueText.text = _currentDialogueData._dialogueText;
+                SetDialogueTextFullyVisible(_currentDialogueData._dialogueText);
                 _isTextTyping = false;
                 _textTypingCts = new CancellationTokenSource();
             }
