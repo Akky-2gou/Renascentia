@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 
 /*
@@ -75,17 +75,35 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
         int leftCharacterId = -2, leftCharacterExpressionId = -2, rightCharacterId = -2, rightCharacterExpressionId = -2;
         int isCharacterSpeaking = -2, textBoxType = -2, backgroundId = -2, bgmId = -2, seId = -2;
 
+        // ヘッダーを読み込み，何列あるべきかを求める
+        string line = lines[0].Trim(); // 各データの前後の空白はスキップ
+        string[] columns = line.Split(','); // 各データをカンマで分割して取得
+
+        // 空でないデータの数をカウント
+        int availableDataCount = 0;
+        foreach (var column in columns)
+        {
+            if (!string.IsNullOrWhiteSpace(column)) availableDataCount++;
+        }
+
+        int expectedColumnsNum = availableDataCount; // あるべき列の数
+
+        // 現在の行のインデックス
+        int currentLineIndex;
+
         // 各行を処理してDialogueDataの配列を作成
         for (int i = 1; i < lines.Length; i++) // 1行目はヘッダー
         {
+            currentLineIndex = i;
+            
             // 各データの前後の空白はスキップ
-            string line = lines[i].Trim();
+            line = lines[i].Trim();
 
             // 各データをカンマで分割して取得
-            string[] columns = line.Split(',');
+            columns = line.Split(',');
 
             // 空でないデータの数をカウント
-            int availableDataCount = 0;
+            availableDataCount = 0;
             foreach (var column in columns)
             {
                 if (!string.IsNullOrWhiteSpace(column)) availableDataCount++;
@@ -93,6 +111,33 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
 
             // 空でないデータ数が0の場合はスキップ
             if (availableDataCount == 0) continue;
+
+            // あるべき列の数より少ない場合，セリフテキスト内に改行があるとみなす
+            if (columns.Length < expectedColumnsNum)
+            {
+                // 1列分のデータ領域を確保
+                Array.Resize(ref columns, columns.Length + 4); 
+
+                // 改行によって複数行に分かれたテキストを集める
+                string[] nextLineColumns;
+                while (true) {
+                    // 次の行のデータを読み込む
+                    i++;
+                    nextLineColumns = lines[i].Trim().Split(',');
+
+                    // 今の行のセリフテキストに改行文字，改行以降のテキストを追加
+                    columns[5] += "\n" + nextLineColumns[0];
+
+                    // 次の行のデータが一つより多ければ（再び改行されていなければ），処理を終了
+                    if (nextLineColumns.Length > 1) break;
+                }
+
+                // 改行されたテキストの最初と最後にある"を削除
+                columns[5] = columns[5].Substring(1, columns[5].Length - 2);
+
+                // セリフより後のデータを追加
+                for (int c = 1; c <= 4; c++) columns[c + 5] = nextLineColumns[c];
+            }
 
             // 選択肢（5つ目のデータが?）の場合
             if (columns[4].Trim() == "?")
@@ -122,7 +167,7 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                 // 選択肢がないのに，選択肢に対応する会話がある場合はエラーを出力してスキップ
                 if (DialogueLinkList.Count == 0)
                 {
-                    Debug.LogError($"選択肢のデータが不足しています（行：{i + 1}）");
+                    Debug.LogError($"選択肢のデータが不足しています（行：{currentLineIndex + 1}）");
                     continue;
                 }
 
@@ -175,7 +220,7 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                 int episodeId;
                 if (!int.TryParse(columns[0], out episodeId) || episodeId < 0)
                 {
-                    Debug.LogError($"不正なエピソードID（行：{i + 1}）");
+                    Debug.LogError($"不正なエピソードID（行：{currentLineIndex + 1}）");
                     continue;
                 }
 
@@ -201,7 +246,7 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                         }
 
                         // 前のセリフデータに次への参照が設定されていない場合，現在のデータを設定
-                        if (preDialogue._nextDialogue == null)
+                        if (preDialogue._nextDialogue.Count == 0)
                         {
                             preDialogue._nextDialogue.Add(dialogue);
                         }
@@ -223,7 +268,7 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
             // エピソードIDが不正な場合はエラーを出力してスキップ
             if (currentEpisodeId < 0)
             {
-                Debug.LogError($"会話IDが指定されていません（行：{i + 1}）");
+                Debug.LogError($"会話IDが指定されていません（行：{currentLineIndex + 1}）");
                 continue;
             }
 
@@ -258,7 +303,7 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                 || !TryToGetNonNegativeInt(columns[8], ref bgmId, true, true)
                 || !TryToGetNonNegativeInt(columns[9], ref seId, false, false))
             {
-                Debug.LogError($"データの形式が不正です（行：{i + 1}）");
+                Debug.LogError($"データの形式が不正です（行：{currentLineIndex + 1}）");
                 continue;
             }
 
