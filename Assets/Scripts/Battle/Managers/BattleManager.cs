@@ -67,7 +67,7 @@ public class BattleManager : MonoBehaviour
             }
             GameObject character = Instantiate(characterData.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
-            characterStatus.Initialize(characterData); // ベースキャラのキャラクターステータスにデータ注入
+            characterStatus.Initialize(characterData, FormationRow.Front); // ベースキャラのキャラクターステータスにデータ注入
 
             CharacterHPBar hpBar = Instantiate(_playerHpBarPrefab, _playerHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
@@ -80,7 +80,7 @@ public class BattleManager : MonoBehaviour
         {
             GameObject character = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
-            characterStatus.Initialize(enemy); // ベースキャラのキャラクターステータスにデータ注入
+            characterStatus.Initialize(enemy, FormationRow.Front); // ベースキャラのキャラクターステータスにデータ注入
             
             CharacterHPBar hpBar = Instantiate(_enemyHpBarPrefab, _enemyHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ

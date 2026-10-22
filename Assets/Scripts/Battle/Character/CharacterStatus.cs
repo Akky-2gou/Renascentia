@@ -35,6 +35,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     EnemyBehavior _enemyBehavior; // 敵の行動パターン（敵のみ使う）
 
+    private FormationRow _row;          // 前衛か後衛か
+
     Animator _animator; // キャラクターのアニメーターコントローラー
 
     float time = 0;
@@ -95,7 +97,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     /// <summary>
     /// ステータスを初期化する処理
     /// </summary>
-    public void Initialize(CharacterData characterData)
+    public void Initialize(CharacterData characterData, FormationRow row)
     {
         // キャラクターデータからステータスを初期化する
         _maxHp = characterData.MaxHp;
@@ -112,6 +114,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _skills = characterData.Skills;
         _passive = characterData.Passive;
         _enemyBehavior = characterData.EnemyBehavior;
+        _row = row;
 
         _animator = this.GetComponent<Animator>();
     }
@@ -190,6 +193,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     public IReadOnlyList<ElementType> Weaknesses => _weaknesses;
 
     public EnemyBehavior EnemyBehavior => _enemyBehavior;
+
+    public FormationRow Row => _row;
 
     /// <summary>指定したエレメント属性が苦手か</summary>
     public bool IsWeakTo(ElementType element)

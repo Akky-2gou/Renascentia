@@ -40,6 +40,16 @@ namespace GameTypes
         EndPoint,
         None
     }
+
+    /// <summary>
+    /// キャラクターの前衛後衛を表す列挙型
+    /// </summary>
+    public enum FormationRow
+    {
+        None,
+        Front,
+        Back,
+    }
 }
 
 
