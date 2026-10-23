@@ -297,9 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d5c231f8164424090cc680b4957777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
-  _enemys:
-  - {fileID: 11400000, guid: a4bd7a56ef77cf040bb37740698db485, type: 2}
-  - {fileID: 11400000, guid: a4bd7a56ef77cf040bb37740698db485, type: 2}
+  _encounter: {fileID: 11400000, guid: b64ee537b8d6e2640992f84ae3643690, type: 2}
   AttackButton: {fileID: 2124278300}
   SkillButton: {fileID: 648302721}
   SkillAttackButtun: {fileID: 166642916}
@@ -2367,7 +2365,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0185553cb146e47118f090320c1a15e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Party
-  playerCharacter: {fileID: 11400000, guid: f2f05babc1df72d45a93f904e950f77d, type: 2}
+  _slot1: {fileID: 0}
+  _slot2: {fileID: 11400000, guid: 371b04f6c63b5e648a362585b5eeed69, type: 2}
+  _slot3: {fileID: 11400000, guid: 2e392a32ebb6a1b43a165729b6f071e3, type: 2}
+  _slot4: {fileID: 0}
 --- !u!114 &529046265 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2842908752005324867, guid: 8903e448ed22e44169a6bcccbb09b727, type: 3}
