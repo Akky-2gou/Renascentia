@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using GameTypes;
 
 /*
  * パーティ情報とそのステータスを保持するシングルトン
@@ -9,12 +10,15 @@ using UnityEngine;
 public class Party : MonoBehaviour
 {
     const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数
+    const int FRONT_SLOT_COUNT = 2; // 先頭2枠が前衛、残りが後衛
     private CharacterData[] _partyMembers = new CharacterData[MAX_PARTY_MEMBERS]; // パーティーメンバーのステータスを格納する配列
 
-    /*
-     * テスト用プログラム
-     */
-    [SerializeField] private CharacterData playerCharacter;
+    [Header("前衛（空欄OK、4スロット全部空はNG）")]
+    [SerializeField] private CharacterData _slot1;
+    [SerializeField] private CharacterData _slot2;
+    [Header("後衛（空欄OK、4スロット全部空はNG）")]
+    [SerializeField] private CharacterData _slot3;
+    [SerializeField] private CharacterData _slot4;
 
     void Awake()
     {
@@ -24,9 +28,11 @@ public class Party : MonoBehaviour
             _partyMembers[i] = null; // 最初は全てのメンバーがいない状態にする
         }
 
-        // テスト用コード
-        _partyMembers[0] = playerCharacter;
-        _partyMembers[1] = playerCharacter;
+        // Inspectorで指定した初期メンバーを反映する（空欄は null のまま）
+        _partyMembers[0] = _slot1;
+        _partyMembers[1] = _slot2;
+        _partyMembers[2] = _slot3;
+        _partyMembers[3] = _slot4;
     }
 
     /// <summary>
@@ -62,5 +68,30 @@ public class Party : MonoBehaviour
             }
             return _partyMembers[index];
         }
+    }
+
+    /// <summary>
+    /// 指定スロット（0〜3）の前衛後衛。0・1が前衛、2・3が後衛
+    /// </summary>
+    public FormationRow GetRowAt(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= MAX_PARTY_MEMBERS)
+        {
+            Debug.LogError("Invalid party member index: " + slotIndex);
+            return FormationRow.None;
+        }
+        return slotIndex < FRONT_SLOT_COUNT ? FormationRow.Front : FormationRow.Back;
+    }
+
+    /// <summary>
+    /// 1人でもメンバーが入っているか
+    /// </summary>
+    public bool HasAnyMember()
+    {
+        foreach (CharacterData member in _partyMembers)
+        {
+            if (member != null) return true;
+        }
+        return false;
     }
 }

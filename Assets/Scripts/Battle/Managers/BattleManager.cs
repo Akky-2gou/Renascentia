@@ -30,8 +30,8 @@ public class BattleManager : MonoBehaviour
     Queue<CharacterStatus> _characterQueue; // ターンの順番を管理するキュー
     BattleContext _context; // 戦闘情報
 
-    [Header("敵の参照")]
-    [SerializeField] private CharacterData[] _enemys; // 敵の参照
+    [Header("出現する敵")]
+    [SerializeField] private EncounterData _encounter; // この戦闘の敵配置
 
     [Header("ボタンUI")]
     [SerializeField] GameObject AttackButton;
@@ -55,19 +55,36 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        // ==================================================================
+        // キャラクターの初期化処理
+        // ==================================================================
+
+        if (_encounter == null)
+        {
+            Debug.LogError("EncounterDataが設定されていません");
+            return;
+        }
+
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
         _context = new BattleContext(_characterQueue); // 同じキューを渡す
 
-        CharacterData[] partyMembers = FindAnyObjectByType<Party>().Members; // パーティーメンバーのステータスを取得する
-        foreach (CharacterData characterData in partyMembers)
+        Party party = FindAnyObjectByType<Party>(); // パーティー情報を取得する
+        CharacterData[] partyMembers = party.Members; // パーティーメンバーのステータスを取得する
+        if (!party.HasAnyMember())
         {
+            Debug.LogError("パーティメンバーが1人も設定されていません");
+        }
+
+        for (int i = 0; i < partyMembers.Length; i++)
+        {
+            CharacterData characterData = partyMembers[i];
             if (characterData == null)
             {
-                continue;
+                continue; // 空スロットは出現させない
             }
             GameObject character = Instantiate(characterData.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
-            characterStatus.Initialize(characterData, FormationRow.Front); // ベースキャラのキャラクターステータスにデータ注入
+            characterStatus.Initialize(characterData, party.GetRowAt(i)); // ベースキャラのキャラクターステータスにデータ注入
 
             CharacterHPBar hpBar = Instantiate(_playerHpBarPrefab, _playerHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
@@ -76,11 +93,21 @@ public class BattleManager : MonoBehaviour
             _characterQueue.Enqueue(characterStatus); // 行動順キューに追加
         } 
 
-        foreach (CharacterData enemy in _enemys)
+        if (!_encounter.HasAnyEnemy())
         {
+            Debug.LogError("EncounterDataに敵が1体も設定されていません");
+        }
+
+        for (int i = 0; i < EncounterData.SlotCount; i++)
+        {
+            CharacterData enemy = _encounter.GetEnemyAt(i);
+            if (enemy == null)
+            {
+                continue; // 空スロットは出現させない
+            }
             GameObject character = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
             CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
-            characterStatus.Initialize(enemy, FormationRow.Front); // ベースキャラのキャラクターステータスにデータ注入
+            characterStatus.Initialize(enemy, _encounter.GetRowAt(i)); // ベースキャラのキャラクターステータスにデータ注入
             
             CharacterHPBar hpBar = Instantiate(_enemyHpBarPrefab, _enemyHpBarContainer); // HPバーの生成
             characterStatus.SetHpBar(hpBar); // HPバーの紐づけ
@@ -95,11 +122,23 @@ public class BattleManager : MonoBehaviour
         endPoint.BattleUnitType = BattleUnitType.EndPoint;
         _characterQueue.Enqueue(endPoint);
 
+        // ==================================================================
+        // UIの初期化処理
+        // ==================================================================
+
         UpdateActiveHpBars(); // 行動キャラのハイライトを反映
 
         skillGaugeBar.SetGaugeImmediate((int)_currentSP, _skillCost, MAX_SP); // ゲージ更新
 
         _turnText.text = "1 turn"; // ターン表示の初期化
+
+        // ==================================================================
+        // 戦闘開始までのアニメーション等の処理
+        // ==================================================================
+
+        // ==================================================================
+        // バトル開始後の処理
+        // ==================================================================
 
         // バトル開始時のパッシブ発動
         foreach (CharacterStatus character in _characterQueue)
