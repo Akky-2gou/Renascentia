@@ -24,6 +24,7 @@ public class BattleManager : MonoBehaviour
     const int MAX_SP = 6; // SPの最大値
     const int MAX_SKILL_COST = 3; // 消費SPの最大値
     const int BASIC_SP_GAIN = 1; // 基本的なSPの増加量
+    const int MAX_PARTY_MEMBERS = 4; // パーティーメンバーの最大数
 
     int _turnCount = 1; // ターン数を管理する変数
 
@@ -53,6 +54,33 @@ public class BattleManager : MonoBehaviour
     [Header("ターン表示テキスト")]
     [SerializeField] private TextMeshProUGUI _turnText; // ターン表示テキスト
 
+    [Header("味方キャラクターの位置・大きさ")]
+    [SerializeField] private Vector2 _1stAllyPosition = new Vector2(3.9f, -2.5f); // 1人目の味方の位置
+    [SerializeField] private float _1stAllyScale = 2.0f;                          // 1人目の味方の大きさ
+    [SerializeField] private Vector2 _2ndAllyPosition = new Vector2(2.6f, -1.0f); // 2人目の味方の位置
+    [SerializeField] private float _2ndAllyScale = 2.0f;                          // 2人目の味方の大きさ
+    [SerializeField] private Vector2 _3rdAllyPosition = new Vector2(6.5f, -2.5f); // 3人目の味方の位置
+    [SerializeField] private float _3rdAllyScale = 2.0f;                          // 3人目の味方の大きさ
+    [SerializeField] private Vector2 _4thAllyPosition = new Vector2(5.2f, -1.0f); // 4人目の味方の位置
+    [SerializeField] private float _4thAllyScale = 2.0f;                          // 4人目の味方の大きさ
+
+    [Header("敵キャラクターの位置・大きさ")]
+    [SerializeField] private Vector2 _1stEnemyPosition = new Vector2(-3.9f, -2.5f); // 1人目の敵の位置
+    [SerializeField] private float _1stEnemyScale = 2.0f;                           // 1人目の敵の大きさ
+    [SerializeField] private Vector2 _2ndEnemyPosition = new Vector2(-2.6f, -1.0f); // 2人目の敵の位置
+    [SerializeField] private float _2ndEnemyScale = 2.0f;                           // 2人目の敵の大きさ
+    [SerializeField] private Vector2 _3rdEnemyPosition = new Vector2(-6.5f, -2.5f); // 3人目の敵の位置
+    [SerializeField] private float _3rdEnemyScale = 2.0f;                           // 3人目の敵の大きさ
+    [SerializeField] private Vector2 _4thEnemyPosition = new Vector2(-5.2f, -1.0f); // 4人目の敵の位置
+    [SerializeField] private float _4thEnemyScale = 2.0f;                           // 4人目の敵の大きさ
+
+    [Header("戦闘開始・終了演出に必要なマネージャーー")]
+    [SerializeField] private CharacterVisualOrderManager _characterVisualOrderManager;
+    [SerializeField] private ButtleStartPresentationManager _buttleStartPresentationManager;
+    [SerializeField] private ButtleWinPresentationManager _buttleWinPresentationManager;
+    [SerializeField] private ButtleDefeatedPresentationManager _buttleDefeatedPresentationManager;
+
+
     void Start()
     {
         // ==================================================================
@@ -75,6 +103,10 @@ public class BattleManager : MonoBehaviour
             Debug.LogError("パーティメンバーが1人も設定されていません");
         }
 
+        // 味方・敵キャラのオブジェクトの配列
+        GameObject[] allyCharacters = new GameObject[partyMembers.Length];
+        GameObject[] enemyCharacters = new GameObject[EncounterData.SlotCount];
+
         for (int i = 0; i < partyMembers.Length; i++)
         {
             CharacterData characterData = partyMembers[i];
@@ -82,8 +114,8 @@ public class BattleManager : MonoBehaviour
             {
                 continue; // 空スロットは出現させない
             }
-            GameObject character = Instantiate(characterData.CharacterPrefab); // キャラ生成(PreFabの生成)
-            CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
+            allyCharacters[i] = Instantiate(characterData.CharacterPrefab); // キャラ生成(PreFabの生成)
+            CharacterStatus characterStatus = allyCharacters[i].GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
             characterStatus.Initialize(characterData, party.GetRowAt(i)); // ベースキャラのキャラクターステータスにデータ注入
 
             CharacterHPBar hpBar = Instantiate(_playerHpBarPrefab, _playerHpBarContainer); // HPバーの生成
@@ -105,8 +137,8 @@ public class BattleManager : MonoBehaviour
             {
                 continue; // 空スロットは出現させない
             }
-            GameObject character = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
-            CharacterStatus characterStatus = character.GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
+            enemyCharacters[i] = Instantiate(enemy.CharacterPrefab); // キャラ生成(PreFabの生成)
+            CharacterStatus characterStatus = enemyCharacters[i].GetComponent<CharacterStatus>(); // ベースキャラのCharacterStatusを取得
             characterStatus.Initialize(enemy, _encounter.GetRowAt(i)); // ベースキャラのキャラクターステータスにデータ注入
             
             CharacterHPBar hpBar = Instantiate(_enemyHpBarPrefab, _enemyHpBarContainer); // HPバーの生成
@@ -135,6 +167,86 @@ public class BattleManager : MonoBehaviour
         // ==================================================================
         // 戦闘開始までのアニメーション等の処理
         // ==================================================================
+
+        // 前列 or 後列が一人だけの場合，配置する位置と見た目の順を求める
+        Vector2[] allyPositions = { _1stAllyPosition, _2ndAllyPosition, _3rdAllyPosition, _4thAllyPosition };
+        int[] allyVisualOrder = { 5, 1, 4, 0 }; // 見た目の順
+        if ((allyCharacters[0] == null && allyCharacters[1] != null) || (allyCharacters[0] != null && allyCharacters[1] == null))
+        {
+            Vector2 midPosition = (_1stAllyPosition + _2ndAllyPosition) / 2;
+            allyPositions[0] = midPosition; allyPositions[1] = midPosition;
+            allyVisualOrder[0] = 3; allyVisualOrder[1] = 3;
+        }
+        if ((allyCharacters[2] == null && allyCharacters[3] != null) || (allyCharacters[2] != null && allyCharacters[3] == null))
+        {
+            Vector2 midPosition = (_3rdAllyPosition + _4thAllyPosition) / 2;
+            allyPositions[2] = midPosition; allyPositions[3] = midPosition;
+            allyVisualOrder[2] = 2; allyVisualOrder[3] = 2;
+        }
+
+        // 味方を指定位置に指定の大きさで右向きに配置
+        float[] allyScales = { _1stAllyScale, _2ndAllyScale, _3rdAllyScale, _4thAllyScale };
+        for (int i = 0; i < partyMembers.Length; i++)
+        {
+            if (allyCharacters[i] == null) continue;
+
+            allyCharacters[i].transform.position = allyPositions[i];
+            allyCharacters[i].transform.localScale = new Vector3(allyScales[i], allyScales[i], 1);
+            ChangeVisualDirection changeVisualDirection = allyCharacters[i].GetComponent<ChangeVisualDirection>();
+            changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left);
+
+            // 見た目の順を指定
+            _characterVisualOrderManager.AddCharacters(allyVisualOrder[i], allyCharacters[i]);
+        }
+
+        // 前列 or 後列が一人だけの場合，配置する位置を求める
+        Vector2[] enemyPositions = { _1stEnemyPosition, _2ndEnemyPosition, _3rdEnemyPosition, _4thEnemyPosition };
+        int[] enemyVisualOrder = { 5, 1, 4, 0 }; // 見た目の順
+        if ((enemyCharacters[0] == null && enemyCharacters[1] != null) || (enemyCharacters[0] != null && enemyCharacters[1] == null))
+        {
+            Vector2 midPosition = (_1stEnemyPosition + _2ndEnemyPosition) / 2;
+            enemyPositions[0] = midPosition; enemyPositions[1] = midPosition;
+            enemyVisualOrder[0] = 3; enemyVisualOrder[1] = 3;
+        }
+        if ((enemyCharacters[2] == null && enemyCharacters[3] != null) || (enemyCharacters[2] != null && enemyCharacters[3] == null))
+        {
+            Vector2 midPosition = (_3rdEnemyPosition + _4thEnemyPosition) / 2;
+            enemyPositions[2] = midPosition; enemyPositions[3] = midPosition;
+            enemyVisualOrder[2] = 2; enemyVisualOrder[3] = 2;
+        }
+
+        // 敵を指定位置に指定の大きさで右向きに配置
+        float[] enemyScales = { _1stEnemyScale, _2ndEnemyScale, _3rdEnemyScale, _4thEnemyScale };
+        for (int i = 0; i < EncounterData.SlotCount; i++)
+        {
+            if (enemyCharacters[i] == null) continue;
+
+            enemyCharacters[i].transform.position = enemyPositions[i];
+            enemyCharacters[i].transform.localScale = new Vector3(enemyScales[i], enemyScales[i], 1);
+            ChangeVisualDirection changeVisualDirection = enemyCharacters[i].GetComponent<ChangeVisualDirection>();
+            changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
+
+            // 見た目の順を指定
+            _characterVisualOrderManager.AddCharacters(enemyVisualOrder[i], enemyCharacters[i]);
+        }
+        
+        // 見た目の順を実際に反映させる
+        _characterVisualOrderManager.AssignOrder();
+
+        // 戦闘開始演出をスタート
+        _buttleStartPresentationManager.Setup(allyCharacters);
+        _buttleStartPresentationManager.ButtleStart().Forget();
+
+        // 戦闘勝利演出のセットアップ
+        foreach (CharacterData characterData in partyMembers)
+        {
+            if (characterData == null) continue;
+            _buttleWinPresentationManager.Setup(characterData);
+            break;
+        }
+        
+        // 戦闘敗北演出のセットアップ（BMからアニメーションを呼べるようになったら消していいよ）
+        _buttleDefeatedPresentationManager.Setup();
 
         // ==================================================================
         // バトル開始後の処理

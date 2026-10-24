@@ -55,4 +55,33 @@ public abstract class ChangeVisualDirection : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 視覚的に方向を変える処理
+    /// </summary>
+    public virtual void Change(VisualDirection visualDirection)
+    {
+        if (visualDirection == VisualDirection.Right)
+        {
+            // スケールを変えて右を向く
+            transform.localScale = new Vector3(-Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+
+            // 右を向いた時のテクスチャに変更
+            for (int i = 0; i < _cubismRenderers.Count; i++)
+            {
+                _cubismRenderers[i].MainTexture = _rightTexture;
+            }
+        }
+        else if (visualDirection == VisualDirection.Left)
+        {
+            // スケールを変えて左を向く
+            transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+
+            // 左を向いた時のテクスチャに変更
+            for (int i = 0; i < _cubismRenderers.Count; i++)
+            {
+                _cubismRenderers[i].MainTexture = _leftTexture;
+            }
+        }
+    }
 }
