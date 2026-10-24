@@ -13,4 +13,12 @@ public class CommonChangeVisualDirection : ChangeVisualDirection
     {
         base.Change(visualDirection, playerTransform);
     }
+
+    /// <summary>
+    /// 視覚的に方向を変える処理
+    /// </summary>
+    public override void Change(VisualDirection visualDirection)
+    {
+        base.Change(visualDirection);
+    }
 }
