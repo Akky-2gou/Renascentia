@@ -15,7 +15,7 @@ MonoBehaviour:
   _maxHp: 100
   _attack: 100
   _defense: 100
-  _normalAttackPower: 100
+  _normalAttackPower: 10
   _healAmount: 0
   _characterType: 1
   _battleUnitType: 1
@@ -25,13 +25,11 @@ MonoBehaviour:
   _iconOffset: {x: 0, y: 0}
   _iconScale: 1
   _characterPrefab: {fileID: 2712923691577202279, guid: 615de3f97666e8640a049ba0b9d585b5, type: 3}
-  _skills:
-  - {fileID: 11400000, guid: 61047105b99d2ef40961387e2a110f0e, type: 2}
-  - {fileID: 11400000, guid: 457212ac5ee68d841a088cd3caa24a3e, type: 2}
-  - {fileID: 11400000, guid: e55f0ffdf2bb52444bf5f402f6f91606, type: 2}
+  _skills: []
   _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}
+  _otherForm: {fileID: 0}
   _enemyBehavior:
     _defaultActions:
-    - _skill: {fileID: 11400000, guid: 61047105b99d2ef40961387e2a110f0e, type: 2}
+    - _skill: {fileID: 11400000, guid: 988d1b57f8c2a0140963cb845d43c77a, type: 2}
       _weight: 1
     _phases: []

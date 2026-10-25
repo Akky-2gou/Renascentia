@@ -95,6 +95,7 @@ public class BattleManager : MonoBehaviour
 
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
         _context = new BattleContext(_characterQueue); // 同じキューを渡す
+        _context.FormChangeRequested += ChangeForm; // 形態変化の要求を受け取る
 
         Party party = FindAnyObjectByType<Party>(); // パーティー情報を取得する
         CharacterData[] partyMembers = party.Members; // パーティーメンバーのステータスを取得する
@@ -789,6 +790,41 @@ public class BattleManager : MonoBehaviour
 
         await UniTask.Yield(); // 今はアニメーションがないので1フレーム待つだけ。アニメーションを入れるときは、ここを終了待ちに変える
         NextTurn();
+    }
+
+    // 形態変化。oldCharacter を、別形態のPrefabで作った新しい実体に入れ替える
+    // 強化・履歴・行動順・HPバーは引き継ぐ。Party は書き換えないので、次の戦闘では最初の形態に戻る
+    void ChangeForm(CharacterStatus oldCharacter)
+    {
+        CharacterData nextData = oldCharacter.Data.OtherForm;
+        if (nextData == null)
+        {
+            Debug.LogError($"別の形態が設定されていません: {oldCharacter.Data.name}");
+            return;
+        }
+
+        GameObject obj = Instantiate(nextData.CharacterPrefab, oldCharacter.transform.position, oldCharacter.transform.rotation);
+        obj.transform.localScale = oldCharacter.transform.localScale; // 大きさ（向きでの反転も含む）を引き継ぐ
+        CharacterStatus newCharacter = obj.GetComponent<CharacterStatus>();
+        newCharacter.Initialize(nextData, oldCharacter.Row); // 種族値・スキル・パッシブは新しい形態のものになる
+        newCharacter.InheritFrom(oldCharacter);              // HPとHPバーを引き継ぐ
+        newCharacter.HpBar.SetIcon(nextData);                // HPバーのアイコンも新しい形態に
+
+        ReplaceInQueue(oldCharacter, newCharacter);          // 行動順の同じ位置に入れる
+        _context.ReplaceCharacter(oldCharacter, newCharacter); // 強化と履歴の持ち主を付け替える
+
+        Destroy(oldCharacter.gameObject);
+    }
+
+    // キューの中の oldCharacter を newCharacter に置き換える（並び順は変えない）
+    void ReplaceInQueue(CharacterStatus oldCharacter, CharacterStatus newCharacter)
+    {
+        int count = _characterQueue.Count;
+        for (int i = 0; i < count; i++)
+        {
+            CharacterStatus character = _characterQueue.Dequeue();
+            _characterQueue.Enqueue(character == oldCharacter ? newCharacter : character);
+        }
     }
 
     // キャラの体力を表示するテスト処理
