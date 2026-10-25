@@ -36,6 +36,7 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     EnemyBehavior _enemyBehavior; // 敵の行動パターン（敵のみ使う）
 
     private FormationRow _row;          // 前衛か後衛か
+    CharacterData _data;            // 今の形態のキャラクターデータ
 
     Animator _animator; // キャラクターのアニメーターコントローラー
 
@@ -115,8 +116,9 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         _passive = characterData.Passive;
         _enemyBehavior = characterData.EnemyBehavior;
         _row = row;
+        _data = characterData;
 
-        _animator = this.GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>(); // 自分を先に探し、なければ子オブジェクトから探す
     }
 
     public int Hp
@@ -172,6 +174,16 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
         get { return _hpBar; }
     }
 
+    /// <summary>
+    /// 形態変化の前のキャラから、HP・生存・HPバーを引き継ぐ（Initialize のあとに呼ぶ）
+    /// </summary>
+    public void InheritFrom(CharacterStatus previous)
+    {
+        _hp = Mathf.Min(previous._hp, _maxHp);
+        _alive = previous._alive;
+        SetHpBar(previous._hpBar); // HPバーを付け替え、今のHPを表示に反映する
+    }
+
     public BattleUnitType BattleUnitType
     {
         get { return _battleUnitType; }
@@ -195,6 +207,8 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     public EnemyBehavior EnemyBehavior => _enemyBehavior;
 
     public FormationRow Row => _row;
+
+    public CharacterData Data => _data;
 
     /// <summary>指定したエレメント属性が苦手か</summary>
     public bool IsWeakTo(ElementType element)

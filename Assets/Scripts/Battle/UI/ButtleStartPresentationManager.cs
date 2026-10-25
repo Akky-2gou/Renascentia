@@ -41,11 +41,26 @@ public class ButtleStartPresentationManager : MonoBehaviour
     /// </summary>
     public void Setup(GameObject[] allyCharacters)
     {
-        _allyCharacters = allyCharacters;
-
-        // 各味方キャラTransformとAnimatorを取得
+        // 空スロット（null）を除いた、実際にいる味方だけを集める
+        List<GameObject> presentAllies = new List<GameObject>();
         foreach (GameObject obj in allyCharacters)
         {
+            if (obj != null) presentAllies.Add(obj);
+        }
+
+        // 全部 null のときだけエラーにする
+        if (presentAllies.Count == 0)
+        {
+            Debug.LogError("ButtleStartPresentationManager: 味方が1人もいません");
+        }
+
+        // ButtleStart で Transform / Animator と同じ添字で使えるように、null を除いた配列を保持する
+        _allyCharacters = presentAllies.ToArray();
+
+        // 各味方キャラTransformとAnimatorを取得
+        foreach (GameObject obj in _allyCharacters)
+        {
+
             Transform transform = obj.GetComponent<Transform>();
             if (transform == null)
             {

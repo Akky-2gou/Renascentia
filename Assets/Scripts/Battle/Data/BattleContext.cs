@@ -152,6 +152,45 @@ namespace Battle
             _lockedBuffs.Clear();
             CurrentBuffs = BuffTotals.None; // 行動外では強化なしに戻しておく
         }
+
+        /// <summary>形態変化の要求が出たことを BattleManager に知らせるイベント</summary>
+        public event Action<CharacterStatus> FormChangeRequested;
+
+        /// <summary>形態変化を要求する（パッシブから呼ぶ）。実際の入れ替えは BattleManager が行う</summary>
+        public void RequestFormChange(CharacterStatus character)
+            => FormChangeRequested?.Invoke(character);
+
+        /// <summary>
+        /// 形態変化でキャラの実体が入れ替わったとき、強化と履歴の持ち主を新しい実体に付け替える。
+        /// 行動の途中ではなく、強化の消費が終わったあとに呼ぶこと
+        /// </summary>
+        public void ReplaceCharacter(CharacterStatus oldCharacter, CharacterStatus newCharacter)
+        {
+            // 強化
+            for (int i = 0; i < _buffs.Count; i++)
+            {
+                PendingBuff buff = _buffs[i];
+                if (buff.Target != oldCharacter) continue;
+                _buffs[i] = new PendingBuff(newCharacter, buff.Stat, buff.Stage, buff.Rate, buff.Duration);
+            }
+
+            // 履歴（記録は作成後に変えられないので、作り直す）
+            for (int i = 0; i < _history.Count; i++)
+            {
+                BattleRecord record = _history[i];
+                CharacterStatus attacker = record.Attacker == oldCharacter ? newCharacter : record.Attacker;
+
+                CharacterStatus[] targets = new CharacterStatus[record.Targets.Count];
+                for (int j = 0; j < targets.Length; j++)
+                {
+                    targets[j] = record.Targets[j] == oldCharacter ? newCharacter : record.Targets[j];
+                }
+
+                _history[i] = new BattleRecord(record.Turn, attacker, targets, record.ActionType, record.Skill);
+            }
+
+            if (Attacker == oldCharacter) Attacker = newCharacter;
+        }
         
         // コンストラクタ
         public BattleContext(Queue<CharacterStatus> characterQueue)
