@@ -74,11 +74,15 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Vector2 _4thEnemyPosition = new Vector2(-5.2f, -1.0f); // 4人目の敵の位置
     [SerializeField] private float _4thEnemyScale = 2.0f;                           // 4人目の敵の大きさ
 
-    [Header("戦闘開始・終了演出に必要なマネージャーー")]
+    [Header("戦闘開始・終了演出に必要なマネージャー")]
     [SerializeField] private CharacterVisualOrderManager _characterVisualOrderManager;
     [SerializeField] private BattleStartPresentationManager _battleStartPresentationManager;
     [SerializeField] private BattleWinPresentationManager _battleWinPresentationManager;
     [SerializeField] private BattleDefeatedPresentationManager _battleDefeatedPresentationManager;
+
+    [Header("チュートリアル関連")]
+    [SerializeField] private bool _isTutorial = false;
+    [SerializeField] private TutorialBattleManager _tutorialBattleManager;
 
 
     void Start()
@@ -236,7 +240,7 @@ public class BattleManager : MonoBehaviour
 
         // 戦闘開始演出をスタート
         _battleStartPresentationManager.Setup(allyCharacters);
-        _battleStartPresentationManager.BattleStart().Forget();
+        StartBattleStartPresentation().Forget();
 
         // 戦闘勝利演出のセットアップ
         foreach (CharacterData characterData in partyMembers)
@@ -263,7 +267,20 @@ public class BattleManager : MonoBehaviour
 
             if (character.Passive.PassiveTiming == PassiveTiming.BattleStart) 
                 character.Passive.Execute(_context);
-        } 
+        }
+    }
+
+    // 戦闘開始に伴う演出を行う
+    private async UniTask StartBattleStartPresentation()
+    {
+        // 戦闘開始演出を行う
+        await _battleStartPresentationManager.BattleStart();
+
+        // チュートリアル戦なら味方の出番が回ってきたときの演出を行う
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnAllyActivationStarted().Forget();
+        }
     }
 
     void OnDestroy()
@@ -414,6 +431,12 @@ public class BattleManager : MonoBehaviour
             if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.TurnStart)
                 _characterQueue.Peek().Passive.Execute(_context);
 
+            // チュートリアル戦なら味方の出番が回ってきたときの演出を行う
+            if (_isTutorial)
+            {
+                _tutorialBattleManager.OnAllyActivationStarted().Forget();
+            }
+
             return;
         }
     }
@@ -429,6 +452,12 @@ public class BattleManager : MonoBehaviour
         }
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         NormalAttack(defender).Forget(); 
+        
+        // チュートリアル戦なら対象を選択した後の処理をする
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedNormalAttackTarget().Forget();
+        }
     }
 
     // 通常攻撃処理
@@ -500,6 +529,12 @@ public class BattleManager : MonoBehaviour
 
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         SkillAttack(new[] { target }, skill).Forget();
+        
+        // チュートリアル戦なら対象を選択した後の処理をする
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedSkillTarget().Forget();
+        }
     }
 
     // スキル攻撃処理
@@ -590,6 +625,12 @@ public class BattleManager : MonoBehaviour
                 character.SetHoverEnabled(true); // ターゲットアイコンの表示
             }
         }
+
+        // チュートリアル戦なら対象選択をさせる
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedNormalAttackButton().Forget();
+        }
     }
 
     /// <summary>
@@ -607,6 +648,12 @@ public class BattleManager : MonoBehaviour
         skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP); // 点滅表示
 
         TestDisplaySP();
+
+        // チュートリアル戦ならスキル攻撃ボタンを押させる
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedSkillButton().Forget();
+        }
     }
 
     /// <summary>
@@ -621,6 +668,12 @@ public class BattleManager : MonoBehaviour
         if (skill == null) return; // 見つからなければ何もしない
 
         ButtunUISetActive(false);
+
+        // チュートリアル戦なら対象選択をさせる
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedSkillAttackButton().Forget();
+        }
 
         switch (skill.TargetType)
         {
