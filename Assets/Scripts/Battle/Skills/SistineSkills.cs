@@ -4,32 +4,24 @@ using System.Collections.Generic;
 using Battle;
 
 [CreateAssetMenu(fileName = "SistineSkill", menuName = "ScriptableObjects/Battle/Siistine/SistineSkill")]
-public class Sistine_S1 : AttackSkillBase
+public class SistineBSkill : AttackSkillBase
 {
-    [SerializeField] private int _damageAmount; // ダメージ量
-    [SerializeField] private int _healAmount; // 回復量
-
-    public int DamageAmount => _damageAmount;
-    public int HealAmount => _healAmount;
+    [Header("味方全体の回復")]
+    [SerializeField] private float _healPercent; // 味方それぞれの最大HPの何％を回復するか（0.15 なら 15%）
+    public float HealPercent => _healPercent;
 
     public override void Execute(BattleContext battleContext)
     {
-        // 攻撃処理
-        foreach (var target in battleContext.Targets)
-        {
-            // ダメージ量を適用する
-            target.DecreaseHp(DamageAmount);
-        }
+        // 攻撃処理：威力で計算した通常のダメージを、標的（敵）に与える
+        base.Execute(battleContext);
 
-        /// <summary>
-        /// battleContext.Targetsはエネミーのみ入っているので、
-        /// 味方全体に回復を行うために、battleContext.CharacterQueueから味方キャラクターを取得する
-        //// </summary>
+        // battleContext.Targets はエネミーのみ入っているので、
+        // 味方全体に回復を行うために、battleContext.CharacterQueue から味方キャラクターを取得する
         List<CharacterStatus> allies = new List<CharacterStatus>();
         foreach (var character in battleContext.CharacterQueue)
         {
             // 味方キャラクターのみを取得する
-             if (character.BattleUnitType == BattleUnitType.Player)
+            if (character.BattleUnitType == BattleUnitType.Player)
             {
                 allies.Add(character);
             }
@@ -43,8 +35,8 @@ public class Sistine_S1 : AttackSkillBase
             {
                 continue;
             }
-            // 回復量を適用する
-            ally.IncreaseHp(HealAmount); 
+            // 最大HPの割合で回復量を決める（最大HPを超える分は IncreaseHp が切り捨てる）
+            ally.IncreaseHp(Mathf.RoundToInt(ally.MaxHp * HealPercent));
         }
     }
 }
