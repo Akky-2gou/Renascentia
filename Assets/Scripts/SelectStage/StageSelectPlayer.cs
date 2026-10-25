@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  * ステージ選択画面でのプレイヤーキャラクターの移動を制御するスクリプト
@@ -20,6 +21,7 @@ public class StageSelectPlayer : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
+    [SerializeField] private string battleSceneName = "MapToBattle";
 
     private Rigidbody2D targetRb;
     private readonly List<int> pendingRouteIndices = new List<int>();
@@ -32,6 +34,7 @@ public class StageSelectPlayer : MonoBehaviour
     private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
 
     public bool IsMoving => isMoving;
+    public MapId CurrentStageId => currentStageId;
 
     public MapId SelectedStageId
     {
@@ -89,7 +92,28 @@ public class StageSelectPlayer : MonoBehaviour
             return;
         }
 
-        Vector3 nextPosition = Vector3.MoveTowards(moveTarget.position, currentTargetPosition, moveSpeed * Time.deltaTime);
+        Vector3 currentPosition = moveTarget.position;
+        float step = moveSpeed * Time.deltaTime;
+        float remainingDistance = Vector3.Distance(currentPosition, currentTargetPosition);
+
+        // 最後だけ吸い込まれる見え方を防ぐため、1フレーム分で届くときはそのまま到達扱いにする
+        if (remainingDistance <= step)
+        {
+            if (targetRb != null)
+            {
+                targetRb.linearVelocity = Vector2.zero;
+                targetRb.MovePosition(currentTargetPosition);
+            }
+            else
+            {
+                moveTarget.position = currentTargetPosition;
+            }
+
+            AdvanceRoute();
+            return;
+        }
+
+        Vector3 nextPosition = Vector3.MoveTowards(currentPosition, currentTargetPosition, step);
 
         if (targetRb != null)
         {
@@ -98,12 +122,6 @@ public class StageSelectPlayer : MonoBehaviour
         else
         {
             moveTarget.position = nextPosition;
-        }
-
-        if (Vector3.Distance(moveTarget.position, currentTargetPosition) <= arriveDistance)
-        {
-            SnapToTarget();
-            AdvanceRoute();
         }
     }
 
@@ -213,6 +231,43 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         Debug.LogWarning("指定したステージIDが見つかりません: " + stageId);
+    }
+
+    // 現在地でバトル開始要求を出す
+    public void RequestBattleStartOnCurrentStage()
+    {
+        if (isMoving)
+        {
+            return;
+        }
+
+        if (currentStageId == MapId.None)
+        {
+            Debug.LogWarning("現在地のステージが未設定のため、バトル開始できません。");
+            return;
+        }
+
+        if (GameProgress.Instance != null && !GameProgress.Instance.IsStageUnlocked(currentStageId))
+        {
+            Debug.LogWarning($"未開放ステージのため、バトル開始できません: {currentStageId}");
+            return;
+        }
+
+        StartBattle(currentStageId);
+    }
+
+    // バトル開始処理
+    public void StartBattle(MapId stageId)
+    {
+        Debug.Log("バトル開始: " + stageId);
+
+        if (string.IsNullOrEmpty(battleSceneName))
+        {
+            Debug.LogWarning("battleSceneName が未設定のため、シーン遷移をスキップします。");
+            return;
+        }
+        //シーンの遷移
+        //SceneManager.LoadScene(battleSceneName);
     }
 
     // 選択状態が有効か確認する

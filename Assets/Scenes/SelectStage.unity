@@ -7469,6 +7469,7 @@ MonoBehaviour:
   moveSpeed: 200
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
+  battleSceneName: MapToBattle
 --- !u!50 &943891172
 Rigidbody2D:
   serializedVersion: 5
@@ -11989,9 +11990,10 @@ MonoBehaviour:
     marker: {fileID: 711937399}
     offset: {x: 0, y: 0, z: 0}
   initialStageId: 1
-  moveSpeed: 200
+  moveSpeed: 0.1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
+  battleSceneName: 
 --- !u!1 &1980285097
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
     private SpriteRenderer spriteRenderer;
     private bool isSelected;
     private bool isHovered;
+    private int lastSelectFrame = -1;
 
     public MapId StageId => stageId;
 
@@ -60,6 +61,12 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
     // ステージ選択の共通処理を実行する
     public void TrySelect()
     {
+        if (Time.frameCount == lastSelectFrame)
+        {
+            return;
+        }
+        lastSelectFrame = Time.frameCount;
+
         if (stageSelectPlayer == null)
         {
             return;
@@ -81,6 +88,12 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
         if (stageSelectKeyboardController != null)
         {
             stageSelectKeyboardController.SelectStageById(stageId);
+        }
+
+        if (stageSelectPlayer.CurrentStageId == stageId)
+        {
+            stageSelectPlayer.RequestBattleStartOnCurrentStage();
+            return;
         }
 
         stageSelectPlayer.MoveToStage(stageId);
