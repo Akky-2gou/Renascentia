@@ -325,9 +325,9 @@ MonoBehaviour:
   _4thEnemyPosition: {x: -5.2, y: -1}
   _4thEnemyScale: 2
   _characterVisualOrderManager: {fileID: 747198727}
-  _buttleStartPresentationManager: {fileID: 1013191609}
-  _buttleWinPresentationManager: {fileID: 1926144773}
-  _buttleDefeatedPresentationManager: {fileID: 1808434439}
+  _battleStartPresentationManager: {fileID: 1013191609}
+  _battleWinPresentationManager: {fileID: 1926144773}
+  _battleDefeatedPresentationManager: {fileID: 1808434441}
 --- !u!4 &62845505
 Transform:
   m_ObjectHideFlags: 0
@@ -5393,15 +5393,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1013191608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de6a989235f3c184a8077cba5d261cbc, type: 3}
+  m_Script: {fileID: 11500000, guid: b70226ac61077dc408df751c3396806c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtleStartPresentationManager
   _allyWalkingVector: {x: -10, y: 0}
   _allyWalkingDuration: 2
   _cameraObj: {fileID: 1758366923}
   _camera: {fileID: 1758366926}
-  _duringButtleCanvas: {fileID: 395223136}
-  _buttleStartChrs:
+  _duringBattleCanvas: {fileID: 395223136}
+  _battleStartChrs:
   - {fileID: 1131316966}
   - {fileID: 320200756}
   - {fileID: 736582178}
@@ -8699,6 +8699,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1808434440}
   - component: {fileID: 1808434439}
+  - component: {fileID: 1808434441}
   m_Layer: 0
   m_Name: ButtleDefeatedPresentationManager
   m_TagString: Untagged
@@ -8727,8 +8728,8 @@ MonoBehaviour:
   _circleCount: 32
   _circleRadius: 1
   _randomSeed: 0
-  _duringButtleCanvas: {fileID: 395223136}
-  _buttleDefeatedText: {fileID: 1279551196}
+  _duringBattleCanvas: {fileID: 0}
+  _battleDefeatedText: {fileID: 0}
   _backGroundObj: {fileID: 1763192274}
   _backGround: {fileID: 1763192276}
   _isStartAnimation: 0
@@ -8748,6 +8749,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1808434441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808434438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af5194679e903504ba8c55aa2abe9262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleDefeatedPresentationManager
+  _backgroundDuration: 2
+  _backgroundEasingMethod: 5
+  _hidingTestDuration: 0.5
+  _hidingTextEasingMethod: 21
+  _hidingTestImage: {fileID: 497026821}
+  _hidingTestObj: {fileID: 497026819}
+  _circleCount: 32
+  _circleRadius: 1
+  _randomSeed: 0
+  _duringBattleCanvas: {fileID: 395223136}
+  _battleDefeatedText: {fileID: 1279551196}
+  _backGroundObj: {fileID: 1763192274}
+  _backGround: {fileID: 1763192276}
+  _isStartAnimation: 0
+  _isDebug: 0
 --- !u!1 &1823827633
 GameObject:
   m_ObjectHideFlags: 0
@@ -9456,7 +9484,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1926144772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4aa4877222e697447acffcd80c74e039, type: 3}
+  m_Script: {fileID: 11500000, guid: bff5a7eea25cddc44be2c326103713cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtleWinPresentationManager
   _duringButtleCanvas: {fileID: 395223136}
@@ -9470,7 +9498,7 @@ MonoBehaviour:
   _characterTransform: {fileID: 623382733}
   _characterAnimation: {fileID: 623382731}
   _isStartAnimation: 0
-  _isDebug: 1
+  _isDebug: 0
 --- !u!4 &1926144774
 Transform:
   m_ObjectHideFlags: 0
