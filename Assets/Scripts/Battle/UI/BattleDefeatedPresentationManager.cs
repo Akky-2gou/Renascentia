@@ -11,7 +11,7 @@ using UnityEngine.UI;
  * 戦闘敗北時の演出を管理するスクリプト
  */
 
-public class ButtleDefeatedPresentationManager : MonoBehaviour
+public class BattleDefeatedPresentationManager : MonoBehaviour
 {
     private const int MaxCircleCount = 32;
 
@@ -31,10 +31,10 @@ public class ButtleDefeatedPresentationManager : MonoBehaviour
     [SerializeField] private int _randomSeed;
 
     [Header("バトルで利用するキャンバス")]
-    [SerializeField] private Canvas _duringButtleCanvas;
+    [SerializeField] private Canvas _duringBattleCanvas;
 
     [Header("「戦闘敗北」のテキスト")]
-    [SerializeField] private TMP_Text _buttleDefeatedText;
+    [SerializeField] private TMP_Text _battleDefeatedText;
 
     [Header("黒背景")]
     [SerializeField] private GameObject _backGroundObj;
@@ -54,7 +54,7 @@ public class ButtleDefeatedPresentationManager : MonoBehaviour
         InitializeHidingTextNoise();
 
         // テキストを非表示にし，背景をリセット
-        _buttleDefeatedText.enabled = false;
+        _battleDefeatedText.enabled = false;
         _backGround.material.SetFloat("_FillAmount", 0f);
     }
 
@@ -88,16 +88,16 @@ public class ButtleDefeatedPresentationManager : MonoBehaviour
     {
         await UniTask.WaitUntil(() => _isStartAnimation, cancellationToken: this.GetCancellationTokenOnDestroy());
         Debug.Log("敗北演出スタート");
-        ButtleDefeated().Forget();
+        BattleDefeated().Forget();
     }
 
     /// <summary>
     /// バトル開始演出を行う
     /// </summary>
-    public async UniTask ButtleDefeated()
+    public async UniTask BattleDefeated()
     {
         // バトル中のUIを消す
-        _duringButtleCanvas.enabled = false;
+        _duringBattleCanvas.enabled = false;
 
         // アニメーション設定
         UniTask animation = DOVirtual.Float(0f, 1f, _backgroundDuration, value =>
@@ -113,10 +113,10 @@ public class ButtleDefeatedPresentationManager : MonoBehaviour
         // アニメーション終了まで待つ
         await animation;
         
-        _hidingTestImage.material.SetFloat("_FillAmount", 0f);
+        _hidingTestImage.material.SetFloat("_FillAmount", 1f);
 
         // テキスト表示
-        _buttleDefeatedText.enabled = true;
+        _battleDefeatedText.enabled = true;
         
         // テキストを表示するアニメーション設定
         animation = DOVirtual.Float(1f, 0f, _hidingTestDuration, value =>

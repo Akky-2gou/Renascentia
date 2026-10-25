@@ -10,7 +10,7 @@ using UnityEngine.UI;
  * 戦闘勝利時の演出を管理するスクリプト
  */
 
-public class ButtleWinPresentationManager : MonoBehaviour
+public class BattleWinPresentationManager : MonoBehaviour
 {
     [Header("バトルで利用するキャンバス")]
     [SerializeField] private Canvas _duringButtleCanvas;
@@ -54,13 +54,13 @@ public class ButtleWinPresentationManager : MonoBehaviour
     {
         await UniTask.WaitUntil(() => _isStartAnimation, cancellationToken: this.GetCancellationTokenOnDestroy());
         Debug.Log("勝利演出スタート");
-        ButtleWin().Forget();
+        BattleWin().Forget();
     }
 
     /// <summary>
     /// バトル開始演出を行う
     /// </summary>
-    public async UniTask ButtleWin()
+    public async UniTask BattleWin()
     {
         // バトル中のUIを消す
         _duringButtleCanvas.enabled = false;

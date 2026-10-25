@@ -76,9 +76,9 @@ public class BattleManager : MonoBehaviour
 
     [Header("戦闘開始・終了演出に必要なマネージャーー")]
     [SerializeField] private CharacterVisualOrderManager _characterVisualOrderManager;
-    [SerializeField] private ButtleStartPresentationManager _buttleStartPresentationManager;
-    [SerializeField] private ButtleWinPresentationManager _buttleWinPresentationManager;
-    [SerializeField] private ButtleDefeatedPresentationManager _buttleDefeatedPresentationManager;
+    [SerializeField] private BattleStartPresentationManager _battleStartPresentationManager;
+    [SerializeField] private BattleWinPresentationManager _battleWinPresentationManager;
+    [SerializeField] private BattleDefeatedPresentationManager _battleDefeatedPresentationManager;
 
 
     void Start()
@@ -235,19 +235,19 @@ public class BattleManager : MonoBehaviour
         _characterVisualOrderManager.AssignOrder();
 
         // 戦闘開始演出をスタート
-        _buttleStartPresentationManager.Setup(allyCharacters);
-        _buttleStartPresentationManager.ButtleStart().Forget();
+        _battleStartPresentationManager.Setup(allyCharacters);
+        _battleStartPresentationManager.BattleStart().Forget();
 
         // 戦闘勝利演出のセットアップ
         foreach (CharacterData characterData in partyMembers)
         {
             if (characterData == null) continue;
-            _buttleWinPresentationManager.Setup(characterData);
+            _battleWinPresentationManager.Setup(characterData);
             break;
         }
         
         // 戦闘敗北演出のセットアップ（BMからアニメーションを呼べるようになったら消していいよ）
-        _buttleDefeatedPresentationManager.Setup();
+        _battleDefeatedPresentationManager.Setup();
 
         // ==================================================================
         // バトル開始後の処理
@@ -357,7 +357,7 @@ public class BattleManager : MonoBehaviour
     }
 
     // ターン経過処理。敵味方関わらず、1人の行動が終わったら呼び出され、次の順番に回す
-    void NextTurn()
+    async Task NextTurn()
     {
         while (true)
         {
@@ -365,11 +365,13 @@ public class BattleManager : MonoBehaviour
             if (IsGameOver())
             {
                 Debug.Log("Game Over!");
+                await _battleDefeatedPresentationManager.BattleDefeated();
                 return; // ゲームオーバーの場合は次のターンに進まない
             }
             else if (IsGameClear())
             {
                 Debug.Log("Game Clear!");
+                await _battleWinPresentationManager.BattleWin();
                 return; // ゲームクリアの場合は次のターンに進まない
             }
 
@@ -582,7 +584,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (var character in _characterQueue)
         {
-            if (character.BattleUnitType == BattleUnitType.Enemy)
+            if (character.BattleUnitType == BattleUnitType.Enemy && character.Alive)
             {
                 character.OnClicked += OnNormalAttackClicked; 
                 character.SetHoverEnabled(true); // ターゲットアイコンの表示
@@ -626,7 +628,7 @@ public class BattleManager : MonoBehaviour
             case SkillTargetType.SingleEnemy:
                 foreach (var character in _characterQueue)
                 {
-                    if (character.BattleUnitType == BattleUnitType.Enemy)
+                    if (character.BattleUnitType == BattleUnitType.Enemy && character.Alive)
                     {
                         character.OnClicked += OnSkillAttackClicked; // 一旦、通常攻撃処理と同じにするが、実際は変更させる
                         character.SetHoverEnabled(true); // ターゲットアイコンの表示
@@ -643,7 +645,7 @@ public class BattleManager : MonoBehaviour
             case SkillTargetType.SingleAlly:
                 foreach (var character in _characterQueue)
                 {
-                    if (character.BattleUnitType == BattleUnitType.Player)
+                    if (character.BattleUnitType == BattleUnitType.Player && character.Alive)
                     {
                         character.OnClicked += OnSkillAttackClicked;
                         character.SetHoverEnabled(true); // ターゲットアイコンの表示
