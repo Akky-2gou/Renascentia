@@ -11,23 +11,23 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-
+    [Header("キャラクター移動のパラメータ")]
     [SerializeField] private float _maxSpeed; // 最大スピード
-
     [SerializeField] private float _maxAcceleration = 30f; // 最大加速度
+    [SerializeField] private float _friction; // 摩擦
     
-    // 摩擦の設定
-    [SerializeField] private float _friction;
-
+    [Header("インタラクト可能なオブジェクトのタグ")]
     [SerializeField] private string _interactableTag = "Interactable";
-    
-    // エレベーターのタグ
     [SerializeField] private string _elevatorTag = "Elevator";
-    // 会話可能オブジェクトのタグ
     [SerializeField] private string _talkableTag = "Talkable";
+    [SerializeField] private string _sceneTransitionTag = "SceneTransition";
+    [SerializeField] private string _turorialTag = "Tutorial";
 
-    // PlayerInputの参照
+    [Header("PlayerInputの参照")]
     [SerializeField] private PlayerInput _playerInput;
+
+    [Header("初期状態での向き")]
+    [SerializeField] private ChangeVisualDirection.VisualDirection _initailDirection;
 
 
     private Animator _playerAnimator; // Animatorを保持する変数
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
     
         // isFacingRightの初期化
-        if (Mathf.Approximately(transform.localScale.x, -1f)) { // 大きさが負なら右向き
+        if (_initailDirection == ChangeVisualDirection.VisualDirection.Right) { // 大きさが負なら右向き
             _isFacingRight = true;
         } else {
             _isFacingRight = false;
@@ -87,6 +87,9 @@ public class PlayerController : MonoBehaviour
     {
         _changeVisualDirection = changeVisualDirection;
         _playerAnimator = animator;
+
+        // 向きを初期化
+        _changeVisualDirection.Change(_isFacingRight ? ChangeVisualDirection.VisualDirection.Right : ChangeVisualDirection.VisualDirection.Left); 
     }
 
     /// <summary>
@@ -171,13 +174,13 @@ public class PlayerController : MonoBehaviour
                     {
                         // 右向きにする
                         _isFacingRight = true;
-                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right, transform);
+                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
                     }
                     else if (_moveInput.x < 0 && _isFacingRight)
                     {
                         // 左向きにする
                         _isFacingRight = false;
-                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left, transform);
+                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left);
                     }
                     
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる
@@ -265,6 +268,10 @@ public class PlayerController : MonoBehaviour
                         HandleTalkableObjectInteraction(component).Forget();
                     }
                 }
+                else if (_touchingCollision.gameObject.CompareTag(_sceneTransitionTag)) // シーン遷移オブジェクト
+                {
+                    Debug.Log("シーン遷移します");
+                }
             }
         }
         finally
@@ -297,12 +304,43 @@ public class PlayerController : MonoBehaviour
         _isInteracting = false; // インタラクション終了
     }
 
+    // チュートリアル会話の処理
+    private async UniTask HandleTutorialDialogue(StartTutorialDialogue component)
+    {
+        _playerInput.SwitchCurrentActionMap("UI"); // UIアクションマップに切り替え
+
+        await component.TalkAsync(_cancellationTokenSource.Token); // 会話終了まで待機
+
+        _playerInput.SwitchCurrentActionMap("Player"); // Playerアクションマップに切り替え
+
+        _isInputEnabled = true; // 入力を有効化
+        _isInteracting = false; // インタラクション終了
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(_interactableTag) || collision.gameObject.CompareTag(_elevatorTag) || collision.gameObject.CompareTag(_talkableTag))
+        if (collision.gameObject.CompareTag(_interactableTag) || collision.gameObject.CompareTag(_elevatorTag) || collision.gameObject.CompareTag(_talkableTag)
+             || collision.gameObject.CompareTag(_sceneTransitionTag))
         {
             Debug.Log("接触！");
             _touchingCollision = collision;
+            return;
+        }
+
+        // チュートリアル用のコライダーに入ったとき
+        if (collision.gameObject.CompareTag(_turorialTag) && !_isInteracting)
+        {
+            var component = collision.gameObject.GetComponent<StartTutorialDialogue>();
+            if (component != null)
+            {
+                // フラグをセットして実行開始
+                _isInteracting = true;
+
+                StopMove(); // 移動を止める
+                _isInputEnabled = false; // 入力を無効化
+
+                HandleTutorialDialogue(component).Forget();
+            }
         }
     }
 
