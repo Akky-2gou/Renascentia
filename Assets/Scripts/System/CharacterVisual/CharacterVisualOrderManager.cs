@@ -10,12 +10,13 @@ using Live2D.Cubism.Rendering;
 public class CharacterVisualOrderManager : MonoBehaviour
 {
     [Header("キャラクターに割り当ててよい順番の下限")]
-    [SerializeField] int _minOrderLive2d = 0;
-    [SerializeField] int _minOrderSpriteSkin = 0;
+    [field: SerializeField] public int MinOrderLive2d { get; set; } 
+    [field: SerializeField] public int MinOrderSpriteSkin { get; set; } 
 
     [Header("キャラクターのリスト（基本的には他のスクリプトから変更するのを想定）")]
     [SerializeField] Dictionary<int, CubismRenderController> _live2DCharacters = new Dictionary<int, CubismRenderController>();
-    [SerializeField] Dictionary<int, PartsAbsoluteOrderController> _spriteSkinCharacters = new Dictionary<int, PartsAbsoluteOrderController>(); 
+    [SerializeField] Dictionary<int, PartsAbsoluteOrderController> _spriteSkinCharacters = new Dictionary<int, PartsAbsoluteOrderController>();
+
 
     /// <summary>
     /// キャラクターのオブジェクトの登録
@@ -52,9 +53,11 @@ public class CharacterVisualOrderManager : MonoBehaviour
         // 指定された順番が下のLive2Dキャラから，見た目の順番を変更
         List<int> keys = _live2DCharacters.Keys.ToList();
         keys.Sort();
-        int order = _minOrderLive2d;
+        int order = MinOrderLive2d;
         foreach (int key in keys)
         {
+            if (_live2DCharacters[key] == null) continue;
+
             _live2DCharacters[key].GroupedSortingIndex = order; // 見た目の順番を変更
             order++;
         }
@@ -62,9 +65,11 @@ public class CharacterVisualOrderManager : MonoBehaviour
         // 指定された順番が下のSpriteSkinキャラから，見た目の順番を変更
         keys = _spriteSkinCharacters.Keys.ToList();
         keys.Sort();
-        order = _minOrderSpriteSkin;
+        order = MinOrderSpriteSkin;
         foreach (int key in keys)
         {
+            if (_spriteSkinCharacters[key] == null) continue;
+
             order = _spriteSkinCharacters[key].ChangeOrderFromLower(order) + 1; // 見た目の順番を変更
         }
     }

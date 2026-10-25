@@ -12,6 +12,6 @@ public class DialogueStarter : MonoBehaviour
     void Start()
     {
         // 会話開始
-        _dialogueDisplay.StartTalking(_episodeIndex, false);
+        _dialogueDisplay.StartTalking(_episodeIndex, DialogueMode.InDialogueScene);
     }
 }

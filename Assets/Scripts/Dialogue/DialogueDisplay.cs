@@ -51,8 +51,10 @@ public class DialogueDisplay : MonoBehaviour
     private bool _isEpisodeCompleted = false; // エピソードが終了したかどうかのフラグ
     private bool _isLogDisplaied = false; // ログが表示されているかどうかのフラグ
     private bool _isInTown = false; // 街探索での会話かどうかのフラグ
+    private bool _isInBattle = false; // バトルでの会話かどうかのフラグ
     private bool _isChoiceDisplayed = false; // 選択肢が表示されているかどうかのフラグ
     private bool _isChoiceButtonPressing = false; // 選択肢が押されているかどうかのフラグ（セリフ送りの誤爆防止）
+    private bool _isStarted = false; // 会話が始まっているかどうかのフラグ
 
     public bool IsEpisodeCompleted => _isEpisodeCompleted; // 会話終了フラグのプロパティ
 
@@ -77,15 +79,17 @@ public class DialogueDisplay : MonoBehaviour
     /// <summary>
     /// 会話を開始するメソッド
     /// </summary>
-    public void StartTalking(int episodeIndex, bool isInTown)
+    public void StartTalking(int episodeIndex, DialogueMode mode)
     {
         // 各フラグの初期化
         _isTextTyping = false;
         _isAutoPlaying = false;
         _isFastForwarding = false;
         _isEpisodeCompleted = false;
-        _isInTown = isInTown;
+        _isInTown = (mode == DialogueMode.InTown);
+        _isInBattle = (mode == DialogueMode.InBattle);
         _isChoiceDisplayed = false;
+        _isStarted = true;
 
         // ダイアログパネルをアクティブ化し，（街探索中なら）メニューパネルを非アクティブ化
         _dialoguePanel.SetActive(true);
@@ -114,7 +118,7 @@ public class DialogueDisplay : MonoBehaviour
     // 次のセリフを表示するメソッド
     private async void ShowNextDialogue(bool isFast) // isFastがtrueの場合，一文字ずつ表示せずに即座に表示
     {
-        if (_isChoiceDisplayed) return; // 選択肢が表示されている場合は次のセリフに進まない
+        if (_isChoiceDisplayed || !_isStarted) return; // 選択肢が表示されている，または会話が始まっていない場合は次のセリフに進まない
 
         if (_isTextTyping) // 表示途中で押されたら
         {
@@ -196,7 +200,7 @@ public class DialogueDisplay : MonoBehaviour
             }
 
             // 背景やテキストボックスを更新
-            if (_isInTown) 
+            if (_isInTown || _isInBattle) 
             {
                 // 背景を半透明の黒にする
                 _backgroundImage.color = _inTownBackGroundColor;
@@ -243,11 +247,18 @@ public class DialogueDisplay : MonoBehaviour
             _isFastForwarding = false;
 
             UnityEngine.Debug.Log("エピソード終了．次のシーンに遷移");
+            
+            _isStarted = false;
 
             // 街探索中ならダイアログパネルを無効化し，メニューパネルをアクティブ化
             if (_isInTown)
             {
                 _menuPanel.SetActive(true);
+                _dialoguePanel.SetActive(false);
+            }
+            // バトル中ならダイアログパネルを無効化
+            else if (_isInBattle)
+            {
                 _dialoguePanel.SetActive(false);
             }
 
@@ -296,8 +307,8 @@ public class DialogueDisplay : MonoBehaviour
     // 自動再生をOnOffするメソッド
     public void SwitchAutoPlay()
     {
-        // エピソードが終了している場合は自動再生を切り替えない
-        if (_isEpisodeCompleted)
+        // エピソードが終了している，または会話が始まっていない場合は自動再生を切り替えない
+        if (_isEpisodeCompleted || !_isStarted)
         {
             return;
         }
@@ -338,8 +349,8 @@ public class DialogueDisplay : MonoBehaviour
     // 早送り機能をOnOffするメソッド
     public void SwitchFastForward()
     {
-        // エピソードが終了している場合は早送りを切り替えない
-        if (_isEpisodeCompleted)
+        // エピソードが終了している，または会話が始まっていない場合は早送りを切り替えない
+        if (_isEpisodeCompleted || !_isStarted)
         {
             return;
         }
@@ -389,6 +400,8 @@ public class DialogueDisplay : MonoBehaviour
     // ログをOnOffするメソッド
     public void SwitchLog()
     {
+        if (!_isStarted) return; // 会話が始まっていない場合は処理を行わない
+
         // ログパネルのOnOffを切り替え
         if (_isLogDisplaied)
         {
@@ -409,6 +422,8 @@ public class DialogueDisplay : MonoBehaviour
     // ログをOffするメソッド
     public void QuitLog()
     {
+        if (!_isStarted) return; // 会話が始まっていない場合は処理を行わない
+        
         // ログがOnならOffにする
         if (_isLogDisplaied)
         {

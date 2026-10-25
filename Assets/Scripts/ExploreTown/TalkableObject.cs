@@ -18,7 +18,7 @@ public class TalkableObject : MonoBehaviour
     public async UniTask TalkAsync(CancellationToken cancellationToken)
     {
         // 会話開始
-        _dialogueDisplay.StartTalking(_episodeIndex, true);
+        _dialogueDisplay.StartTalking(_episodeIndex, DialogueMode.InTown);
 
         // 外部のキャンセル要求とオブジェクト破棄時のキャンセルを結合(usingをつけるとlinkedCtsを自動的に破棄)
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, this.GetCancellationTokenOnDestroy());
