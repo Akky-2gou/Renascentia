@@ -14,35 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EpisodeDatabase
   _data:
   - _data:
-    - rid: 1840691778296742127
-    - rid: 1840691778296742128
-    - rid: 1840691778296742129
-    - rid: 1840691778296742130
+    - rid: 4540466526716166236
+    - rid: 4540466526716166237
+    - rid: 4540466526716166238
+    - rid: 4540466526716166239
   - _data:
-    - rid: 1840691778296742131
-    - rid: 1840691778296742132
-    - rid: 1840691778296742133
+    - rid: 4540466526716166240
+    - rid: 4540466526716166241
+    - rid: 4540466526716166242
   - _data:
-    - rid: 1840691778296742134
-    - rid: 1840691778296742135
-    - rid: 1840691778296742136
-    - rid: 1840691778296742137
+    - rid: 4540466526716166243
+    - rid: 4540466526716166244
+    - rid: 4540466526716166245
+    - rid: 4540466526716166246
   - _data:
-    - rid: 1840691778296742138
-    - rid: 1840691778296742139
-    - rid: 1840691778296742140
-    - rid: 1840691778296742141
-    - rid: 1840691778296742142
-    - rid: 1840691778296742143
-    - rid: 1840691778296742144
-    - rid: 1840691778296742145
-    - rid: 1840691778296742146
+    - rid: 4540466526716166247
+    - rid: 4540466526716166248
+    - rid: 4540466526716166249
+    - rid: 4540466526716166250
+    - rid: 4540466526716166251
+    - rid: 4540466526716166252
+    - rid: 4540466526716166253
+    - rid: 4540466526716166254
+    - rid: 4540466526716166255
   - _data:
-    - rid: 1840691778296742147
+    - rid: 4540466526716166256
   references:
     version: 2
     RefIds:
-    - rid: 1840691778296742127
+    - rid: 4540466526716166236
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 1
@@ -56,8 +56,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: 0
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742128
+        _nextDialogue:
+        - rid: 4540466526716166237
+    - rid: 4540466526716166237
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 1
@@ -71,8 +72,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: 0
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742129
+        _nextDialogue:
+        - rid: 4540466526716166238
+    - rid: 4540466526716166238
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 1
@@ -86,8 +88,9 @@ MonoBehaviour:
         _bgmId: 1
         _seId: 0
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742130
+        _nextDialogue:
+        - rid: 4540466526716166239
+    - rid: 4540466526716166239
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 1
@@ -102,7 +105,7 @@ MonoBehaviour:
         _seId: 1
         _isChoice: 0
         _nextDialogue: []
-    - rid: 1840691778296742131
+    - rid: 4540466526716166240
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: -1
@@ -116,8 +119,9 @@ MonoBehaviour:
         _bgmId: -1
         _seId: -1
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742132
+        _nextDialogue:
+        - rid: 4540466526716166241
+    - rid: 4540466526716166241
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: -1
@@ -131,8 +135,9 @@ MonoBehaviour:
         _bgmId: -1
         _seId: -1
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742133
+        _nextDialogue:
+        - rid: 4540466526716166242
+    - rid: 4540466526716166242
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -147,7 +152,7 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue: []
-    - rid: 1840691778296742134
+    - rid: 4540466526716166243
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -161,8 +166,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: -1
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742135
+        _nextDialogue:
+        - rid: 4540466526716166244
+    - rid: 4540466526716166244
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -176,8 +182,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: -1
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742136
+        _nextDialogue:
+        - rid: 4540466526716166245
+    - rid: 4540466526716166245
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -191,8 +198,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: 2
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742137
+        _nextDialogue:
+        - rid: 4540466526716166246
+    - rid: 4540466526716166246
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -207,7 +215,7 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue: []
-    - rid: 1840691778296742138
+    - rid: 4540466526716166247
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -222,10 +230,10 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue:
-        - rid: 1840691778296742139
-        - rid: 1840691778296742140
-        - rid: 1840691778296742141
-    - rid: 1840691778296742139
+        - rid: 4540466526716166248
+        - rid: 4540466526716166249
+        - rid: 4540466526716166250
+    - rid: 4540466526716166248
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -240,8 +248,8 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 1
         _nextDialogue:
-        - rid: 1840691778296742142
-    - rid: 1840691778296742140
+        - rid: 4540466526716166251
+    - rid: 4540466526716166249
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -256,8 +264,8 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 1
         _nextDialogue:
-        - rid: 1840691778296742143
-    - rid: 1840691778296742141
+        - rid: 4540466526716166252
+    - rid: 4540466526716166250
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -272,8 +280,8 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 1
         _nextDialogue:
-        - rid: 1840691778296742144
-    - rid: 1840691778296742142
+        - rid: 4540466526716166253
+    - rid: 4540466526716166251
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -288,8 +296,8 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue:
-        - rid: 1840691778296742146
-    - rid: 1840691778296742143
+        - rid: 4540466526716166255
+    - rid: 4540466526716166252
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -304,8 +312,8 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue:
-        - rid: 1840691778296742146
-    - rid: 1840691778296742144
+        - rid: 4540466526716166255
+    - rid: 4540466526716166253
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -319,8 +327,9 @@ MonoBehaviour:
         _bgmId: 0
         _seId: -1
         _isChoice: 0
-        _nextDialogue: []
-    - rid: 1840691778296742145
+        _nextDialogue:
+        - rid: 4540466526716166254
+    - rid: 4540466526716166254
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -335,8 +344,8 @@ MonoBehaviour:
         _seId: 1
         _isChoice: 0
         _nextDialogue:
-        - rid: 1840691778296742146
-    - rid: 1840691778296742146
+        - rid: 4540466526716166255
+    - rid: 4540466526716166255
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0
@@ -351,7 +360,7 @@ MonoBehaviour:
         _seId: -1
         _isChoice: 0
         _nextDialogue: []
-    - rid: 1840691778296742147
+    - rid: 4540466526716166256
       type: {class: DialogueData, ns: , asm: Assembly-CSharp}
       data:
         _leftCharacterId: 0

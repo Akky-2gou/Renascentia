@@ -16,6 +16,10 @@ MonoBehaviour:
   _cost: 1
   _element: 1
   _description: 
-  _targetType: 0
+  _targetType: 3
   _power: 10
-  _selfBuffs: []
+  _selfBuffs:
+  - Stat: 0
+    Stage: 0
+    Rate: 0
+    Duration: 0
