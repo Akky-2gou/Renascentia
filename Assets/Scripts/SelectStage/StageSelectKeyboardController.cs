@@ -49,17 +49,17 @@ public class StageSelectKeyboardController : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current.aKey.wasPressedThisFrame)
+        if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame)
         {
-            SelectPreviousNode();
+            TryMoveSelection(-1);
         }
-        else if (Keyboard.current.dKey.wasPressedThisFrame)
+        else if (Keyboard.current.dKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame)
         {
-            SelectNextNode();
+            TryMoveSelection(1);
         }
         else if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
-            stageNodes[selectedIndex].TrySelect();
+            stageSelectPlayer?.RequestBattleStartOnCurrentStage();
         }
     }
 
@@ -95,26 +95,29 @@ public class StageSelectKeyboardController : MonoBehaviour
         return -1;
     }
 
-    private void SelectPreviousNode()
+    private void TryMoveSelection(int direction)
     {
-        if (selectedIndex <= 0)
+        int nextIndex = selectedIndex + direction;
+        if (nextIndex < 0 || nextIndex >= stageNodes.Count)
         {
             return;
         }
 
-        selectedIndex--;
-        ApplySelection();
-    }
-
-    private void SelectNextNode()
-    {
-        if (selectedIndex >= stageNodes.Count - 1)
+        StageSelectNode nextNode = stageNodes[nextIndex];
+        if (nextNode == null)
         {
             return;
         }
 
-        selectedIndex++;        
+        if (GameProgress.Instance != null && !GameProgress.Instance.IsStageUnlocked(nextNode.StageId))
+        {
+            Debug.Log("未開放ステージのため移動できません: " + nextNode.StageId);
+            return;
+        }
+
+        selectedIndex = nextIndex;
         ApplySelection();
+        stageSelectPlayer?.MoveToStage(nextNode.StageId);
     }
 
     private void ApplySelection()
