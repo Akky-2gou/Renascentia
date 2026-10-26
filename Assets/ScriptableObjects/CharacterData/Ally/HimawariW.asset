@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HimawariW
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   _maxHp: 100
-  _attack: 100
+  _attack: 10
   _defense: 100
   _normalAttackPower: 100
   _healAmount: 0
@@ -21,9 +21,9 @@ MonoBehaviour:
   _battleUnitType: 0
   _attackElement: 1
   _weaknesses: 0300000005000000
-  _icon: {fileID: 21300000, guid: a12aebfce4d75466bbe225b2f88adeb1, type: 3}
-  _iconOffset: {x: 0, y: 0}
-  _iconScale: 1
+  _icon: {fileID: 21300000, guid: 579d4fab1f24e07459c28fda2c77604c, type: 3}
+  _iconOffset: {x: 52.4, y: -338}
+  _iconScale: 13
   _characterPrefab: {fileID: 447002470704470471, guid: 42139614dd83b40008e673babaaf39ce, type: 3}
   _skills:
   - {fileID: 11400000, guid: 61047105b99d2ef40961387e2a110f0e, type: 2}
