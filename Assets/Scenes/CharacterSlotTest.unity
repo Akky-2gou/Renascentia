@@ -4174,9 +4174,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameProgress
   _stageProgress: 4
-  _testUnlockedCharacterIds: 010000000200000003000000
+  _testUnlockedCharacterIds: 0100000002000000030000000400000005000000
   _replaceOnApply: 0
-  _applyTestUnlockedOnAwake: 0
+  _applyTestUnlockedOnAwake: 1
 --- !u!4 &413751882
 Transform:
   m_ObjectHideFlags: 0
@@ -7766,43 +7766,43 @@ PrefabInstance:
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[0]'
       value: 
-      objectReference: {fileID: 1411959985}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[1]'
       value: 
-      objectReference: {fileID: 1411959984}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[2]'
       value: 
-      objectReference: {fileID: 1411959983}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[3]'
       value: 
-      objectReference: {fileID: 1411959982}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[4]'
       value: 
-      objectReference: {fileID: 1411959981}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[5]'
       value: 
-      objectReference: {fileID: 1411959980}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[6]'
       value: 
-      objectReference: {fileID: 1411959979}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[7]'
       value: 
-      objectReference: {fileID: 1411959978}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[8]'
       value: 
-      objectReference: {fileID: 1411959977}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_characterSlots.Array.data[9]'
       value: 
-      objectReference: {fileID: 1411959976}
+      objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: _returnFromTeamCompositionButton
       value: 
@@ -7922,116 +7922,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24fffe1500f08d84792c058be31a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeamMemberSlot
---- !u!114 &1411959976 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1371460825959040903, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959977 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 418686619309524769, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959978 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9140755895784563597, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959979 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2501594940825486258, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959980 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1787493377119206446, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959981 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3365568764594660301, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959982 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7947742422484480590, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959983 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7266223470509560566, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959984 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5752140410541999949, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
---- !u!114 &1411959985 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 363772630314992972, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
-  m_PrefabInstance: {fileID: 1456864092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
 --- !u!1001 &1456864092
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8099,6 +7989,10 @@ PrefabInstance:
     - target: {fileID: 129861267508441714, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ReadCharacterDetail, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 157537592282473842, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 300265953248931958, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
@@ -8196,6 +8090,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ReadCharacterDetail, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1349354799068542129, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1349354799068542129, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1371460825959040903, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -8212,6 +8114,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 1576762005571099461, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1787126757914328522, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -8356,6 +8262,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 2359138349157940666, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: firstSelectedButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2496004880417718788, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
@@ -8480,6 +8390,14 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 3685747348992491954, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685747348992491954, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: characterSlotPrefab
       value: 
@@ -8495,43 +8413,43 @@ PrefabInstance:
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[0]'
       value: 
-      objectReference: {fileID: 1411959985}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[1]'
       value: 
-      objectReference: {fileID: 1411959984}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[2]'
       value: 
-      objectReference: {fileID: 1411959983}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[3]'
       value: 
-      objectReference: {fileID: 1411959982}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[4]'
       value: 
-      objectReference: {fileID: 1411959981}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[5]'
       value: 
-      objectReference: {fileID: 1411959980}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[6]'
       value: 
-      objectReference: {fileID: 1411959979}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[7]'
       value: 
-      objectReference: {fileID: 1411959978}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[8]'
       value: 
-      objectReference: {fileID: 1411959977}
+      objectReference: {fileID: 0}
     - target: {fileID: 3740153312553004285, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: 'characterSlots.Array.data[9]'
       value: 
-      objectReference: {fileID: 1411959976}
+      objectReference: {fileID: 0}
     - target: {fileID: 3882041985243150197, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -8796,6 +8714,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 6792169092215129421, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6797697255806534907, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -8852,6 +8774,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 7222543810465774289, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7266223470509560566, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -8896,6 +8822,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 8069811507328221560, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8392302872499049791, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: saveData
       value: 
@@ -8915,6 +8845,18 @@ PrefabInstance:
     - target: {fileID: 8577044552740730882, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ReadCharacterDetail, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735483365536874974, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735483365536874974, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735483365536874974, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8758336251608901676, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8948,6 +8890,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 9094875559254185330, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 9140755895784563597, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -8975,6 +8921,16 @@ PrefabInstance:
     - {fileID: 6638078087596309923, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
     - {fileID: 5039382332386466044, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
     - {fileID: 7386379050884458634, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 2212779712996317515, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 9182823787180936945, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 6082827153244674890, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 3822950110047371210, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 8499756722834124361, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 249753975957807145, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 4111308667300093877, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 7305756850164776842, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 626376869282732928, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+    - {fileID: 2195020382264498982, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}

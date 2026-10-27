@@ -82,10 +82,21 @@ public class CharacterSlotManager : MonoBehaviour
 		unlockedCharacterIds.RemoveAll(id => id <= 0);
 		unlockedCharacterIds.Sort();
 
+		TeamConpositionManager teamConpositionManager = Object.FindFirstObjectByType<TeamConpositionManager>();
+
 		foreach (int characterId in unlockedCharacterIds)
 		{
 			CharacterSlot slot = Instantiate(characterSlotPrefab, gridLayoutGroup.transform, false);
 			slot.CharacterID = characterId;
+			slot.TeamConpositionManager = teamConpositionManager;
+
+			UnityEngine.UI.Button uiButton = slot.GetComponent<UnityEngine.UI.Button>();
+			if (uiButton == null)
+			{
+				uiButton = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
+			}
+			uiButton.onClick.RemoveAllListeners();
+			uiButton.onClick.AddListener(() => slot.OnClick());
 
 			ReadCharacterDetail readCharacterDetail = slot.GetComponent<ReadCharacterDetail>();
 			if (readCharacterDetail == null)
@@ -95,6 +106,12 @@ public class CharacterSlotManager : MonoBehaviour
 
 			readCharacterDetail.Initialize(characterId, characterDetailDatabase, characterDescription, gameProgress);
 			spawnedSlots.Add(slot);
+		}
+
+		TeamMemberManager teamMemberManager = Object.FindFirstObjectByType<TeamMemberManager>();
+		if (teamMemberManager != null)
+		{
+			teamMemberManager.SetCharacterSlots(spawnedSlots);
 		}
 	}
 

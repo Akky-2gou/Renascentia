@@ -19,6 +19,33 @@ public class TeamConpositionManager : MonoBehaviour
 
     private bool _isSelectedTeamMemberSlotEmpty; // 選択されたチームメンバースロットが空欄か 
 
+    private void Awake()
+    {
+        ResolvePanelReferences();
+    }
+
+    private void ResolvePanelReferences()
+    {
+        if (_teamCompositionPanel == null)
+        {
+            _teamCompositionPanel = transform.Find("TeamComposition")?.gameObject;
+        }
+
+        if (_characterDetailPanel == null)
+        {
+            _characterDetailPanel = transform.Find("CharacterDetail")?.gameObject;
+        }
+
+        if (_characterListPanel == null)
+        {
+            _characterListPanel = transform.Find("CharacterList")?.gameObject;
+        }
+
+        if (_removeCharacterButton == null)
+        {
+            _removeCharacterButton = transform.Find("RemoveCharacter")?.gameObject;
+        }
+    }
     
     /// <summary>
     /// チーム編成画面で空欄スロットを選択した場合の処理
@@ -74,42 +101,42 @@ public class TeamConpositionManager : MonoBehaviour
     /// チーム編成からキャラクター詳細に遷移する処理
     private void TeamCompositionToCharacterDetail()
     {
-        _teamCompositionPanel.SetActive(false);
-        _characterDetailPanel.SetActive(true);
+        if (_teamCompositionPanel != null) _teamCompositionPanel.SetActive(false);
+        if (_characterDetailPanel != null) _characterDetailPanel.SetActive(true);
     }
 
     /// チーム編成からキャラクター一覧に遷移する処理
     private void TeamCompositionToCharacterList()
     {
-        _teamCompositionPanel.SetActive(false);
-        _characterListPanel.SetActive(true);
+        if (_teamCompositionPanel != null) _teamCompositionPanel.SetActive(false);
+        if (_characterListPanel != null) _characterListPanel.SetActive(true);
     }
 
     /// キャラクター詳細からチーム編成に遷移する処理
     private void CharacterDetailToTeamComposition()
     {
-        _characterDetailPanel.SetActive(false);
-        _teamCompositionPanel.SetActive(true);
+        if (_characterDetailPanel != null) _characterDetailPanel.SetActive(false);
+        if (_teamCompositionPanel != null) _teamCompositionPanel.SetActive(true);
     }
 
     /// キャラクター詳細からキャラクター一覧に遷移する処理
     private void CharacterDetailToCharacterList()
     {
-        _characterDetailPanel.SetActive(false);
-        _characterListPanel.SetActive(true);
+        if (_characterDetailPanel != null) _characterDetailPanel.SetActive(false);
+        if (_characterListPanel != null) _characterListPanel.SetActive(true);
     }
 
     /// キャラクター一覧からチーム編成に遷移する処理
     private void CharacterListToTeamComposition()
     {
-        _characterListPanel.SetActive(false);
-        _teamCompositionPanel.SetActive(true);
+        if (_characterListPanel != null) _characterListPanel.SetActive(false);
+        if (_teamCompositionPanel != null) _teamCompositionPanel.SetActive(true);
     }
 
     /// キャラクター一覧からキャラクター詳細に遷移する処理
     private void CharacterListToCharacterDetail()
     {
-        _characterListPanel.SetActive(false);
-        _characterDetailPanel.SetActive(true);
+        if (_characterListPanel != null) _characterListPanel.SetActive(false);
+        if (_characterDetailPanel != null) _characterDetailPanel.SetActive(true);
     }
 }

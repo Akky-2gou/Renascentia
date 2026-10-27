@@ -22,6 +22,12 @@ public class CharacterSlot : Button
 
     // チーム編成を制御するマネージャー
     [SerializeField] private TeamConpositionManager _teamConpositionManager = null;
+    public TeamConpositionManager TeamConpositionManager
+    {
+        get => _teamConpositionManager;
+        set => _teamConpositionManager = value;
+    }
+
     // 自身にアタッチされているボタンの参照
     [SerializeField] private UnityEngine.UI.Button _button;
     
