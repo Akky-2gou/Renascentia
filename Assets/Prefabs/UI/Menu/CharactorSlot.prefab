@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -8001189612822691953}
   - component: {fileID: 5439892710797211960}
   - component: {fileID: -5220882474803757113}
+  - component: {fileID: -3820224552166389939}
   m_Layer: 5
   m_Name: CharactorSlot
   m_TagString: Untagged
@@ -148,3 +149,20 @@ MonoBehaviour:
   _characterID: -1
   _teamConpositionManager: {fileID: 0}
   _button: {fileID: 5439892710797211960}
+--- !u!114 &-3820224552166389939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3184763087512871872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9073bf3a47622470b87812a06b27f604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReadCharacterDetail
+  slotId: -1
+  _canShowDetail: 0
+  characterDetailDatabase: {fileID: 11400000, guid: 4001972f4e22d4d599dfd9e1a9c5b7e4, type: 2}
+  characterDescription: {fileID: 0}
+  gameProgress: {fileID: 0}

@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
  */
 public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 {
+	private const int InitialDisplayCharacterId = 1;
+
 	[SerializeField] private int slotId = -1;
 	[SerializeField] private bool _canShowDetail;
 	[SerializeField] private CharacterDetailDatabase characterDetailDatabase;
@@ -18,6 +20,12 @@ public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 	private void OnEnable()
 	{
 		RefreshCanShowDetail();
+
+		// 初期状態ではID1のスロットだけが詳細を表示する
+		if (slotId == InitialDisplayCharacterId)
+		{
+			DisplayCharacterDetail();
+		}
 	}
 
 	private void Start()
@@ -56,6 +64,18 @@ public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 			return;
 		}
 
+	}
+
+	public void Initialize(int characterId, CharacterDetailDatabase database, ShowCharacterDescription description, GameProgress progress = null)
+	{
+		slotId = characterId;
+		characterDetailDatabase = database;
+		characterDescription = description;
+		if (progress != null)
+		{
+			gameProgress = progress;
+		}
+		RefreshCanShowDetail();
 	}
 
 	public void DisplayCharacterDetail()
