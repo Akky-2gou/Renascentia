@@ -7,13 +7,22 @@ using System.Collections.Generic;
 
 public class TeamMemberManager : MonoBehaviour
 {  
-    [SerializeField] private List<CharacterSlot> _characterSlots; // キャラクタースロットのリスト  
+    private List<CharacterSlot> _characterSlots = new List<CharacterSlot>(); // CharacterSlotManager が生成したキャラクタースロットのリスト
 
     [SerializeField] private UnityEngine.UI.Button _returnFromTeamCompositionButton ; // 編成画面から戻るボタンを参照するための変数 
 
-
     private HashSet<int> _assignedCharacterIds = new HashSet<int>(); // 編成されたキャラクターのIDの集合
 
+    public void SetCharacterSlots(IEnumerable<CharacterSlot> characterSlots)
+    {
+        _characterSlots = characterSlots == null ? new List<CharacterSlot>() : new List<CharacterSlot>(characterSlots);
+        _characterSlots.RemoveAll(slot => slot == null);
+
+        foreach (CharacterSlot slot in _characterSlots)
+        {
+            slot.UpdateInteractableState(_assignedCharacterIds);
+        }
+    }
 
     /// <summary>
     /// 編成キャラが変更されたときの処理
@@ -29,11 +38,14 @@ public class TeamMemberManager : MonoBehaviour
         // 編成状態を基に，キャラクタースロットを選択できるかを更新
         foreach (CharacterSlot slot in _characterSlots)
         {
+            if (slot == null) continue;
             slot.UpdateInteractableState(_assignedCharacterIds);
         }
 
         // 誰も編成されていなければ，編成画面から戻る画面を無効にする
-        if (_assignedCharacterIds.Count == 0) _returnFromTeamCompositionButton.interactable = false;
-        else _returnFromTeamCompositionButton.interactable = true;
+        if (_returnFromTeamCompositionButton != null)
+        {
+            _returnFromTeamCompositionButton.interactable = _assignedCharacterIds.Count > 0;
+        }
     }
 }

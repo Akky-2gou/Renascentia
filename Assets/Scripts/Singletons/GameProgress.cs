@@ -11,6 +11,9 @@ public class GameProgress : MonoBehaviour
     public static GameProgress Instance { get; private set; }
 
     [SerializeField] private MapId _stageProgress = MapId.None; // テスト用に初期値をinspectorで設定可能にする
+    [SerializeField] private List<int> _testUnlockedCharacterIds = new List<int>(); // テスト用: Inspectorで自由に設定する解放キャラID
+    [SerializeField] private bool _replaceOnApply = true; // trueなら反映時に既存の解放キャラを置き換える
+    [SerializeField] private bool _applyTestUnlockedOnAwake = false; // trueなら起動時に_testUnlockedCharacterIdsを自動反映する
     private MapId _lastMapId;
     private List<int> _unlockedCharacterIds = new List<int>();
     private List<int> _collectedItemIds = new List<int>();
@@ -45,6 +48,11 @@ public class GameProgress : MonoBehaviour
     public List<int> UnlockedCharacterIds => _unlockedCharacterIds;
     public List<int> CollectedItemIds => _collectedItemIds;
 
+    public bool IsCharacterUnlocked(int characterId)
+    {
+        return _unlockedCharacterIds.Contains(characterId);
+    }
+
     // 開放されたキャラクターIDを追加するメソッド
     public void AddUnlockedCharacter(int characterId)
     {
@@ -72,6 +80,31 @@ public class GameProgress : MonoBehaviour
         // リストの中身を空にする
         _unlockedCharacterIds.Clear();
     }
+
+    // 任意のキャラクターID一覧を解放状態として反映する（テスト用）
+    public void SetUnlockedCharacters(IEnumerable<int> characterIds, bool replaceExisting = true)
+    {
+        if (replaceExisting)
+        {
+            _unlockedCharacterIds.Clear();
+        }
+
+        if (characterIds == null)
+        {
+            return;
+        }
+
+        foreach (int characterId in characterIds)
+        {
+            if (characterId <= 0)
+            {
+                Debug.LogWarning($"無効なキャラクターIDをスキップしました: {characterId}");
+                continue;
+            }
+
+            AddUnlockedCharacter(characterId);
+        }
+    }
       //収集アイテムのリストを初期化するメソッド
     public void ResetCollectedItems()
     {
@@ -85,11 +118,35 @@ public class GameProgress : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // テストIDが1件でも入っていれば、起動時に自動反映する
+            TryAutoApplyTestUnlockedCharacters();
         }
         else
         {
+            // 既存Instanceが空で、後から生成された方にテストIDが入っている場合は引き継ぐ
+            if (Instance._unlockedCharacterIds.Count == 0 && _testUnlockedCharacterIds != null && _testUnlockedCharacterIds.Count > 0)
+            {
+                Instance.SetUnlockedCharacters(_testUnlockedCharacterIds, true);
+                string inherited = string.Join(", ", Instance._unlockedCharacterIds);
+                Debug.Log($"GameProgress重複検出: テスト解放IDを既存Instanceへ引き継ぎました。IDs: [{inherited}]");
+            }
+
             Destroy(gameObject);
         }
+    }
+
+    private void TryAutoApplyTestUnlockedCharacters()
+    {
+        bool hasTestIds = _testUnlockedCharacterIds != null && _testUnlockedCharacterIds.Count > 0;
+        if (!_applyTestUnlockedOnAwake && !hasTestIds)
+        {
+            return;
+        }
+
+        SetUnlockedCharacters(_testUnlockedCharacterIds, _replaceOnApply);
+        string unlocked = _unlockedCharacterIds.Count > 0 ? string.Join(", ", _unlockedCharacterIds) : "なし";
+        Debug.Log($"GameProgress起動時反映: 解放キャラ数: {_unlockedCharacterIds.Count} / IDs: [{unlocked}]");
     }
     // テスト用Inspectorのコンテキストメニューから実行可能
     [ContextMenu("Test/Unlock Characters 1 to 15")]
@@ -100,5 +157,20 @@ public class GameProgress : MonoBehaviour
             AddUnlockedCharacter(i);
         }
         Debug.Log("テスト: キャラクターID 1〜15を開放しました。");
+    }
+
+    [ContextMenu("Test/Apply Unlocked Characters From Inspector")]
+    public void ApplyTestUnlockedCharactersFromInspector()
+    {
+        SetUnlockedCharacters(_testUnlockedCharacterIds, _replaceOnApply);
+        string unlocked = _unlockedCharacterIds.Count > 0 ? string.Join(", ", _unlockedCharacterIds) : "なし";
+        Debug.Log($"テスト: Inspector設定を反映しました。解放キャラ数: {_unlockedCharacterIds.Count} / IDs: [{unlocked}]");
+    }
+
+    [ContextMenu("Test/Clear Unlocked Characters")]
+    public void ClearUnlockedCharactersForTest()
+    {
+        ResetUnlockedCharacters();
+        Debug.Log("テスト: 解放キャラクターをクリアしました。");
     }
 }

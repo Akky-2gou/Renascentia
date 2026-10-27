@@ -1,11 +1,14 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
 
 /*
  * キャラクターの詳細情報を呼び込むスクリプト
  */
-public class ReadCharacterDetail : MonoBehaviour
+public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 {
+	private const int InitialDisplayCharacterId = 1;
+
 	[SerializeField] private int slotId = -1;
 	[SerializeField] private bool _canShowDetail;
 	[SerializeField] private CharacterDetailDatabase characterDetailDatabase;
@@ -17,11 +20,11 @@ public class ReadCharacterDetail : MonoBehaviour
 	private void OnEnable()
 	{
 		RefreshCanShowDetail();
-		
-		CharacterDetailRecord record = characterDetailDatabase.GetByCharacterId(1);
-		if (record != null)
+
+		// 初期状態ではID1のスロットだけが詳細を表示する
+		if (slotId == InitialDisplayCharacterId)
 		{
-			characterDescription.SetCharacterDetail(record);
+			DisplayCharacterDetail();
 		}
 	}
 
@@ -34,15 +37,65 @@ public class ReadCharacterDetail : MonoBehaviour
 	{
 		if (gameProgress == null)
 		{
+			gameProgress = GameProgress.Instance;
+		}
+
+		if (gameProgress == null)
+		{
 			_canShowDetail = false;
 			Debug.LogError("gameProgressがnull.");
 			return;
 		}
 
-		_canShowDetail = gameProgress.UnlockedCharacterIds.Contains(slotId);
+		if (slotId <= 0)
+		{
+			_canShowDetail = false;
+			Debug.LogWarning($"slotId が無効です: {slotId}");
+			return;
+		}
+
+		_canShowDetail = gameProgress.IsCharacterUnlocked(slotId);
 		if (!_canShowDetail)
 		{
-			Debug.LogWarning($"キャラクターID {slotId} はアンロックされていない.");
+			string unlocked = gameProgress.UnlockedCharacterIds.Count > 0
+				? string.Join(", ", gameProgress.UnlockedCharacterIds)
+				: "なし";
+			Debug.LogWarning($"キャラクターID {slotId} はアンロックされていない. 現在の解放ID: [{unlocked}]");
+			return;
+		}
+
+	}
+
+	public void Initialize(int characterId, CharacterDetailDatabase database, ShowCharacterDescription description, GameProgress progress = null)
+	{
+		slotId = characterId;
+		characterDetailDatabase = database;
+		characterDescription = description;
+		if (progress != null)
+		{
+			gameProgress = progress;
+		}
+		RefreshCanShowDetail();
+	}
+
+	public void DisplayCharacterDetail()
+	{
+		RefreshCanShowDetail();
+		if (!_canShowDetail)
+		{
+			return;
+		}
+
+		if (characterDetailDatabase == null)
+		{
+			Debug.LogError("characterDetailDatabase が未設定です。");
+			characterDescription?.Clear();
+			return;
+		}
+
+		if (characterDescription == null)
+		{
+			Debug.LogError("characterDescription が未設定です。");
 			return;
 		}
 
@@ -53,20 +106,13 @@ public class ReadCharacterDetail : MonoBehaviour
 		}
 		else
 		{
+			Debug.LogWarning($"解放済みだが詳細データが見つかりません。slotId={slotId}");
 			characterDescription.Clear();
 		}
 	}
 
-	public void DisplayCharacterDetail()
+	public void OnPointerClick(PointerEventData eventData)
 	{
-		CharacterDetailRecord record = characterDetailDatabase.GetByCharacterId(slotId);
-		if (record != null)
-		{
-			characterDescription.SetCharacterDetail(record);
-		}
-		else
-		{
-			characterDescription.Clear();
-		}
+		DisplayCharacterDetail();
 	}
 }

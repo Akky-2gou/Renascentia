@@ -9,8 +9,25 @@ public class CharacterSlot : Button
 {
     // スロットに割り当てられているキャラクターのID
     [SerializeField] private int _characterID = -1;
+    public int CharacterID
+    {
+        get => _characterID;
+        set => _characterID = value;
+    }
+
+    public void SetCharacterId(int characterId)
+    {
+        _characterID = characterId;
+    }
+
     // チーム編成を制御するマネージャー
     [SerializeField] private TeamConpositionManager _teamConpositionManager = null;
+    public TeamConpositionManager TeamConpositionManager
+    {
+        get => _teamConpositionManager;
+        set => _teamConpositionManager = value;
+    }
+
     // 自身にアタッチされているボタンの参照
     [SerializeField] private UnityEngine.UI.Button _button;
     
