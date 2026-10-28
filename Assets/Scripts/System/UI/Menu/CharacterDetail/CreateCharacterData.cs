@@ -44,6 +44,11 @@ public class CharacterDetailRecord
     public string skill3Description;
     public string passive;
     public string bonusPassive;
+
+    // 後から Inspector で差し込む背景アイコンと位置補正
+    public Sprite detailBackgroundIcon;
+    public Vector2 detailBackgroundIconOffset;
+    public float detailBackgroundIconScale = 1f;
 }
 
 #if UNITY_EDITOR

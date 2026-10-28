@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /*
@@ -6,6 +7,7 @@ using TMPro;
  */
 public class ShowCharacterDescription : MonoBehaviour
 {
+	[SerializeField] private Image _backCharaImage;
 	[SerializeField] private TextMeshProUGUI _characterNameText;
 	[SerializeField] private TextMeshProUGUI _speciesText;
 	[SerializeField] private TextMeshProUGUI _hpText;
@@ -26,6 +28,16 @@ public class ShowCharacterDescription : MonoBehaviour
 			return;
 		}
 
+		if (_backCharaImage != null)
+		{
+			_backCharaImage.sprite = record.detailBackgroundIcon;
+			if (_backCharaImage.rectTransform != null)
+			{
+				_backCharaImage.rectTransform.anchoredPosition = record.detailBackgroundIconOffset;
+				_backCharaImage.rectTransform.localScale = Vector3.one * record.detailBackgroundIconScale;
+			}
+		}
+
 		SetText(_characterNameText, $"キャラ名: {record.characterName}");
 		SetText(_speciesText, $"属性: {record.species}");
 		SetText(_hpText, $"HP: {record.hp}");
@@ -41,6 +53,16 @@ public class ShowCharacterDescription : MonoBehaviour
 
 	public void Clear()
 	{
+		if (_backCharaImage != null)
+		{
+			_backCharaImage.sprite = null;
+			if (_backCharaImage.rectTransform != null)
+			{
+				_backCharaImage.rectTransform.anchoredPosition = Vector2.zero;
+				_backCharaImage.rectTransform.localScale = Vector3.one;
+			}
+		}
+
 		SetText(_characterNameText, string.Empty);
 		SetText(_speciesText, string.Empty);
 		SetText(_hpText, string.Empty);
