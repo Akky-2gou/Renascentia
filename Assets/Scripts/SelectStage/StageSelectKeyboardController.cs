@@ -51,15 +51,18 @@ public class StageSelectKeyboardController : MonoBehaviour
 
         if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame)
         {
+            if (stageSelectPlayer.IsOpeningDialogue) return;
             TryMoveSelection(-1);
         }
         else if (Keyboard.current.dKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame)
         {
+            if (stageSelectPlayer.IsOpeningDialogue) return;
             TryMoveSelection(1);
         }
         else if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
-            stageSelectPlayer?.RequestBattleStartOnCurrentStage();
+            if (!stageSelectPlayer.CanAcceptSubmit()) return; // ダイアログ表示中、または閉じたフレームは、受け付けない
+            stageSelectPlayer.RequestBattleStartOnCurrentStage();
         }
     }
 

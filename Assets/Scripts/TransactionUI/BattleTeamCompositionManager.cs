@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,14 @@ public class BattleTeamCompositionManager : MonoBehaviour
     [SerializeField] private GameObject compositionPanel;
     [SerializeField] private GameObject sortieConfirmDialog;
     [SerializeField] private string battleSceneName = "MapToBattle";
+
+    private TransitionTarget _nextScene;
+
+    private void Start()
+    {
+        _nextScene = new TransitionTarget(SceneId.Battle, CurrentConversation.Instance.ConversationId, GameProgress.Instance.LastMapId);
+        SceneNavigator.Instance.Prepare(_nextScene);
+    }
 
     //編成画面を閉じる
     public void CancelBattleTeamComposition()
@@ -58,6 +67,6 @@ public class BattleTeamCompositionManager : MonoBehaviour
     private void LoadBattleScene()
     {
         Debug.Log("出撃: " + battleSceneName + " へ移動します");
-        SceneManager.LoadScene(battleSceneName);
+        SceneNavigator.Instance.Go(_nextScene);
     }
 }

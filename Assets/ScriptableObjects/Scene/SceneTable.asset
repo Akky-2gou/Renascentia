@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3998238f6a2c1a747a4caa90e99cb554, type: 3}
   m_Name: SceneTable
   m_EditorClassIdentifier: Assembly-CSharp::SceneTable
-  _title: 
-  _dialogue: 
-  _town: 
-  _townTutorial: 
-  _map: 
-  _battlePreparation: 
-  _battle: 
-  _battleTutorial: 
-  _townToMapUI: 
+  _title: TitleScene
+  _dialogue: DialogueScene
+  _town: ExploreTownScene
+  _townTutorial: ExploreTownTutorialScene
+  _map: SelectStage
+  _battlePreparation: MapToBattle
+  _battle: BattleScene
+  _battleTutorial: BattleTutorialScene
+  _townToMapUI: TownToMapUI

@@ -11,6 +11,12 @@ public class ToTitleConfirmButton : Button
     /// </summary>
     public void OnClick()
     {
+        
         Debug.Log("タイトルに戻った！");
+
+        TransitionTarget target = new TransitionTarget(SceneId.Title);
+        SceneNavigator.Instance.Go(target);
+
+        Debug.Log("test");
     }
 }

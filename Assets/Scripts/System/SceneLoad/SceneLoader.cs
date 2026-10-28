@@ -30,6 +30,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            if (Singletons.IsInDuplicate(this)) return; // 複製の Singletons の子は、何もしない（もうすぐ破棄される）
             Debug.LogError("SceneLoaderが複数存在します");
             return;
         }
@@ -95,9 +96,13 @@ public class SceneLoader : MonoBehaviour
         _fade.SetBlocking(true); // クリックを止める
         DeselectUI();            // キーボードの選択を外す
 
+        Debug.Log($"[Transition] 開始 timeScale={Time.timeScale} DOTween.timeScale={DG.Tweening.DOTween.timeScale}");
         await _fade.FadeAsync(1f); // 暗転
+        Debug.Log("[Transition] 暗転完了");
 
         await LoadAsync(sceneName); // シーン変更
+        Debug.Log("[Transition] シーン読み込み完了");
+        Time.timeScale = 1f; // ポーズなどで止めたままの時間を、元に戻す
 
         _fade.SetBlocking(false);
         _isTransitioning = false;

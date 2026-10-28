@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     [Header("初期状態での向き")]
     [SerializeField] private ChangeVisualDirection.VisualDirection _initailDirection;
 
+    [Header("プレイヤーがオブジェクトに当たって遷移するシーン")]
+    [SerializeField] private TransitionTarget _nextScene;
+
 
     private Animator _playerAnimator; // Animatorを保持する変数
     private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
@@ -270,7 +273,21 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (_touchingCollision.gameObject.CompareTag(_sceneTransitionTag)) // シーン遷移オブジェクト
                 {
-                    Debug.Log("シーン遷移します");
+                    // フラグをセットして実行開始
+                    _isInteracting = true;
+
+                    StopMove(); // 移動を止める
+                    _isInputEnabled = false; // 入力を無効化
+
+                    if (SceneNavigator.Instance == null)
+                    {
+                        Debug.LogError("TransitionButton: SceneNavigator が存在しません");
+                        return;
+                    }
+
+                    // プレイヤーがオブジェクトに当たって遷移する例は1つしかないはずなので、強制させてる
+                    // オブジェクトに当たって遷移する先が、1シーンにつき複数ある場合は分岐を増やす
+                    SceneNavigator.Instance.Go(_nextScene);
                 }
             }
         }
