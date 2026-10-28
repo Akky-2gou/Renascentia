@@ -22,6 +22,7 @@ public class StageSelectPlayer : MonoBehaviour
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
     [SerializeField] private string battleSceneName = "MapToBattle";
+    [SerializeField] private ConfirmDialogController _battleConfirm;
 
     private Rigidbody2D targetRb;
     private readonly List<int> pendingRouteIndices = new List<int>();
@@ -35,6 +36,10 @@ public class StageSelectPlayer : MonoBehaviour
 
     public bool IsMoving => isMoving;
     public MapId CurrentStageId => currentStageId;
+    private bool _isOpeningDialogue = false;
+    public bool IsOpeningDialogue { set{_isOpeningDialogue = value;} get{return _isOpeningDialogue;} }
+
+    private int _dialogueClosedFrame = -1; // ダイアログを閉じたフレーム
 
     public MapId SelectedStageId
     {
@@ -47,6 +52,21 @@ public class StageSelectPlayer : MonoBehaviour
 
             return stageTargets[selectedIndex].stageId;
         }
+    }
+
+    /// <summary>ダイアログを閉じたときに呼ぶ（IsOpeningDialogue を直接 false にする代わり）</summary>
+    public void NotifyDialogueClosed()
+    {
+        IsOpeningDialogue = false;
+        _dialogueClosedFrame = Time.frameCount;
+    }
+
+    // 決定の入力を受け付けてよいか
+    public bool CanAcceptSubmit()
+    {
+        if (IsOpeningDialogue) return false;
+        if (Time.frameCount == _dialogueClosedFrame) return false; // 閉じたのと同じ入力で、開き直さない
+        return true;
     }
 
     /// <summary>
@@ -253,13 +273,22 @@ public class StageSelectPlayer : MonoBehaviour
             return;
         }
 
-        StartBattle(currentStageId);
+        if (_isOpeningDialogue) return; // ダイアログ表示中は再度押させない
+
+        ConfirmBattleStartDialogue();
+    }
+
+    // バトル開始ダイアログの表示
+    public void ConfirmBattleStartDialogue()
+    {
+        _battleConfirm.OpenDialog();
+        _isOpeningDialogue = true;
     }
 
     // バトル開始処理
-    public void StartBattle(MapId stageId)
+    public void StartBattle()
     {
-        Debug.Log("バトル開始: " + stageId);
+        Debug.Log("バトル開始: " + currentStageId);
 
         if (string.IsNullOrEmpty(battleSceneName))
         {
@@ -267,7 +296,9 @@ public class StageSelectPlayer : MonoBehaviour
             return;
         }
         //シーンの遷移
-        //SceneManager.LoadScene(battleSceneName);
+        GameProgress.Instance.LastMapId = currentStageId;
+        TransitionTarget target = new TransitionTarget(SceneId.Dialogue, 11, GameProgress.Instance.LastMapId);
+        SceneNavigator.Instance.Go(target);
     }
 
     // 選択状態が有効か確認する

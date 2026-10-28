@@ -35,6 +35,7 @@ public class SoundManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            if (Singletons.IsInDuplicate(this)) return; // 複製の Singletons の子は、何もしない（もうすぐ破棄される）
             Debug.LogError("SoundManagerが複数存在します");
             return;
         }

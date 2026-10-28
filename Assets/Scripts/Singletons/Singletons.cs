@@ -21,4 +21,15 @@ public class Singletons : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+    /// <summary>
+    /// 渡されたコンポーネントが、これから破棄される複製の Singletons の子か
+    /// 各シングルトンの Awake の最初に呼んで、true なら何もせず戻ること
+    /// </summary>
+    public static bool IsInDuplicate(Component self)
+    {
+        Singletons parent = self.GetComponentInParent<Singletons>();
+        if (parent == null) return false; // Singletons の外にある場合は、判定しない
+        return instance != null && instance != parent;
+    }
 }
