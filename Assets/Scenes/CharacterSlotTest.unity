@@ -2446,6 +2446,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308e904e3f33207489a2c15b9b0b297b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Rendering.CubismRenderer
+--- !u!114 &27061507 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6738893129657552443, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+  m_PrefabInstance: {fileID: 1456864092}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc0e859bbe6a4221b8d56d15ae924f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowCharacterDescription
 --- !u!43 &46936088
 Mesh:
   m_ObjectHideFlags: 0
@@ -6502,6 +6513,7 @@ MonoBehaviour:
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
   battleSceneName: MapToBattle
+  _battleConfirm: {fileID: 0}
 --- !u!50 &943891172
 Rigidbody2D:
   serializedVersion: 5
@@ -7149,6 +7161,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1456864095}
     - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
+      propertyPath: _characterDescription
+      value: 
+      objectReference: {fileID: 27061507}
+    - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
       propertyPath: _characterDetailPanel
       value: 
       objectReference: {fileID: 1456864096}
@@ -7168,6 +7184,10 @@ PrefabInstance:
       propertyPath: _removeCharactorButton
       value: 
       objectReference: {fileID: 1456864094}
+    - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
+      propertyPath: _characterDetailDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 4001972f4e22d4d599dfd9e1a9c5b7e4, type: 2}
     - target: {fileID: 5505882283555852344, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
       propertyPath: m_Name
       value: TeamConpositionManager
@@ -8018,6 +8038,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 502168492856877061, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 551710429083668044, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -8069,6 +8093,34 @@ PrefabInstance:
     - target: {fileID: 1097213086385014395, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Resume
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227683935366942128, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278434960371421479, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1292930086194616881, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
@@ -8262,9 +8314,57 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297694199922888228, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2359138349157940666, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: firstSelectedButton
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432754027961941469, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2496004880417718788, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
@@ -8354,6 +8454,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -215
       objectReference: {fileID: 0}
+    - target: {fileID: 2965494916473526687, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113033852266004004, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3221864380492788101, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -8382,6 +8510,10 @@ PrefabInstance:
       propertyPath: saveData
       value: 
       objectReference: {fileID: 1032344581}
+    - target: {fileID: 3508526916633003140, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3617879364782759049, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamMemberManager
       value: 
@@ -8670,6 +8802,30 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -215
       objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135166742139449640, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6571996853223370139, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -8802,6 +8958,30 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7529158818750646085, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7571705620092050874, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -10493,6 +10673,7 @@ MonoBehaviour:
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
   battleSceneName: 
+  _battleConfirm: {fileID: 0}
 --- !u!1 &1980285097
 GameObject:
   m_ObjectHideFlags: 0
