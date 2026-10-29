@@ -11,6 +11,8 @@ public class TeamConpositionManager : MonoBehaviour
     [SerializeField] private GameObject _teamCompositionPanel; // チーム編成パネルを参照するための変数
     [SerializeField] private GameObject _characterDetailPanel; // キャラクター詳細パネルを参照するための変数
     [SerializeField] private GameObject _characterListPanel; // キャラクター一覧パネルを参照するための変数
+    [SerializeField] private ShowCharacterDescription _characterDescription; // キャラクター詳細の表示コンポーネント
+    [SerializeField] private CharacterDetailDatabase _characterDetailDatabase; // キャラクター詳細データベース
     
     [SerializeField] private GameObject _removeCharacterButton; // キャラクターを外すボタンを参照するための変数
 
@@ -36,6 +38,11 @@ public class TeamConpositionManager : MonoBehaviour
             _characterDetailPanel = transform.Find("CharacterDetail")?.gameObject;
         }
 
+        if (_characterDetailPanel != null && _characterDescription == null)
+        {
+            _characterDescription = _characterDetailPanel.GetComponentInChildren<ShowCharacterDescription>(true);
+        }
+
         if (_characterListPanel == null)
         {
             _characterListPanel = transform.Find("CharacterList")?.gameObject;
@@ -53,7 +60,10 @@ public class TeamConpositionManager : MonoBehaviour
     public void SelectEmptyTeamMemberSlot(TeamMemberSlot slot)
     {
         _selectedTeamMemberSlot = slot; // 選択されたチームメンバースロットを保持
-        _removeCharacterButton.SetActive(false); // キャラクターを外すボタンを非アクティブに
+        if (_removeCharacterButton != null)
+        {
+            _removeCharacterButton.SetActive(false); // キャラクターを外すボタンを非アクティブに
+        }
         _isSelectedTeamMemberSlotEmpty = true;
         TeamCompositionToCharacterList(); // キャラクター一覧に画面遷移
     }
@@ -64,11 +74,50 @@ public class TeamConpositionManager : MonoBehaviour
     public void SelectNotEmptyTeamMemberSlot(TeamMemberSlot slot)
     {
         _selectedTeamMemberSlot = slot; // 選択されたチームメンバースロットを保持
-        _removeCharacterButton.SetActive(true); // キャラクターを外すボタンをアクティブに
+        if (_removeCharacterButton != null)
+        {
+            _removeCharacterButton.SetActive(true); // キャラクターを外すボタンをアクティブに
+        }
         _isSelectedTeamMemberSlotEmpty = false;
         TeamCompositionToCharacterDetail(); // キャラクター詳細に画面遷移
 
-        // ここでキャラクター詳細の中身を，選択されたチームメンバースロットに割り当てられているキャラクターのものに変更
+        UpdateSelectedCharacterDetail();   // 選択されたチームメンバースロットのキャラクター詳細を表示
+    }
+
+    /// <summary>
+    /// 選択されたチームメンバースロットのキャラクター詳細を表示する処理
+    /// </summary>
+    private void UpdateSelectedCharacterDetail()
+    {
+        if (_selectedTeamMemberSlot == null)
+        {
+            _characterDescription?.Clear();
+            return;
+        }
+
+        int selectedCharacterId = _selectedTeamMemberSlot.CharacterID;
+        if (selectedCharacterId <= 0)
+        {
+            _characterDescription?.Clear();
+            return;
+        }
+
+        if (_characterDetailDatabase == null)
+        {
+            Debug.LogWarning("CharacterDetailDatabase が未設定のため、チームメンバースロットの詳細を表示できません。");
+            _characterDescription?.Clear();
+            return;
+        }
+
+        CharacterDetailRecord record = _characterDetailDatabase.GetByCharacterId(selectedCharacterId);
+        if (record == null)
+        {
+            Debug.LogWarning($"CharacterDetailDatabase にキャラクターID {selectedCharacterId} の詳細が見つかりませんでした。");
+            _characterDescription?.Clear();
+            return;
+        }
+
+        _characterDescription?.SetCharacterDetail(record);
     }
 
     /// <summary>
