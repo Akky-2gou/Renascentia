@@ -6,10 +6,17 @@ using System.Collections.Generic;
  */
 
 public class TeamMemberManager : MonoBehaviour
-{  
+{
+    [System.Serializable]
+    public class CharacterCombinationGroup
+    {
+        public List<int> characterIds = new List<int>();
+    }
+
     private List<CharacterSlot> _characterSlots = new List<CharacterSlot>(); // CharacterSlotManager が生成したキャラクタースロットのリスト
 
     [SerializeField] private UnityEngine.UI.Button _returnFromTeamCompositionButton ; // 編成画面から戻るボタンを参照するための変数 
+    [SerializeField] private List<CharacterCombinationGroup> _exclusiveCharacterGroups = new List<CharacterCombinationGroup>(); // 同時に編成できないキャラクターの組み合わせ
 
     private HashSet<int> _assignedCharacterIds = new HashSet<int>(); // 編成されたキャラクターのIDの集合
 
@@ -24,11 +31,75 @@ public class TeamMemberManager : MonoBehaviour
         }
     }
 
+    private IEnumerable<TeamMemberSlot> GetAllTeamMemberSlots()
+    {
+        TeamMemberSlot[] slots = GetComponentsInChildren<TeamMemberSlot>(true);
+        if (slots != null && slots.Length > 0)
+        {
+            return slots;
+        }
+
+        return Object.FindObjectsByType<TeamMemberSlot>(FindObjectsSortMode.None);
+    }
+
+    private void ResolveExclusiveCharacterGroups(int targetCharacterId)
+    {
+        if (targetCharacterId <= 0)
+        {
+            return;
+        }
+
+        foreach (CharacterCombinationGroup group in _exclusiveCharacterGroups)
+        {
+            if (group == null || group.characterIds == null || group.characterIds.Count == 0)
+            {
+                continue;
+            }
+
+            if (!group.characterIds.Contains(targetCharacterId))
+            {
+                continue;
+            }
+
+            foreach (int conflictingCharacterId in new List<int>(group.characterIds))
+            {
+                if (conflictingCharacterId == targetCharacterId)
+                {
+                    continue;
+                }
+
+                if (!_assignedCharacterIds.Contains(conflictingCharacterId))
+                {
+                    continue;
+                }
+
+                foreach (TeamMemberSlot slot in GetAllTeamMemberSlots())
+                {
+                    if (slot == null)
+                    {
+                        continue;
+                    }
+
+                    if (slot.CharacterID == conflictingCharacterId)
+                    {
+                        slot.ClearSlot();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// 編成キャラが変更されたときの処理
     /// </summary>
     public void OnTeamMemberIdChanged(int beforeId, int afterId)
     {
+        if (afterId != -1)
+        {
+            ResolveExclusiveCharacterGroups(afterId);
+        }
+
         // 変更前のIDが-1でない（誰かが編成されていた）なら，変更前のIDを編成キャラIDの集合から削除
         if (beforeId != -1) _assignedCharacterIds.Remove(beforeId);
         
