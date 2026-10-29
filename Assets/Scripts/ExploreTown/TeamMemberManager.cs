@@ -42,6 +42,9 @@ public class TeamMemberManager : MonoBehaviour
         return Object.FindObjectsByType<TeamMemberSlot>(FindObjectsSortMode.None);
     }
 
+    /// <summary>
+    /// 編成キャラクターのIDが同時に編成できない組み合わせに含まれている場合、既に編成されているキャラクターを外す処理
+    /// </summary>
     private void ResolveExclusiveCharacterGroups(int targetCharacterId)
     {
         if (targetCharacterId <= 0)
