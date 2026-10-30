@@ -14,7 +14,7 @@ public class GameProgress : MonoBehaviour
     [SerializeField] private List<int> _testUnlockedCharacterIds = new List<int>(); // テスト用: Inspectorで自由に設定する解放キャラID
     [SerializeField] private bool _replaceOnApply = true; // trueなら反映時に既存の解放キャラを置き換える
     [SerializeField] private bool _applyTestUnlockedOnAwake = false; // trueなら起動時に_testUnlockedCharacterIdsを自動反映する
-    private MapId _lastMapId;
+    [SerializeField] private MapId _lastMapId;
     private List<int> _unlockedCharacterIds = new List<int>();
     private List<int> _collectedItemIds = new List<int>();
 
