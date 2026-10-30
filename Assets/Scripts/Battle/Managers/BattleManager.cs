@@ -33,7 +33,7 @@ public class BattleManager : MonoBehaviour
     BattleContext _context; // 戦闘情報
 
     [Header("出現する敵")]
-    [SerializeField] private EncounterTable _encounterTable; // 全戦闘の一覧
+    [SerializeField] private StageTable _stageTable; // 全ステージの一覧
     private EncounterData _encounter; // 今回の戦闘(Start で一覧から決める)
 
     [Header("背景")]
@@ -95,9 +95,9 @@ public class BattleManager : MonoBehaviour
         // キャラクターの初期化処理
         // ==================================================================
 
-        if (_encounterTable == null)
+        if (_stageTable == null)
         {
-            Debug.LogError("EncounterTableが設定されていません");
+            Debug.LogError("StageTableが設定されていません");
             return;
         }
 
@@ -107,10 +107,17 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        MapId stageNum = GameProgress.Instance.LastMapId;
-        if (!_encounterTable.TryGet(stageNum, out _encounter))
+        MapId stage = GameProgress.Instance.LastMapId;
+        if (!_stageTable.TryGet(stage, out StageData stageData))
         {
             return; // ログは TryGet 内で出る
+        }
+
+        _encounter = stageData.Encounter;
+        if (_encounter == null)
+        {
+            Debug.LogError($"{stageData.name}: EncounterData が設定されていません");
+            return;
         }
 
         // 背景の反映

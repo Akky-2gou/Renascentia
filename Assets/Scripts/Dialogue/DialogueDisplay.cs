@@ -113,6 +113,12 @@ public class DialogueDisplay : MonoBehaviour
         
         // 会話データの最初のセリフを取得
         ShowNextDialogue(false);
+
+        // ステージ中の会話シーンなら、会話のあとに行くシーンを先に読み込んでおく
+        if (!_isInTown && !_isInBattle && StageFlow.Instance != null && StageFlow.Instance.IsInStage)
+        {
+            StageFlow.Instance.PrepareAfterTalk();
+        }
     }
 
     // 次のセリフを表示するメソッド
@@ -246,7 +252,9 @@ public class DialogueDisplay : MonoBehaviour
             _isAutoPlaying = false; // 自動再生中の場合は停止
             _isFastForwarding = false;
 
-            UnityEngine.Debug.Log("エピソード終了．次のシーンに遷移");
+                        UnityEngine.Debug.Log($"エピソード終了: town={_isInTown}, battle={_isInBattle}, " +
+                                  $"StageFlowあり={StageFlow.Instance != null}, " +
+                                  $"ステージ中={(StageFlow.Instance != null && StageFlow.Instance.IsInStage)}");
             
             _isStarted = false;
 
@@ -260,6 +268,20 @@ public class DialogueDisplay : MonoBehaviour
             else if (_isInBattle)
             {
                 _dialoguePanel.SetActive(false);
+            }
+            // 会話シーンなら、ステージの流れに「会話が終わった」ことを伝える（次の行き先は StageFlow が決める）
+            else if (StageFlow.Instance == null)
+            {
+                Debug.LogError("DialogueDisplay: StageFlow が存在しません");
+            }
+            else if (StageFlow.Instance.IsInStage)
+            {
+                Debug.Log("test");
+                StageFlow.Instance.OnTalkFinished();
+            }
+            else
+            {
+                Debug.LogWarning("DialogueDisplay: ステージ外の会話が終わりました。終わったあとの行き先が決まっていません");
             }
 
             return;

@@ -96,6 +96,19 @@ public class BattleWinPresentationManager : MonoBehaviour
         await FadeAsync(1f);
     }
 
+    /// <summary>勝利後のUIのボタンから呼ぶ（Inspector の On Click () に登録する）</summary>
+    public void OnClickNext()
+    {
+        if (StageFlow.Instance == null)
+        {
+            Debug.LogError("BattleWinPresentationManager: StageFlow が存在しません");
+            return;
+        }
+
+        _menu.interactable = false; // 連打で2回呼ばれないように、1回押したらボタンを効かなくする
+        StageFlow.Instance.OnBattleWon();
+    }
+
     private async UniTask FadeAsync(float to)
     {
         // フェード中にもう一度呼ばれたら、前のフェードを止めて今の α から続ける

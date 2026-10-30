@@ -77,11 +77,15 @@ public class SceneNavigator : MonoBehaviour
                 GameProgress.Instance.LastMapId = target.Stage; // 以降の会話やバトルは、ここから読む
                 return true;
 
-            // パラメータが要らないシーン
+            // ステージの外へ出るシーン。ステージの途中で抜けたときのために、ステージの状態を消す
             case SceneId.Title:
             case SceneId.Town:
             case SceneId.TownTutorial:
             case SceneId.Map:
+                if (StageFlow.Instance != null) StageFlow.Instance.LeaveStage();
+                return true;
+
+            // パラメータが要らないシーン
             case SceneId.Battle:
             case SceneId.BattleTutorial:
             case SceneId.TownToMapUI:
