@@ -23,6 +23,7 @@ public class StageSelectPlayer : MonoBehaviour
     [SerializeField] private Transform moveTarget;
     [SerializeField] private string battleSceneName = "MapToBattle";
     [SerializeField] private ConfirmDialogController _battleConfirm;
+    [SerializeField] private int _seId = 3; // 歩きSEのID
 
     private Rigidbody2D targetRb;
     private readonly List<int> pendingRouteIndices = new List<int>();
@@ -239,6 +240,8 @@ public class StageSelectPlayer : MonoBehaviour
             return;
         }
 
+        // 歩きSEをループで鳴らす
+        SoundManager.Instance.PlayLoopSe(_seId);
         BeginRoute(route);
     }
 
@@ -529,6 +532,8 @@ public class StageSelectPlayer : MonoBehaviour
     {
         isMoving = false;
         pendingRouteIndices.Clear();
+        // 歩行SEを止める
+        SoundManager.Instance.StopLoopSe(_seId);
 
         if (currentStageId != MapId.None)
         {

@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     [Header("初期状態での向き")]
     [SerializeField] private ChangeVisualDirection.VisualDirection _initailDirection;
 
+    [Header("サウンド")]
+    [SerializeField] private int _walkSeId = 3;
+
     [Header("プレイヤーがオブジェクトに当たって遷移するシーン")]
     [SerializeField] private TransitionTarget _nextScene;
 
@@ -138,6 +141,11 @@ public class PlayerController : MonoBehaviour
 
                 _isMoving = true;
 
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlayLoopSe(_walkSeId);
+                }
+
                 // Walkアニメーションの開始
                 if (_playerAnimator != null)
                 {
@@ -159,8 +167,10 @@ public class PlayerController : MonoBehaviour
 
     private void StopMove()
     {
-        //SoundManager.Instance.StopSE(); // 歩行SEを止める
-        //isWalkSoundPlaying = false;
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopLoopSe(_walkSeId);
+        }
 
         // 止まってる場合は摩擦を有効化する
         _col.sharedMaterial.friction = _friction;
