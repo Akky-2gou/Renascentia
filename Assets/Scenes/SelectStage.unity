@@ -6286,9 +6286,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameProgress
   _stageProgress: 4
-  _testUnlockedCharacterIds: 010000000200000003000000
+  _testUnlockedCharacterIds: 0100000002000000030000000400000005000000
   _replaceOnApply: 0
   _applyTestUnlockedOnAwake: 0
+  _lastMapId: 0
 --- !u!114 &856717684 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
@@ -7374,6 +7375,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1456864095}
     - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
+      propertyPath: _characterDescription
+      value: 
+      objectReference: {fileID: 1058991471}
+    - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
       propertyPath: _characterDetailPanel
       value: 
       objectReference: {fileID: 1456864096}
@@ -7393,6 +7398,10 @@ PrefabInstance:
       propertyPath: _removeCharactorButton
       value: 
       objectReference: {fileID: 1456864094}
+    - target: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
+      propertyPath: _characterDetailDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 4001972f4e22d4d599dfd9e1a9c5b7e4, type: 2}
     - target: {fileID: 5505882283555852344, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
       propertyPath: m_Name
       value: TeamConpositionManager
@@ -7529,6 +7538,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1058991471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6738893129657552443, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+  m_PrefabInstance: {fileID: 1456864092}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc0e859bbe6a4221b8d56d15ae924f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowCharacterDescription
 --- !u!1 &1073796253
 GameObject:
   m_ObjectHideFlags: 0
