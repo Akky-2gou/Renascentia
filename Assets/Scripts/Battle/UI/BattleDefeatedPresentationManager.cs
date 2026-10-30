@@ -40,6 +40,11 @@ public class BattleDefeatedPresentationManager : MonoBehaviour
     [SerializeField] private GameObject _backGroundObj;
     [SerializeField] private Image _backGround;
 
+    [Header("メニュー画面")]
+    [SerializeField] private CanvasGroup _menu;
+    [SerializeField, Min(0f)] private float _fadeSeconds = 0.25f; // フェードにかける秒数
+    private CancellationTokenSource _fadeCts;
+
     
     // BMからできるようになったら消してね
     [Header("演出確認用")]
@@ -56,6 +61,14 @@ public class BattleDefeatedPresentationManager : MonoBehaviour
         // テキストを非表示にし，背景をリセット
         _battleDefeatedText.enabled = false;
         _backGround.material.SetFloat("_FillAmount", 0f);
+
+        // 敗北メニューは最初は隠しておく
+        SetVisibleImmediate(false);
+    }
+
+    private void OnDestroy()
+    {
+        CancelFade();
     }
 
     // テキストを隠す画像のノイズ生成
@@ -131,5 +144,46 @@ public class BattleDefeatedPresentationManager : MonoBehaviour
 
         // アニメーション終了まで待つ
         await animation;
+
+        await FadeAsync(1f);
+    }
+
+    private async UniTask FadeAsync(float to)
+    {
+        // フェード中にもう一度押されたら、前のフェードを止めて今の α から続ける
+        CancelFade();
+        _fadeCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+        CancellationToken ct = _fadeCts.Token;
+
+        // 開くときは最初から操作を受け付ける。閉じるときは、すぐ操作できなくする
+        _menu.interactable = to > 0f;
+        _menu.blocksRaycasts = to > 0f;
+
+        float from = _menu.alpha;
+        float elapsed = 0f;
+        while (elapsed < _fadeSeconds)
+        {
+            elapsed += Time.unscaledDeltaTime; // timeScale = 0 でも進む
+            _menu.alpha = Mathf.Lerp(from, to, elapsed / _fadeSeconds);
+
+            if (await UniTask.Yield(PlayerLoopTiming.Update, ct).SuppressCancellationThrow()) return;
+        }
+        _menu.alpha = to;
+    }
+
+    private void SetVisibleImmediate(bool visible)
+    {
+        CancelFade();
+        _menu.alpha = visible ? 1f : 0f;
+        _menu.interactable = visible;
+        _menu.blocksRaycasts = visible;
+    }
+
+    private void CancelFade()
+    {
+        if (_fadeCts == null) return;
+        _fadeCts.Cancel();
+        _fadeCts.Dispose();
+        _fadeCts = null;
     }
 }

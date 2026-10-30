@@ -94,8 +94,8 @@ public class BattleStartPresentationManager : MonoBehaviour
         }
 
         // カメラも移動
-        Vector3 cameraTargetPos = _camera.position;
-        _camera.position -= new Vector3(_allyWalkingVector.x, _allyWalkingVector.y, 0);
+        // Vector3 cameraTargetPos = _camera.position;
+        // _camera.position -= new Vector3(_allyWalkingVector.x, _allyWalkingVector.y, 0);
 
         // 見た目の歩行アニメーション開始
         foreach (Animator animator in _allyAnimators) {
@@ -115,6 +115,7 @@ public class BattleStartPresentationManager : MonoBehaviour
         }
 
         // カメラアニメーションの設定
+        /*
         animations.Add(DOTween.Sequence()
                        .Join(_camera.DOMove(cameraTargetPos, _allyWalkingDuration))
                        .SetLink(_cameraObj) // オブジェクトが消えたら一緒に消す
@@ -122,6 +123,7 @@ public class BattleStartPresentationManager : MonoBehaviour
                        .SetEase(Ease.OutSine) // イージング設定
                        .AsyncWaitForCompletion() // 完了まで待つ
                        .AsUniTask()); // Unitask型に変換
+        */
 
         // 全ての歩行アニメーション終了まで待つ
         await UniTask.WhenAll(animations);
