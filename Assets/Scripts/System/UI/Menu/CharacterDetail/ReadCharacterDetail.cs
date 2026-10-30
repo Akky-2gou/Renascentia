@@ -43,7 +43,6 @@ public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 		if (gameProgress == null)
 		{
 			_canShowDetail = false;
-			Debug.LogError("gameProgressがnull.");
 			return;
 		}
 
