@@ -42,6 +42,11 @@ public class BattleManager : MonoBehaviour
     [Header("ボタンUI")]
     [SerializeField] GameObject AttackButton;
     [SerializeField] GameObject SkillButton;
+    [SerializeField] GameObject CancelButton;
+
+    private bool _isSelectingTarget = false;             // 対象を選んでいる最中か
+    private CharacterStatus[] _allTargets;               // 全体対象スキルで、マークを出している相手
+    private Action<CharacterStatus> _allTargetsHandler;  // 全体対象スキルで、クリックに登録した処理
 
     // スキルゲージの取得
     [Header("スキルゲージ")]
@@ -472,6 +477,7 @@ public class BattleManager : MonoBehaviour
 
             // プレイヤーの番になったらボタンを表示して入力待ちにする
             ButtunUISetActive(true);
+            CancelButton.SetActive(true);
 
             // ターン開始時のパッシブの発動
             if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.TurnStart)
@@ -491,6 +497,8 @@ public class BattleManager : MonoBehaviour
     private void OnNormalAttackClicked(CharacterStatus defender)
     {
         PlayTargetSelectSe();
+        _isSelectingTarget = false;
+        CancelButton.SetActive(false); // 攻撃が始まったら、もう戻れない
 
         foreach (var character in _characterQueue)
         {
@@ -567,6 +575,8 @@ public class BattleManager : MonoBehaviour
     private void OnSkillAttackClicked(CharacterStatus target)
     {
         PlayTargetSelectSe();
+        _isSelectingTarget = false;
+        CancelButton.SetActive(false); // スキルが始まったら、もう戻れない
 
         foreach (var character in _characterQueue)
         {
@@ -694,6 +704,7 @@ public class BattleManager : MonoBehaviour
     private void StartNormalAttackTargeting()
     {
         ButtunUISetActive(false);
+        _isSelectingTarget = true;
 
         foreach (var character in _characterQueue)
         {
@@ -748,6 +759,7 @@ public class BattleManager : MonoBehaviour
         if (skill == null) return; // 見つからなければ何もしない
 
         ButtunUISetActive(false);
+        _isSelectingTarget = true;
 
         // チュートリアル戦なら対象選択をさせる
         if (_isTutorial)
@@ -852,6 +864,10 @@ public class BattleManager : MonoBehaviour
                 t.OnClicked -= handler;
                 t.HideTargetMark();
             }
+            _allTargets = null;
+            _allTargetsHandler = null;
+            _isSelectingTarget = false;
+            CancelButton.SetActive(false); // スキルが始まったら、もう戻れない
 
             SkillAttack(targets, skill).Forget(); // 全員に対して効果を発動する
         };
@@ -861,6 +877,56 @@ public class BattleManager : MonoBehaviour
             t.ShowTargetMark(); // ★ホバーなしで、最初から常時表示する
             t.OnClicked += handler;
         }
+
+        // キャンセルされたときに外せるよう、覚えておく
+        _allTargets = targets;
+        _allTargetsHandler = handler;
+    }
+
+    /// <summary>
+    /// リセット/キャンセルボタンが押された際の処理（Inspector の On Click () に登録する）
+    /// 対象選択中なら、選択をやめて攻撃・スキルのボタンに戻る（コストはそのまま）
+    /// それ以外なら、選んでいるコストを 0 に戻す
+    /// </summary>
+    public void OnClickedCancelButton()
+    {
+        if (_isSelectingTarget)
+        {
+            CancelTargetSelection();
+            ButtunUISetActive(true);
+            return;
+        }
+
+        if (_skillCost == 0) return; // すでに 0 なら何もしない
+
+        _skillCost = 0;
+        skillGauge.SetGauge(_skillCost); // スキルのフェードと同じ時間で戻る（攻撃ボタンの画像も）
+        skillGaugeBar.SetGauge((int)_currentSP, _skillCost, MAX_SP);
+    }
+
+    // 対象選択をやめる。クリックの登録と、標的マークを全部外す
+    private void CancelTargetSelection()
+    {
+        foreach (var character in _characterQueue)
+        {
+            character.OnClicked -= OnNormalAttackClicked;
+            character.OnClicked -= OnSkillAttackClicked;
+            character.SetHoverEnabled(false); // ターゲットアイコンの非表示
+        }
+
+        // 全体対象スキルの選択中だった場合
+        if (_allTargetsHandler != null && _allTargets != null)
+        {
+            foreach (var t in _allTargets)
+            {
+                t.OnClicked -= _allTargetsHandler;
+                t.HideTargetMark();
+            }
+        }
+        _allTargets = null;
+        _allTargetsHandler = null;
+
+        _isSelectingTarget = false;
     }
 
     private void PlayTargetSelectSe()

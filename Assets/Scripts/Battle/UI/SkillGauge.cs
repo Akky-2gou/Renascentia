@@ -18,6 +18,9 @@ public class SkillGauge : MonoBehaviour
     [Header("ゲージ内部のマスク")]
     [SerializeField] private RectTransform[] innerMasks;
 
+    [Header("攻撃ボタンの画像（0: 通常攻撃, 1: SP1, 2: SP2, 3: SP3）")]
+    [SerializeField] private Image[] attackButtonImages;
+
     [Header("アニメーション設定")]
     [SerializeField] private float transitionTime = 0.3f;
 
@@ -44,6 +47,12 @@ public class SkillGauge : MonoBehaviour
         if (innerMasks == null || innerMasks.Length != 3)
         {
             Debug.LogError("SkillGauge: innerMasksには3個のRectTransformを設定してください。");
+            return;
+        }
+
+        if (attackButtonImages == null || attackButtonImages.Length != 4)
+        {
+            Debug.LogError("SkillGauge: attackButtonImagesには4枚のImageを設定してください。");
             return;
         }
 
@@ -84,6 +93,7 @@ public class SkillGauge : MonoBehaviour
 
         UpdateOuterImages(currentValue);
         UpdateInnerImages(currentValue);
+        UpdateAttackButtonImages(currentValue);
     }
 
 
@@ -111,6 +121,7 @@ public class SkillGauge : MonoBehaviour
 
                 // Innerの更新
                 UpdateInnerImages(currentValue);
+                UpdateAttackButtonImages(currentValue);
                 
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
@@ -120,6 +131,7 @@ public class SkillGauge : MonoBehaviour
 
             UpdateOuterImages(currentValue);
             UpdateInnerImages(currentValue);
+            UpdateAttackButtonImages(currentValue);
         }
         catch (OperationCanceledException)
         {
@@ -201,6 +213,33 @@ public class SkillGauge : MonoBehaviour
             SetAlpha(innerImages[1], 1f - t);
             SetAlpha(innerImages[2], t);
         }
+    }
+
+    // =========================================================
+    // 攻撃ボタンの画像の更新（Outerと同じく、隣り合う2枚をα値で入れ替える）
+    // =========================================================
+    private void UpdateAttackButtonImages(float value)
+    {
+        if (attackButtonImages == null || attackButtonImages.Length != 4) return; // Awake でエラーを出している
+
+        value = Mathf.Clamp(value, 0f, 3f);
+
+        int lowerIndex = Mathf.FloorToInt(value);
+
+        // 3.0の場合は3だけ表示
+        if (lowerIndex >= 3)
+        {
+            SetAllAlpha(attackButtonImages, 0f);
+            SetAlpha(attackButtonImages[3], 1f);
+            return;
+        }
+
+        int upperIndex = lowerIndex + 1;
+        float t = value - lowerIndex;
+
+        SetAllAlpha(attackButtonImages, 0f);
+        SetAlpha(attackButtonImages[lowerIndex], 1f - t);
+        SetAlpha(attackButtonImages[upperIndex], t);
     }
 
     // =========================================================
