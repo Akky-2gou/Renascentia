@@ -14,6 +14,7 @@ public static class DamageCalculator
     private const float RANDOM_VARIANCE_MIN = 0.85f; // 乱数の下限
     private const float RANDOM_VARIANCE_MAX = 1.0f; // 乱数の上限
     private const float WEAKNESS_MULTIPLIER = 1.5f; // 苦手属性を突いたときの倍率
+    private const float DAMAGE_DIVISOR = 50f; // 元ダメージを割る値（威力 × 攻撃 / 防御 / 50）
 
     /// <summary>
     /// ダメージ演算処理
@@ -27,7 +28,7 @@ public static class DamageCalculator
         BuffTotals buffs = context.CurrentBuffs; // 今回の行動で使う強化の合計
         
         float power = ctx.Power * buffs.PowerMultiplier;          // 威力に強化を掛ける
-        float baseDamage = power * ((float)attacker.Attack / Mathf.Max(defender.Defense, 1));
+        float baseDamage = power * ((float)attacker.Attack / Mathf.Max(defender.Defense, 1)) / DAMAGE_DIVISOR;
         baseDamage = Mathf.Max(baseDamage, 1f); // 最低保証ダメージ
 
         // 2 属性補正
