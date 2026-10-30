@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8256700687684904071}
   - component: {fileID: 7634175602757235026}
+  - component: {fileID: 1733815397966900362}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -58,6 +59,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1733815397966900362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107887494881235669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4709f4d7e0a645499f4ae5372deb811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillEffect
 --- !u!1 &327331437959670975
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +105,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8198921152321745739
 SpriteRenderer:
-  serializedVersion: 3
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -149,7 +162,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
 --- !u!1 &521600576090916621
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +261,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -16}
 --- !u!212 &3050432035193542719
 SpriteRenderer:
-  serializedVersion: 3
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -306,7 +318,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
 --- !u!114 &2237988049392127166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +339,6 @@ MonoBehaviour:
     m_Extent: {x: 5.448865, y: 0.37012768, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
-  m_BoundsMode: 0
 --- !u!1 &4995791858069287859
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +373,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &959364647968734370
 SpriteRenderer:
-  serializedVersion: 3
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -420,7 +430,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
 --- !u!1 &6953794015442640941
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,7 +498,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 16}
 --- !u!212 &6186400329842190622
 SpriteRenderer:
-  serializedVersion: 3
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -546,7 +555,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
 --- !u!114 &675214128700386008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,7 +576,6 @@ MonoBehaviour:
     m_Extent: {x: 5.448865, y: 0.37012768, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
-  m_BoundsMode: 0
 --- !u!1 &7984440047555145360
 GameObject:
   m_ObjectHideFlags: 0

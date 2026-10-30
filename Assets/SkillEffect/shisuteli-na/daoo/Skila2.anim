@@ -7,7 +7,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Skila2
-  serializedVersion: 8
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -397,7 +397,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1700974937
       attribute: 2526845255
@@ -407,7 +406,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1700974937
       attribute: 2334886179
@@ -417,7 +415,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1700974937
       attribute: 304273561
@@ -427,7 +424,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 0
       attribute: 2238339752
@@ -437,7 +433,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1700974937
       attribute: 4215373228
@@ -447,7 +442,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 0
       attribute: 2363233923
@@ -457,7 +451,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 0
       attribute: 1750992286
@@ -467,7 +460,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 0
       attribute: 4225443349
@@ -477,7 +469,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 0
       attribute: 1900360927
@@ -487,7 +478,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -876,4 +866,18 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 3
+    functionName: AnimEvent_OnHit
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 4.016667
+    functionName: AnimEvent_OnAnimationEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

@@ -55,6 +55,13 @@ public class CharacterData : ScriptableObject
     [SerializeField] PassiveData _passive;
     public PassiveData Passive => _passive;
 
+    [Header("スキル演出（スキル1 → 演出1、スキル2 → 演出2、スキル3 → 両方）")]
+    [SerializeField] SkillEffectSlot _skillEffect1;
+    public SkillEffectSlot SkillEffect1 => _skillEffect1;
+
+    [SerializeField] SkillEffectSlot _skillEffect2;
+    public SkillEffectSlot SkillEffect2 => _skillEffect2;
+
     [Header("別の形態（形態変化するキャラのみ設定）")]
     [SerializeField] CharacterData _otherForm;
     public CharacterData OtherForm => _otherForm;

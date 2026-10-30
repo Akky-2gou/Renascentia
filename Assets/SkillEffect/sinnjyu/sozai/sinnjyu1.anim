@@ -7,7 +7,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: sinnjyu1
-  serializedVersion: 8
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -1129,7 +1129,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 101335452
       attribute: 1
@@ -1139,7 +1138,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1060662067
       attribute: 1
@@ -1149,7 +1147,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 2788244105
       attribute: 1
@@ -1159,7 +1156,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 294393797
       attribute: 1
@@ -1169,7 +1165,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 2986854106
       attribute: 4
@@ -1179,7 +1174,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1015595321
       attribute: 4
@@ -1189,7 +1183,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 4028809639
       attribute: 4
@@ -1199,7 +1192,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1374885512
       attribute: 3
@@ -1209,7 +1201,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 3371845426
       attribute: 3
@@ -1219,7 +1210,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1469037189
       attribute: 3
@@ -1229,7 +1219,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1190318332
       attribute: 3
@@ -1239,7 +1228,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 4278782740
       attribute: 3
@@ -1249,7 +1237,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 1060662067
       attribute: 3
@@ -1259,7 +1246,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     - serializedVersion: 2
       path: 2788244105
       attribute: 3
@@ -1269,7 +1255,6 @@ AnimationClip:
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
-      metaData: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -3752,4 +3737,18 @@ AnimationClip:
     flags: 0
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 2.15
+    functionName: AnimEvent_OnHit
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 4
+    functionName: AnimEvent_OnAnimationEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

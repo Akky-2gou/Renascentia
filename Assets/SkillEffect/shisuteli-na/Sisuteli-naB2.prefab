@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7464463746605909391}
   - component: {fileID: 3236936879223048108}
   - component: {fileID: 5866513087423277901}
+  - component: {fileID: 627080793040722874}
   m_Layer: 0
   m_Name: Sisuteli-naB2
   m_TagString: Untagged
@@ -75,6 +76,18 @@ MonoBehaviour:
   y: 0
   yw: 0
   obj: {fileID: 1252438980277799305, guid: 4453d9ad03c3cae4e8c09ff3f6b9fa40, type: 3}
+--- !u!114 &627080793040722874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207935822041075728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4709f4d7e0a645499f4ae5372deb811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillEffect
 --- !u!1 &6184747536575103212
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +122,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5415410020830347344
 SpriteRenderer:
-  serializedVersion: 3
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -166,4 +179,3 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
