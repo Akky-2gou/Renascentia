@@ -32,10 +32,12 @@ MonoBehaviour:
   _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}
   _skillEffect1:
     _prefab: {fileID: -2807269356095098569, guid: 8bf604eff73f6f246b6a4a47bd02b612, type: 3}
-    _offset: {x: 0, y: 0}
+    _offset: {x: -3.5, y: -2.5}
+    _scale: {x: 0.3, y: 0.3}
   _skillEffect2:
     _prefab: {fileID: 1733815397966900362, guid: 49b6961672e529e4ea4bf4a77af1b673, type: 3}
-    _offset: {x: 0, y: 0}
+    _offset: {x: -7, y: -3}
+    _scale: {x: 0.3, y: 0.3}
   _otherForm: {fileID: 0}
   _enemyBehavior:
     _defaultActions: []
