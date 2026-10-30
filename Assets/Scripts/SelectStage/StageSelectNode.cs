@@ -40,6 +40,10 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     public MapId StageId => stageId;
 
+    public int SortingOrder => spriteRenderer != null ? spriteRenderer.sortingOrder : int.MinValue;
+
+    public int SortingLayerId => spriteRenderer != null ? spriteRenderer.sortingLayerID : int.MinValue;
+
     public StageSelectNode GetNextNode(NavigationKey navigationKey)
     {
         switch (navigationKey)
@@ -63,6 +67,17 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
             default:
                 return null;
         }
+    }
+
+    public bool ContainsWorldPoint(Vector2 worldPoint)
+    {
+        if (spriteRenderer == null)
+        {
+            return false;
+        }
+
+        Vector3 point = new Vector3(worldPoint.x, worldPoint.y, spriteRenderer.bounds.center.z);
+        return spriteRenderer.bounds.Contains(point);
     }
 
     // 初期化して参照先と表示を整える
@@ -133,7 +148,7 @@ public class StageSelectNode : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
         if (stageSelectKeyboardController != null)
         {
-            stageSelectKeyboardController.SelectStageById(stageId);
+            stageSelectKeyboardController.SelectNode(this);
         }
 
         if (stageSelectPlayer.CurrentStageId == stageId)

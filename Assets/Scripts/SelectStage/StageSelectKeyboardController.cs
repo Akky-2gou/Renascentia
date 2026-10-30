@@ -9,12 +9,14 @@ public class StageSelectKeyboardController : MonoBehaviour
 
     private readonly List<StageSelectNode> stageNodes = new List<StageSelectNode>();
     private StageSelectPlayer stageSelectPlayer;
+    private Camera mainCamera;
     private int selectedIndex = -1;
     private StageSelectNode selectedNode;
 
     private void Awake()
     {
         stageSelectPlayer = FindFirstObjectByType<StageSelectPlayer>();
+        mainCamera = Camera.main;
 
         StageSelectNode[] foundNodes = FindObjectsByType<StageSelectNode>(FindObjectsSortMode.None);
         stageNodes.AddRange(foundNodes);
@@ -53,6 +55,14 @@ public class StageSelectKeyboardController : MonoBehaviour
         if (Keyboard.current == null)
         {
             return;
+        }
+
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (TrySelectNodeByMousePosition())
+            {
+                return;
+            }
         }
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
@@ -113,6 +123,24 @@ public class StageSelectKeyboardController : MonoBehaviour
 
         selectedIndex = nextIndex;
         selectedNode = stageNodes[selectedIndex];
+        ApplySelection();
+    }
+
+    public void SelectNode(StageSelectNode node)
+    {
+        if (node == null)
+        {
+            return;
+        }
+
+        int nextIndex = stageNodes.IndexOf(node);
+        if (nextIndex < 0 || nextIndex == selectedIndex)
+        {
+            return;
+        }
+
+        selectedIndex = nextIndex;
+        selectedNode = node;
         ApplySelection();
     }
 
@@ -184,5 +212,46 @@ public class StageSelectKeyboardController : MonoBehaviour
             selectedNode = stageNodes[selectedIndex];
             Debug.Log("選択中ノード: " + stageNodes[selectedIndex].StageId);
         }
+    }
+
+    private bool TrySelectNodeByMousePosition()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                return false;
+            }
+        }
+
+        Vector2 mouseScreen = Mouse.current.position.ReadValue();
+        Vector3 world = mainCamera.ScreenToWorldPoint(new Vector3(mouseScreen.x, mouseScreen.y, Mathf.Abs(mainCamera.transform.position.z)));
+        Vector2 world2D = new Vector2(world.x, world.y);
+
+        StageSelectNode bestNode = null;
+        for (int i = 0; i < stageNodes.Count; i++)
+        {
+            StageSelectNode node = stageNodes[i];
+            if (node == null || !node.ContainsWorldPoint(world2D))
+            {
+                continue;
+            }
+
+            if (bestNode == null
+                || node.SortingLayerId > bestNode.SortingLayerId
+                || (node.SortingLayerId == bestNode.SortingLayerId && node.SortingOrder > bestNode.SortingOrder))
+            {
+                bestNode = node;
+            }
+        }
+
+        if (bestNode == null)
+        {
+            return false;
+        }
+
+        bestNode.TrySelect();
+        return true;
     }
 }

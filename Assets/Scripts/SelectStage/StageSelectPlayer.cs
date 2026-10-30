@@ -24,6 +24,8 @@ public class StageSelectPlayer : MonoBehaviour
     [SerializeField, Range(0.1f, 3f)] private float moveSpeedScale = 1f;
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
+    [Header("位置合わせ設定")]
+    [SerializeField] private Vector3 pivotToFootOffset = Vector3.zero;
     [SerializeField] private string battleSceneName = "MapToBattle";
     [SerializeField] private ConfirmDialogController _battleConfirm;
     [SerializeField] private int _seId = 3; // 歩きSEのID
@@ -432,7 +434,8 @@ public class StageSelectPlayer : MonoBehaviour
             return false;
         }
 
-        currentTargetPosition = target.marker.position + target.offset;
+        // ノード中心に足元を合わせるため、moveTargetの中心位置を足元オフセット分だけ補正する
+        currentTargetPosition = target.marker.position + target.offset - pivotToFootOffset;
 
         // 目標位置と現在位置を比較し，進行方向を向く
         if (_groupChangeVisualDirection != null)

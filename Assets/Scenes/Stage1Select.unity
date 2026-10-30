@@ -6309,7 +6309,7 @@ Transform:
   m_GameObject: {fileID: 868282608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7, y: -4, z: 0}
+  m_LocalPosition: {x: -2.7, y: -7.8, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6412,7 +6412,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6692,6 +6692,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
+  pivotToFootOffset: {x: -0.5, y: -4.5, z: 0}
   battleSceneName: MapToBattle
   _battleConfirm: {fileID: 1600000473}
   _seId: 3
@@ -6923,7 +6924,7 @@ Transform:
   m_GameObject: {fileID: 943891169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.86, y: -15.84, z: 0}
+  m_LocalPosition: {x: 82, y: -13, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -10342,7 +10343,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10384,8 +10385,8 @@ Transform:
   m_GameObject: {fileID: 1685583616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 9.9, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: -4.3, y: 11.5, z: 0}
+  m_LocalScale: {x: 12, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -11719,6 +11720,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
+  pivotToFootOffset: {x: 0, y: 0, z: 0}
   battleSceneName: 
   _battleConfirm: {fileID: 0}
   _seId: 3
@@ -11829,7 +11831,7 @@ Transform:
   m_GameObject: {fileID: 1986245013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.2, y: -15, z: 0}
+  m_LocalPosition: {x: 81.5, y: -17.9, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11932,7 +11934,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12569,7 +12571,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12611,7 +12613,7 @@ Transform:
   m_GameObject: {fileID: 2144819570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.8, y: -7, z: 0}
+  m_LocalPosition: {x: 30.8, y: -10.1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
