@@ -589,23 +589,30 @@ public class BattleManager : MonoBehaviour
         skill.BeforeDamage(_context); // スキル自身が付ける強化（この攻撃に乗せるもの）
         _context.LockBuffs(); // パッシブが付けた強化も含めて、今回の行動で使う強化を確定する
 
-        // イベントを await するための準備
-        // var skillAnimTcs = new UniTaskCompletionSource(); スキルアニメーションタイミングのイベント
-        // var endTcs = new UniTaskCompletionSource();
-
-        // Actionが呼ばれたらTCSを完了(TrySetResult)させる
-        // Action onSkillAnim = () => skillAnimTcs.TrySetResult();
-        // Action onEnd = () => endTcs.TrySetResult();
-
-        // アタッカーのイベントに登録
-        // attacker.OnSkillAnimEvent += onSkillAnim;
-        // attacker.OnAnimationEndEvent += onEnd;
-
-        // attackerのスキルアニメーション開始
+        // attackerのスキルアニメーション開始（キャラ自身のモーション）
         attacker.PlaySkillAnimation();
 
-        // アニメーション上で OnSkillAnim が呼ばれるまで待機(実際にスキルエフェクトが描画される瞬間まで待機)
-        // await skillAnimTcs;
+        // スキルの演出を生成する（生成と同時に、演出のアニメーションが再生される）
+        List<SkillEffect> effects = attacker.SpawnSkillEffects(skill.Cost);
+
+        // 演出のイベントを await するための準備
+        // ヒットは「どれか1つ目の演出のヒット」で1回だけ、終了は「全部の演出の終了」を待つ
+        var hitTcs = new UniTaskCompletionSource();
+        var endTasks = new List<UniTask>();
+        foreach (SkillEffect effect in effects)
+        {
+            effect.HitEvent += () => hitTcs.TrySetResult();
+
+            var endTcs = new UniTaskCompletionSource();
+            effect.EndEvent += () => endTcs.TrySetResult();
+            endTasks.Add(endTcs.Task);
+        }
+
+        // 演出のヒットのタイミングまで待つ（演出が1つも出なかったときは、待たずに進める）
+        if (effects.Count > 0)
+        {
+            await hitTcs.Task;
+        }
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
         skill.Execute(_context); // 通常攻撃はダメージを与えるだけ
@@ -619,12 +626,8 @@ public class BattleManager : MonoBehaviour
             target.PlayDamagedAnimation(); // 被弾アニメーション
         }
 
-        // 攻撃アニメーションが最後まで終わるまで待つ
-        // await endTcs.Task;
-
-        // イベントの登録を解除
-        // attacker.OnHitEvent -= onSkillAnim;
-        // attacker.OnAnimationEndEvent -= onEnd;
+        // 全部の演出が最後まで終わるまで待つ（演出は終わると自分で消える）
+        await UniTask.WhenAll(endTasks);
 
         // スキル終了後のパッシブの発動
         if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterSkillAttack

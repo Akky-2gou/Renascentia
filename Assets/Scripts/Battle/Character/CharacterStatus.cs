@@ -303,6 +303,69 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     }
 
     // ====================================================
+    // スキルエフェクトのアニメーションに関する処理
+    // ====================================================
+
+    /// <summary>
+    /// スキルの演出を、自分の位置（＋ずれ）に生成する。コスト1 → 演出1、2 → 演出2、3 → 両方
+    /// 生成した演出を返す（設定が足りないものはエラーを出して飛ばす）
+    /// </summary>
+    public List<SkillEffect> SpawnSkillEffects(int cost)
+    {
+        var effects = new List<SkillEffect>();
+
+        if (_data == null)
+        {
+            Debug.LogError($"{name}: CharacterData が設定されていないため、スキル演出を出せません");
+            return effects;
+        }
+
+        switch (cost)
+        {
+            case 1:
+                TrySpawnSkillEffect(_data.SkillEffect1, effects);
+                break;
+            case 2:
+                TrySpawnSkillEffect(_data.SkillEffect2, effects);
+                break;
+            case 3:
+                TrySpawnSkillEffect(_data.SkillEffect1, effects);
+                TrySpawnSkillEffect(_data.SkillEffect2, effects);
+                break;
+            default:
+                Debug.LogError($"{_data.name}: コスト{cost}のスキル演出はありません");
+                break;
+        }
+        return effects;
+    }
+
+    // 演出を1つ生成して、リストに入れる
+    private void TrySpawnSkillEffect(SkillEffectSlot slot, List<SkillEffect> effects)
+    {
+        if (slot == null || slot.Prefab == null)
+        {
+            Debug.LogError($"{_data.name}: スキル演出のプレハブが設定されていません");
+            return;
+        }
+
+        Vector3 position = transform.position + (Vector3)slot.Offset;
+        SkillEffect effect = Instantiate(slot.Prefab, position, Quaternion.identity);
+
+        // 倍率が 0 だと見えなくなるので、設定ミスとして知らせて、そのままの大きさで出す
+        Vector2 scale = slot.Scale;
+        if (scale.x == 0f || scale.y == 0f)
+        {
+            Debug.LogWarning($"{_data.name}: スキル演出の倍率が 0 です。倍率 1 で表示します");
+            scale = Vector2.one;
+        }
+
+        Vector3 baseScale = effect.transform.localScale; // プレハブ本来の大きさ
+        effect.transform.localScale = new Vector3(baseScale.x * scale.x, baseScale.y * scale.y, baseScale.z);
+
+        effects.Add(effect);
+    }
+
+    // ====================================================
     // ターゲットマークに関する処理
     // ====================================================
 
