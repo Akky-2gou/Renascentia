@@ -10,6 +10,7 @@ using System;
 using Unity.VisualScripting;
 using TMPro;
 using Battle;
+using UnityEngine.UI;
 
 /*
  * バトルシステムマネージャー
@@ -32,12 +33,15 @@ public class BattleManager : MonoBehaviour
     BattleContext _context; // 戦闘情報
 
     [Header("出現する敵")]
-    [SerializeField] private EncounterData _encounter; // この戦闘の敵配置
+    [SerializeField] private EncounterTable _encounterTable; // 全戦闘の一覧
+    private EncounterData _encounter; // 今回の戦闘(Start で一覧から決める)
+
+    [Header("背景")]
+    [SerializeField] private SpriteRenderer _backgroundRenderer; // EncounterData の背景を表示する先
 
     [Header("ボタンUI")]
     [SerializeField] GameObject AttackButton;
     [SerializeField] GameObject SkillButton;
-    [SerializeField] GameObject SkillAttackButtun;
 
     // スキルゲージの取得
     [Header("スキルゲージ")]
@@ -91,13 +95,40 @@ public class BattleManager : MonoBehaviour
         // キャラクターの初期化処理
         // ==================================================================
 
-        if (_encounter == null)
+        if (_encounterTable == null)
         {
-            Debug.LogError("EncounterDataが設定されていません");
+            Debug.LogError("EncounterTableが設定されていません");
             return;
         }
 
+        if (GameProgress.Instance == null)
+        {
+            Debug.LogError("GameProgressが見つかりません。GameProgressのあるシーンから始めてください");
+            return;
+        }
+
+        MapId stageNum = GameProgress.Instance.LastMapId;
+        if (!_encounterTable.TryGet(stageNum, out _encounter))
+        {
+            return; // ログは TryGet 内で出る
+        }
+
+        // 背景の反映
+        if (_backgroundRenderer == null)
+        {
+            Debug.LogError("背景のSpriteRendererが設定されていません");
+        }
+        else if (_encounter.Background == null)
+        {
+            Debug.LogWarning($"{_encounter.name}: 背景画像が設定されていません");
+        }
+        else
+        {
+            _backgroundRenderer.sprite = _encounter.Background;
+        }
+
         _characterQueue = new Queue<CharacterStatus>(); // キューを初期化する
+
         _context = new BattleContext(_characterQueue); // 同じキューを渡す
         _context.FormChangeRequested += ChangeForm; // 形態変化の要求を受け取る
 
@@ -611,9 +642,22 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 攻撃ボタンが押された際の処理
+    /// 攻撃ボタンが押された際の処理。スキルゲージが0なら通常攻撃、1以上ならスキル攻撃
     /// </summary>
     public void OnClickedAttackButton()
+    {
+        if (_skillCost == 0)
+        {
+            StartNormalAttackTargeting();
+        }
+        else
+        {
+            StartSkillAttackTargeting();
+        }
+    }
+
+    // 通常攻撃の対象選択を始める
+    private void StartNormalAttackTargeting()
     {
         ButtunUISetActive(false);
 
@@ -621,7 +665,7 @@ public class BattleManager : MonoBehaviour
         {
             if (character.BattleUnitType == BattleUnitType.Enemy && character.Alive)
             {
-                character.OnClicked += OnNormalAttackClicked; 
+                character.OnClicked += OnNormalAttackClicked;
                 character.SetHoverEnabled(true); // ターゲットアイコンの表示
             }
         }
@@ -659,9 +703,8 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// スキル攻撃ボタンが押された際の処理
     /// </summary>
-    public void OnClickedSkillAtackButtun()
+    public void StartSkillAttackTargeting()
     {
-        if (_skillCost == 0) return;
 
         CharacterStatus attacker = _characterQueue.Peek();
         SkillData skill = GetSkillByCost(attacker, _skillCost);
@@ -784,16 +827,8 @@ public class BattleManager : MonoBehaviour
     // ボタンUIの表示と非表示
     private void ButtunUISetActive(bool display)
     {
-        if (display)
-        {
-            AttackButton.SetActive(true);
-            SkillButton.SetActive(true);
-            SkillAttackButtun.SetActive(true);
-        } else {
-            AttackButton.SetActive(false);
-            SkillButton.SetActive(false);
-            SkillAttackButtun.SetActive(false);
-        }
+        AttackButton.SetActive(display);
+        SkillButton.SetActive(display);
     }
 
     /// <summary>
@@ -835,9 +870,39 @@ public class BattleManager : MonoBehaviour
         skill.BeforeDamage(_context); // スキル自身が付ける強化
         _context.LockBuffs();         // 今回の行動で使う強化を確定する
 
+        // イベントを await するための準備(プレイヤーの通常攻撃と同じ)
+        var hitTcs = new UniTaskCompletionSource();
+        var endTcs = new UniTaskCompletionSource();
+        Action onHit = () => hitTcs.TrySetResult();
+        Action onEnd = () => endTcs.TrySetResult();
+
+        attacker.OnHitEvent += onHit;
+        attacker.OnAnimationEndEvent += onEnd;
+
+        // 敵の攻撃アニメーション開始
+        attacker.PlayAttackAnimation();
+
+        // アニメーション上で OnHit が呼ばれるまで待機
+        await hitTcs.Task;
+
         skill.Execute(_context);
         _context.ConsumeLockedBuffs();               // 使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
+
+        foreach (var target in targets)
+        {
+            // 敵が味方(敵側)に使う強化などでは、被弾アニメーションを出さない
+            if (target.BattleUnitType == BattleUnitType.Player)
+            {
+                target.PlayDamagedAnimation();
+            }
+        }
+
+        // 攻撃アニメーションが最後まで終わるまで待つ
+        await endTcs.Task;
+
+        attacker.OnHitEvent -= onHit;
+        attacker.OnAnimationEndEvent -= onEnd;
 
         // スキル終了後のパッシブの発動
         if (attacker.Passive.PassiveTiming == PassiveTiming.AfterAction) // 敵はスキル攻撃しかないので、AfterActionのみ
