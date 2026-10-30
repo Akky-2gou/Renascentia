@@ -134,6 +134,11 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        PlaceOnLastMapNode();
+    }
+
     // 移動中のキャラクター位置を更新する（Updateは使わずコルーチンで実行）
     private IEnumerator MoveRouteCoroutine()
     {
@@ -182,6 +187,46 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         movementCoroutine = null;
+    }
+
+    // LastMapIdに対応するノードへ初期配置する
+    private void PlaceOnLastMapNode()
+    {
+        if (moveTarget == null || stageTargets == null || stageTargets.Count == 0)
+        {
+            return;
+        }
+
+        if (GameProgress.Instance == null)
+        {
+            return;
+        }
+
+        MapId lastMapId = GameProgress.Instance.LastMapId;
+        if (lastMapId == MapId.None)
+        {
+            return;
+        }
+
+        int lastIndex = GetStageIndexById(lastMapId);
+        if (lastIndex < 0)
+        {
+            Debug.LogWarning("LastMapId に対応するノードが見つからないため、既定の初期位置を使います: " + lastMapId);
+            return;
+        }
+
+        currentIndex = lastIndex;
+        selectedIndex = lastIndex;
+        ClampSelection();
+
+        if (!PrepareTargetPositionForIndex(currentIndex))
+        {
+            return;
+        }
+
+        currentStageId = GetStageId(currentIndex);
+        SnapToTarget();
+        Debug.Log("LastMapId から初期配置: " + currentStageId);
     }
 
     /// <summary>
@@ -345,7 +390,10 @@ public class StageSelectPlayer : MonoBehaviour
     // バトル開始ダイアログの表示
     public void ConfirmBattleStartDialogue()
     {
-        _battleConfirm.OpenDialog();
+        if (_battleConfirm != null)
+        {
+            _battleConfirm.OpenDialogForStage(currentStageId);
+        }
         _isOpeningDialogue = true;
     }
 

@@ -22,11 +22,17 @@ public class StageSelectKeyboardController : MonoBehaviour
         stageNodes.AddRange(foundNodes);
         stageNodes.Sort(CompareNodesByStageId);
 
-        selectedIndex = FindNodeIndexByStageId(initialStageId);
+        MapId startStageId = initialStageId;
+        if (GameProgress.Instance != null && GameProgress.Instance.LastMapId != MapId.None)
+        {
+            startStageId = GameProgress.Instance.LastMapId;
+        }
+
+        selectedIndex = FindNodeIndexByStageId(startStageId);
         if (selectedIndex < 0 && stageNodes.Count > 0)
         {
             selectedIndex = 0;
-            Debug.LogWarning("初期 stageId が見つからないため、先頭ノードを初期選択にします: " + initialStageId);
+            Debug.LogWarning("初期 stageId が見つからないため、先頭ノードを初期選択にします: " + startStageId);
         }
     }
 

@@ -2594,7 +2594,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30BF\u30A4\u30C8\u30EB\u306B\u623B\u308A\u307E\u3059\u304B\uFF1F\n"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
   m_sharedMaterial: {fileID: 7573449486024199980, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
@@ -10011,6 +10011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmDialogController
   _noButton: {fileID: 1367580328}
+  _stageText: {fileID: 40704604}
+  _stageTextFormat: "\u30B9\u30C6\u30FC\u30B8 {0} \u306B\u51FA\u6483\u3057\u307E\u3059\u304B\uFF1F"
 --- !u!114 &1600000474
 MonoBehaviour:
   m_ObjectHideFlags: 0
