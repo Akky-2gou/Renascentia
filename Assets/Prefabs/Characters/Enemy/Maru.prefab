@@ -45,7 +45,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593118153487594585}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 27863c0396c6d894594c674a8e60ceae, type: 2}
   m_CullingMode: 0
@@ -1064,6 +1064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6115930661817266582}
   - component: {fileID: 3440977264025829717}
+  - component: {fileID: 2988415521208196617}
   - component: {fileID: 8896076516131417484}
   - component: {fileID: 1668839554445786402}
   - component: {fileID: 5713087098282998618}
@@ -1104,6 +1105,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatus
   _targetMarkRoot: {fileID: 5042906214028312644}
+--- !u!95 &2988415521208196617
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640719455133620165}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 27863c0396c6d894594c674a8e60ceae, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &8896076516131417484
 BoxCollider2D:
   m_ObjectHideFlags: 0
