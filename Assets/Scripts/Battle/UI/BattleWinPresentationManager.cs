@@ -26,6 +26,11 @@ public class BattleWinPresentationManager : MonoBehaviour
     [SerializeField] private Transform _characterTransform;
     [SerializeField] private UIAnimationInCanvas _characterAnimation;
 
+    [Header("勝利後に出すUI (press any button など)")]
+    [SerializeField] private CanvasGroup _menu;
+    [SerializeField, Min(0f)] private float _fadeSeconds = 0.25f; // フェードにかける秒数
+    private CancellationTokenSource _fadeCts;
+
     
     // BMからできるようになったら消してね
     [Header("演出確認用")]
@@ -33,6 +38,16 @@ public class BattleWinPresentationManager : MonoBehaviour
     [SerializeField] private bool _isDebug = false;
     // BMからできるようになったら消してね
 
+    private void Start()
+    {
+        // 勝利後のUIは最初は隠しておく
+        SetVisibleImmediate(false);
+    }
+
+    private void OnDestroy()
+    {
+        CancelFade();
+    }
 
     /// <summary>
     /// バトル勝利演出のセットアップを行う
@@ -76,5 +91,47 @@ public class BattleWinPresentationManager : MonoBehaviour
         
         // 全てのアニメーション終了まで待つ
         await UniTask.WhenAll(animations);
+        
+        // 勝利後のUIをフェードで出す
+        await FadeAsync(1f);
+    }
+
+    private async UniTask FadeAsync(float to)
+    {
+        // フェード中にもう一度呼ばれたら、前のフェードを止めて今の α から続ける
+        CancelFade();
+        _fadeCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+        CancellationToken ct = _fadeCts.Token;
+
+        // 出すときは最初から操作を受け付ける。消すときは、すぐ操作できなくする
+        _menu.interactable = to > 0f;
+        _menu.blocksRaycasts = to > 0f;
+
+        float from = _menu.alpha;
+        float elapsed = 0f;
+        while (elapsed < _fadeSeconds)
+        {
+            elapsed += Time.unscaledDeltaTime; // timeScale = 0 でも進む
+            _menu.alpha = Mathf.Lerp(from, to, elapsed / _fadeSeconds);
+
+            if (await UniTask.Yield(PlayerLoopTiming.Update, ct).SuppressCancellationThrow()) return;
+        }
+        _menu.alpha = to;
+    }
+
+    private void SetVisibleImmediate(bool visible)
+    {
+        CancelFade();
+        _menu.alpha = visible ? 1f : 0f;
+        _menu.interactable = visible;
+        _menu.blocksRaycasts = visible;
+    }
+
+    private void CancelFade()
+    {
+        if (_fadeCts == null) return;
+        _fadeCts.Cancel();
+        _fadeCts.Dispose();
+        _fadeCts = null;
     }
 }

@@ -13,8 +13,9 @@ public class GameSpeedController : MonoBehaviour
     [Header("スピードアップ時のサブ画像")]
     [SerializeField] private GameObject _speedOverlay; // 薄白い画像
 
-    [Header("メニュー用の暗転画像")]
+    [Header("メニュー用の画像")]
     [SerializeField] private GameObject _menuOverlay; // 薄暗い画像
+    [SerializeField] private GameObject _menu; // メニュー全体
 
     [Header("設定")]
     [SerializeField] private float _fastForwardScale = 2f; // 倍速時の速度
@@ -30,12 +31,13 @@ public class GameSpeedController : MonoBehaviour
         // 非表示にしておく
         _speedOverlay.SetActive(false);
         _menuOverlay.SetActive(false);
+        _menu.SetActive(false);
     }
 
     /// <summary>
     /// スピードボタンが押された時の処理
     /// </summary>
-    private void OnClickedSpeedButton()
+    public void OnClickedSpeedButton()
     {
         if (_isMenuOpen) return; // メニューが開いている間は倍速切り替えを無視する
 
@@ -47,11 +49,12 @@ public class GameSpeedController : MonoBehaviour
     /// <summary>
     /// メニューボタンが押された時の処理
     /// </summary>
-    private void OnClickedMenuButton()
+    public void OnClickedMenuButton()
     {
         _isMenuOpen = !_isMenuOpen;
 
         _menuOverlay.SetActive(_isMenuOpen);
+        _menu.SetActive(_isMenuOpen);
         Time.timeScale = _isMenuOpen ? 0f : (_isFastForward ? _fastForwardScale : 1f);
     }
 }
