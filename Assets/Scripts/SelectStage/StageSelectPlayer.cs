@@ -357,10 +357,13 @@ public class StageSelectPlayer : MonoBehaviour
             Debug.LogWarning("battleSceneName が未設定のため、シーン遷移をスキップします。");
             return;
         }
-        //シーンの遷移
-        GameProgress.Instance.LastMapId = currentStageId;
-        TransitionTarget target = new TransitionTarget(SceneId.Dialogue, 11, GameProgress.Instance.LastMapId);
-        SceneNavigator.Instance.Go(target);
+         //シーンの遷移（前の会話があれば会話へ、なければ戦闘準備へ。行き先は StageFlow が決める）
+        if (StageFlow.Instance == null)
+        {
+            Debug.LogError("StageSelectPlayer: StageFlow が存在しません");
+            return;
+        }
+        StageFlow.Instance.StartStage(currentStageId);
     }
 
     // 選択状態が有効か確認する
