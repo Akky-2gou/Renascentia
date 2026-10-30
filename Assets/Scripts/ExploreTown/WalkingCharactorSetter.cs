@@ -7,11 +7,14 @@ using System.Collections.Generic;
 
 public class WalkingCharactorSetter : MonoBehaviour
 {
-    // WalkingCharactorSetupperの参照
+    [Header("WalkingCharactorSetupperの参照")]
     [SerializeField] private WalkingCharactorSetupper _walkingCharactorSetupper; 
 
-    // 編成されたキャラクターを保持するスロットのリスト（左から順に格納）
+    [Header("編成されたキャラクターを保持するスロットのリスト（左から順に格納）")]
     [SerializeField] private List<TeamMemberSlot> _teamMemberSlots;
+
+    [Header("TalkableCharacterManagerの参照")]
+    [SerializeField] private TalkableCharacterManager _talkableCharacterManager;
 
     void Start()
     {
@@ -35,7 +38,8 @@ public class WalkingCharactorSetter : MonoBehaviour
             if (characterID >= 0)
             {
                 // そのキャラクターを歩くキャラクターとし，プレイヤーの見た目を変更
-                _walkingCharactorSetupper.SetupWalkingCharactor(characterID);
+                _walkingCharactorSetupper.Setup(characterID);
+                _talkableCharacterManager.UpdateTalkableCharacters(characterID);
                 return;
             }
         }

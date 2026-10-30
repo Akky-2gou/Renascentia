@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Collections.Generic;
 
 /*
  * プレイヤーコントローラー
@@ -33,8 +34,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TransitionTarget _nextScene;
 
 
-    private Animator _playerAnimator; // Animatorを保持する変数
-    private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
+    private List<Animator> _playerAnimator; // Animatorを保持する変数
+    private GroupChangeVisualDirection _groupChangeVisualDirection; // GroupChangeVisualDirectionを保持する変数
 
     Vector2 _moveInput; // 移動入力を格納する変数
     bool _isFacingRight; // プレイヤーが右を向いているかどうか
@@ -81,18 +82,40 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("CapsuleCollider2D取得成功");
         }
+
+        _groupChangeVisualDirection = GetComponent<GroupChangeVisualDirection>(); // GroupChangeVisualDirectionを取得
+        if (_groupChangeVisualDirection == null)
+        {
+            Debug.LogError("GroupChangeVisualDirectionがアタッチされていません");
+        }
+        else
+        {
+            Debug.Log("GroupChangeVisualDirection取得成功");
+        }
     }
 
     /// <summary>
-    /// プレイヤーの見た目となるオブジェクトのChangeVisualDirection，Animatorの取得
+    /// プレイヤーの見た目を制御するコンポーネントの取得
     /// </summary>
-    public void SetPlayerVisualComponet(ChangeVisualDirection changeVisualDirection, Animator animator)
+    public void SetPlayerVisualComponet(List<GameObject> playersObj, List<Animator> animator)
     {
-        _changeVisualDirection = changeVisualDirection;
+        if (_groupChangeVisualDirection == null)
+        {
+            Debug.Log("PlayerController: GroupChangeVisualDirectionがnullのため，処理を中断");
+            return;
+        }
+
+        // プレイヤーとなるメインキャラとそれにくっつくサブキャラクターを登録
+        _groupChangeVisualDirection.UpdateMainCharacter(playersObj[0]);
+        _groupChangeVisualDirection.ClearSubCharacters();
+        for (int i = 1; i < playersObj.Count; i++) _groupChangeVisualDirection.AddSubCharacters(playersObj[i]);
+
+        // 各キャラのAnimatorを取得
         _playerAnimator = animator;
+        foreach (Animator anim in _playerAnimator) anim.Rebind();
 
         // 向きを初期化
-        _changeVisualDirection.Change(_isFacingRight ? ChangeVisualDirection.VisualDirection.Right : ChangeVisualDirection.VisualDirection.Left); 
+        _groupChangeVisualDirection.Change(_isFacingRight ? ChangeVisualDirection.VisualDirection.Right : ChangeVisualDirection.VisualDirection.Left); 
     }
 
     /// <summary>
@@ -118,7 +141,7 @@ public class PlayerController : MonoBehaviour
                 // Walkアニメーションの開始
                 if (_playerAnimator != null)
                 {
-                    _playerAnimator.SetBool("WalkBool", true);
+                    foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", true);
                 }
                 else
                 {
@@ -151,7 +174,7 @@ public class PlayerController : MonoBehaviour
         // Walkアニメーションの停止
         if (_playerAnimator != null)
         {
-            _playerAnimator.SetBool("WalkBool", false);
+            foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", false);
         }
         else
         {
@@ -177,13 +200,13 @@ public class PlayerController : MonoBehaviour
                     {
                         // 右向きにする
                         _isFacingRight = true;
-                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
+                        _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
                     }
                     else if (_moveInput.x < 0 && _isFacingRight)
                     {
                         // 左向きにする
                         _isFacingRight = false;
-                        _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left);
+                        _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left);
                     }
                     
                     // 入力方向(moveInput.x)に最大速度を掛け合わせる

@@ -12,6 +12,9 @@ public class TalkableObject : MonoBehaviour
     [SerializeField] private DialogueDisplay _dialogueDisplay; // DialogueDisplayを参照するための変数
     [SerializeField] private int _episodeIndex = 0; // 現在のエピソードのインデックス
 
+    public DialogueDisplay DialogueDisplay { set { _dialogueDisplay = value; } }
+    public int EpisodeIndex { set { _episodeIndex = value; } }
+
     // <summary>
     // 会話を非同期で行う処理
     // </summary>
