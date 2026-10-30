@@ -88,6 +88,14 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private bool _isTutorial = false;
     [SerializeField] private TutorialBattleManager _tutorialBattleManager;
 
+    [Header("SE関連")]
+    [SerializeField] private int _attackButtonSeId = 1; // 攻撃ボタンのSE番号
+    [SerializeField] private int _skillButtonSeId = 1;  // スキルボタンのSE番号
+    [SerializeField] private int _targetSelectSeId = 2; // 対象指定のSE番号 
+    [SerializeField] private int _normalAttackSeId = 4;  // 通常攻撃SE番号
+    [SerializeField] private int _skillCastSeId = 5; // スキル詠唱SE番号
+    [SerializeField] private int _skillAttackSeId = 6; // スキル発動SE番号
+    [SerializeField] private int _takeDamageSeId = 7; // 被ダメージSE番号
 
     void Start()
     {
@@ -482,6 +490,8 @@ public class BattleManager : MonoBehaviour
     // 通常攻撃ボタンが押された時に呼ばれる関数
     private void OnNormalAttackClicked(CharacterStatus defender)
     {
+        PlayTargetSelectSe();
+
         foreach (var character in _characterQueue)
         {
             character.OnClicked -= OnNormalAttackClicked;
@@ -531,6 +541,7 @@ public class BattleManager : MonoBehaviour
         await hitTcs.Task;
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
+        PlaySeIfAvailable(_normalAttackSeId);
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
         _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
@@ -555,6 +566,8 @@ public class BattleManager : MonoBehaviour
     // スキル攻撃ボタンが押された時に呼ばれる関数
     private void OnSkillAttackClicked(CharacterStatus target)
     {
+        PlayTargetSelectSe();
+
         foreach (var character in _characterQueue)
         {
             character.OnClicked -= OnNormalAttackClicked;
@@ -590,6 +603,7 @@ public class BattleManager : MonoBehaviour
         _context.LockBuffs(); // パッシブが付けた強化も含めて、今回の行動で使う強化を確定する
 
         // attackerのスキルアニメーション開始（キャラ自身のモーション）
+        PlaySeIfAvailable(_skillCastSeId);
         attacker.PlaySkillAnimation();
 
         // スキルの演出を生成する（生成と同時に、演出のアニメーションが再生される）
@@ -615,14 +629,22 @@ public class BattleManager : MonoBehaviour
         }
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
+        PlaySeIfAvailable(_skillAttackSeId);
         skill.Execute(_context); // 通常攻撃はダメージを与えるだけ
         _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
 
         DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
         ResetSkillCost();
+        bool playedTakeDamageSe = false;
         foreach (var target in targets)
         {
+            if (!playedTakeDamageSe)
+            {
+                PlaySeIfAvailable(_takeDamageSeId);
+                playedTakeDamageSe = true;
+            }
+
             target.PlayDamagedAnimation(); // 被弾アニメーション
         }
 
@@ -656,6 +678,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void OnClickedAttackButton()
     {
+        // 攻撃ボタンSEを鳴らす
+        SoundManager.Instance.PlaySe(_attackButtonSeId);
         if (_skillCost == 0)
         {
             StartNormalAttackTargeting();
@@ -692,6 +716,9 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void OnClickedSkillButton()
     {
+        // スキルボタンSEを鳴らす
+        PlaySeIfAvailable(_skillButtonSeId);
+
         if (_currentSP - _skillCost >= 1 && _skillCost != MAX_SKILL_COST) {
             _skillCost++;
         } else {
@@ -817,6 +844,8 @@ public class BattleManager : MonoBehaviour
         Action<CharacterStatus> handler = null;
         handler = (clicked) =>
         {
+            PlayTargetSelectSe();
+
             // 選択が確定したので、全員分の登録とマークを解除する
             foreach (var t in targets)
             {
@@ -832,6 +861,21 @@ public class BattleManager : MonoBehaviour
             t.ShowTargetMark(); // ★ホバーなしで、最初から常時表示する
             t.OnClicked += handler;
         }
+    }
+
+    private void PlayTargetSelectSe()
+    {
+        PlaySeIfAvailable(_targetSelectSeId);
+    }
+
+    private void PlaySeIfAvailable(int seId)
+    {
+        if (SoundManager.Instance == null)
+        {
+            return;
+        }
+
+        SoundManager.Instance.PlaySe(seId);
     }
 
     // ボタンUIの表示と非表示
@@ -895,15 +939,23 @@ public class BattleManager : MonoBehaviour
         // アニメーション上で OnHit が呼ばれるまで待機
         await hitTcs.Task;
 
+        PlaySeIfAvailable(_skillAttackSeId);
         skill.Execute(_context);
         _context.ConsumeLockedBuffs();               // 使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
 
+        bool playedTakeDamageSe = false;
         foreach (var target in targets)
         {
             // 敵が味方(敵側)に使う強化などでは、被弾アニメーションを出さない
             if (target.BattleUnitType == BattleUnitType.Player)
             {
+                if (!playedTakeDamageSe)
+                {
+                    PlaySeIfAvailable(_takeDamageSeId);
+                    playedTakeDamageSe = true;
+                }
+
                 target.PlayDamagedAnimation();
             }
         }
