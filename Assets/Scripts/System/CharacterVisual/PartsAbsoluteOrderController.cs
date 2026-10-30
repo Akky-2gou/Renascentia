@@ -10,6 +10,21 @@ public class PartsAbsoluteOrderController : MonoBehaviour
     [Header("パーツのリスト")]
     [SerializeField] List<SpriteRenderer> _parts;
 
+    void Reset()
+    {
+        // 子からパーツを自動収集
+        if (_parts.Count == 0)
+        {
+            // すべての子オブジェクト（孫以降も含む）でSpriteRendererを持っているもののSpriteRendererを取得
+            Transform[] allChildren = GetComponentsInChildren<Transform>(false);
+            foreach (Transform child in allChildren)
+            {
+                SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
+                if (sr != null) _parts.Add(sr);
+            }
+        }
+    } 
+
     void Awake()
     {
         // Order in Layerの昇順に並び変え
