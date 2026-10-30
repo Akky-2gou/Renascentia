@@ -11,9 +11,6 @@ public class EncounterData : ScriptableObject
 {
     public const int SlotCount = 4;
 
-    [Header("どのステージの戦闘か")]
-    [SerializeField] private MapId _stageNum;
-
     [Header("前衛（空欄OK、4スロット全部空はNG）")]
     [SerializeField] private CharacterData _slot1;
     [SerializeField] private CharacterData _slot2;
@@ -26,7 +23,6 @@ public class EncounterData : ScriptableObject
     [SerializeField] private Sprite _background; // この戦闘の背景画像
 
     public Sprite Background => _background;
-    public MapId StageNum => _stageNum;
 
     // 指定スロット（0〜3）の敵。空スロットなら null
     public CharacterData GetEnemyAt(int slotIndex)
