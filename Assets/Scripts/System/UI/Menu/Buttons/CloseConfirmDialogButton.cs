@@ -12,8 +12,10 @@ public class CloseConfirmDialogButton : Button
     /// <summary>
     /// Noボタンが押された際にダイアログを閉じる処理
     /// </summary>
-    public void OnClick()
+    
+    public override void OnClick()
     {
+        base.OnClick(); // 決定音を鳴らす
         _confirmDialogController.CloseDialog();
     }
 }

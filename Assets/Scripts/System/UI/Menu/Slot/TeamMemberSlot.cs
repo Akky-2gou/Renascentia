@@ -9,6 +9,7 @@ public class TeamMemberSlot : Button
 {
     // スロットに割り当てられているキャラクターのID（-1は空欄）
     [SerializeField] private int _characterID = -1;
+
     // チーム編成を制御するマネージャー
     [SerializeField] private TeamConpositionManager _teamConpositionManager;
     // 編成されたメンバーを管理するマネージャー
@@ -81,6 +82,8 @@ public class TeamMemberSlot : Button
     /// </summary>
     public override void OnClick()
     {
+        // seを鳴らす
+        base.OnClick();
         if (_characterID == -1) // 空欄の場合
         {
             _teamConpositionManager.SelectEmptyTeamMemberSlot(this);

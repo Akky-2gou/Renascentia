@@ -33,6 +33,13 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log($"SoundLibrary assigned: {_library != null}");
+        if (_library != null)
+        {
+            Debug.Log($"BGM count: {_library.Bgm?.Count}, SE count: {_library.Se?.Count}");
+        }
+
+        
         if (Instance != null && Instance != this)
         {
             if (Singletons.IsInDuplicate(this)) return; // 複製の Singletons の子は、何もしない（もうすぐ破棄される）

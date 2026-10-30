@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class TransitionButton : Button
 {
     [SerializeField] private TransitionTarget _target;
+    [SerializeField] private int _seId = 1; // SEのID（SoundLibraryで設定した番号）
 
     public override void OnClick()
     {

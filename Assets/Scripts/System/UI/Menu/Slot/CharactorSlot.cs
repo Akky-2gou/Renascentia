@@ -46,6 +46,8 @@ public class CharacterSlot : Button
     /// </summary>
     public override void OnClick()
     {
+        // seを鳴らす
+        base.OnClick();
         Debug.Log(this.gameObject.name + "が押されました");
         if (_teamConpositionManager != null) _teamConpositionManager.SelectCharacter(_characterID);
     }

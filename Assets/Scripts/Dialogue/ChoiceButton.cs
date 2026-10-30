@@ -8,6 +8,8 @@ public class ChoiceButton : Button
 {
     [SerializeField] private TMPro.TextMeshProUGUI _choiceTextUI; // 選択肢のテキストを表示するUI
 
+    [SerializeField] private int _seId = 1; // SEのID（SoundLibraryで設定した番号）
+
     private int _choiceId; // 選択肢のID
     private ChoiceButtonManager _choiceButtonManager; // ChoiceButtonManagerの参照
 

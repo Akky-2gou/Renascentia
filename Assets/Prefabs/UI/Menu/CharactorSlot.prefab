@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72bb1c411c3cdc42a6652a1df688331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharactorSlot
+  _seId: 1
   _characterID: -1
   _teamConpositionManager: {fileID: 4200220821991427764, guid: 11b6b4e6ffae54346aaad8074b949997, type: 3}
   _button: {fileID: 5439892710797211960}
@@ -161,8 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9073bf3a47622470b87812a06b27f604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReadCharacterDetail
-  slotId: -1
+  slotId: 1
   _canShowDetail: 0
   characterDetailDatabase: {fileID: 11400000, guid: 4001972f4e22d4d599dfd9e1a9c5b7e4, type: 2}
-  characterDescription: {fileID: 0}
+  characterDescription: {fileID: 1682964516668741760, guid: 4def5c2b1e045429e81bc7d84df03793, type: 3}
   gameProgress: {fileID: 0}

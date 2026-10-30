@@ -9,8 +9,12 @@ public class GoMapConfirmButton : Button
     /// <summary>
     /// Yesが押された際の処理
     /// </summary>
-    public void OnClick()
+    
+    public override void OnClick()
     {
+        // seを鳴らす
+        base.OnClick(); 
+        // マップに向かう処理を呼ぶ
         Debug.Log("マップに向かった！");
     }
 }
