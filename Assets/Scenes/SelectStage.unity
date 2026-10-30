@@ -6703,7 +6703,8 @@ MonoBehaviour:
     marker: {fileID: 711937399}
     offset: {x: 0, y: 0, z: 0}
   initialStageId: 1
-  moveSpeed: 200
+  moveSpeed: 10
+  moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
   battleSceneName: MapToBattle
@@ -11713,6 +11714,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
   initialStageId: 1
   moveSpeed: 0.1
+  moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
   battleSceneName: 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,7 +19,9 @@ public class StageSelectPlayer : MonoBehaviour
 
     [SerializeField] private List<StageTarget> stageTargets = new List<StageTarget>();
     [SerializeField] private MapId initialStageId = MapId.Map1_1;
-    [SerializeField] private float moveSpeed = 5f;
+    [Header("移動速度設定")]
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField, Range(0.1f, 3f)] private float moveSpeedScale = 1f;
     [SerializeField] private float arriveDistance = 0.05f;
     [SerializeField] private Transform moveTarget;
     [SerializeField] private string battleSceneName = "MapToBattle";
@@ -32,11 +35,13 @@ public class StageSelectPlayer : MonoBehaviour
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
+    private Coroutine movementCoroutine;
     private List<Animator> _playerAnimator; // Animatorを保持する変数
     private GroupChangeVisualDirection _groupChangeVisualDirection; // GroupChangeVisualDirectionを保持する変数
 
     public bool IsMoving => isMoving;
     public MapId CurrentStageId => currentStageId;
+    public float MoveSpeed => moveSpeed * moveSpeedScale;
     private bool _isOpeningDialogue = false;
     public bool IsOpeningDialogue { set{_isOpeningDialogue = value;} get{return _isOpeningDialogue;} }
 
@@ -127,45 +132,77 @@ public class StageSelectPlayer : MonoBehaviour
         }
     }
 
-    // 移動中のキャラクター位置を更新する
-    private void Update()
+    // 移動中のキャラクター位置を更新する（Updateは使わずコルーチンで実行）
+    private IEnumerator MoveRouteCoroutine()
     {
-        if (!isMoving || pendingRouteIndices.Count == 0 || !HasValidSelection())
+        while (isMoving && pendingRouteIndices.Count > 0 && HasValidSelection())
         {
-            return;
-        }
+            Vector3 currentPosition = moveTarget.position;
+            float step = MoveSpeed * Time.fixedDeltaTime;
+            float stopDistance = Mathf.Max(arriveDistance, step);
+            float remainingDistance = Vector3.Distance(currentPosition, currentTargetPosition);
 
-        Vector3 currentPosition = moveTarget.position;
-        float step = moveSpeed * Time.deltaTime;
-        float remainingDistance = Vector3.Distance(currentPosition, currentTargetPosition);
+            // 最後だけ吸い込まれる見え方を防ぐため、1FixedUpdate分で届くときはそのまま到達扱いにする
+            if (remainingDistance <= stopDistance)
+            {
+                if (targetRb != null)
+                {
+                    targetRb.linearVelocity = Vector2.zero;
+                    targetRb.MovePosition(currentTargetPosition);
+                }
+                else
+                {
+                    moveTarget.position = currentTargetPosition;
+                }
 
-        // 最後だけ吸い込まれる見え方を防ぐため、1フレーム分で届くときはそのまま到達扱いにする
-        if (remainingDistance <= step)
-        {
+                AdvanceRoute();
+                if (!isMoving)
+                {
+                    break;
+                }
+
+                yield return new WaitForFixedUpdate();
+                continue;
+            }
+
+            Vector3 nextPosition = Vector3.MoveTowards(currentPosition, currentTargetPosition, step);
+
             if (targetRb != null)
             {
-                targetRb.linearVelocity = Vector2.zero;
-                targetRb.MovePosition(currentTargetPosition);
+                targetRb.MovePosition(nextPosition);
             }
             else
             {
-                moveTarget.position = currentTargetPosition;
+                moveTarget.position = nextPosition;
             }
 
-            AdvanceRoute();
-            return;
+            yield return new WaitForFixedUpdate();
         }
 
-        Vector3 nextPosition = Vector3.MoveTowards(currentPosition, currentTargetPosition, step);
+        movementCoroutine = null;
+    }
 
-        if (targetRb != null)
-        {
-            targetRb.MovePosition(nextPosition);
-        }
-        else
-        {
-            moveTarget.position = nextPosition;
-        }
+    /// <summary>
+    /// 基準移動速度を設定する（0以下は0.01として扱う）
+    /// </summary>
+    public void SetMoveSpeed(float speed)
+    {
+        moveSpeed = Mathf.Max(0.01f, speed);
+    }
+
+    /// <summary>
+    /// 移動速度係数を設定する（0以下は0.01として扱う）
+    /// </summary>
+    public void SetMoveSpeedScale(float scale)
+    {
+        moveSpeedScale = Mathf.Max(0.01f, scale);
+    }
+
+    private void OnValidate()
+    {
+        moveSpeed = Mathf.Max(0.01f, moveSpeed);
+        moveSpeedScale = Mathf.Max(0.01f, moveSpeedScale);
+        arriveDistance = Mathf.Max(0f, arriveDistance);
     }
 
     // 指定インデックスのステージを選択する
@@ -456,6 +493,11 @@ public class StageSelectPlayer : MonoBehaviour
         }
 
         isMoving = true;
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+        movementCoroutine = StartCoroutine(MoveRouteCoroutine());
         Debug.Log("ステージ移動開始: 現在=" + currentStageId + " / 目的地=" + SelectedStageId);
     }
 
@@ -530,6 +572,12 @@ public class StageSelectPlayer : MonoBehaviour
     // 移動完了時の後始末をする
     private void FinishMovement()
     {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+            movementCoroutine = null;
+        }
+
         isMoving = false;
         pendingRouteIndices.Clear();
         // 歩行SEを止める
