@@ -31,8 +31,8 @@ public class StageSelectPlayer : MonoBehaviour
     private int selectedIndex;
     private bool isMoving;
     private Vector3 currentTargetPosition;
-    private Animator _playerAnimator; // Animatorを保持する変数
-    private ChangeVisualDirection _changeVisualDirection; // ChangeVisualDirectionを保持する変数
+    private List<Animator> _playerAnimator; // Animatorを保持する変数
+    private GroupChangeVisualDirection _groupChangeVisualDirection; // GroupChangeVisualDirectionを保持する変数
 
     public bool IsMoving => isMoving;
     public MapId CurrentStageId => currentStageId;
@@ -70,12 +70,24 @@ public class StageSelectPlayer : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーの見た目となるオブジェクトのChangeVisualDirection，Animatorの取得
+    /// プレイヤーの見た目を制御するコンポーネントの取得
     /// </summary>
-    public void SetPlayerVisualComponet(ChangeVisualDirection changeVisualDirection, Animator animator)
+    public void SetPlayerVisualComponet(List<GameObject> playersObj, List<Animator> animator)
     {
-        _changeVisualDirection = changeVisualDirection;
+        if (_groupChangeVisualDirection == null)
+        {
+            Debug.Log("PlayerController: GroupChangeVisualDirectionがnullのため，処理を中断");
+            return;
+        }
+
+        // プレイヤーとなるメインキャラとそれにくっつくサブキャラクターを登録
+        _groupChangeVisualDirection.UpdateMainCharacter(playersObj[0]);
+        _groupChangeVisualDirection.ClearSubCharacters();
+        for (int i = 1; i < playersObj.Count; i++) _groupChangeVisualDirection.AddSubCharacters(playersObj[i]);
+
+        // 各キャラのAnimatorを取得
         _playerAnimator = animator;
+        foreach (Animator anim in _playerAnimator) anim.Rebind(); 
     }
 
     // 移動用の初期状態を設定する
@@ -102,6 +114,16 @@ public class StageSelectPlayer : MonoBehaviour
         PrepareTargetPositionForIndex(currentIndex);
         currentStageId = GetStageId(currentIndex);
         Debug.Log("初期ノード: " + currentStageId);
+        
+        _groupChangeVisualDirection = GetComponent<GroupChangeVisualDirection>(); // GroupChangeVisualDirectionを取得
+        if (_groupChangeVisualDirection == null)
+        {
+            Debug.LogError("GroupChangeVisualDirectionがアタッチされていません");
+        }
+        else
+        {
+            Debug.Log("GroupChangeVisualDirection取得成功");
+        }
     }
 
     // 移動中のキャラクター位置を更新する
@@ -370,10 +392,10 @@ public class StageSelectPlayer : MonoBehaviour
         currentTargetPosition = target.marker.position + target.offset;
 
         // 目標位置と現在位置を比較し，進行方向を向く
-        if (_changeVisualDirection != null)
+        if (_groupChangeVisualDirection != null)
         {
-            if (currentTargetPosition.x < moveTarget.position.x) _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left, moveTarget); 
-            else _changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right, moveTarget);
+            if (currentTargetPosition.x < moveTarget.position.x) _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left); 
+            else _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
         } 
 
         return true;
@@ -423,7 +445,7 @@ public class StageSelectPlayer : MonoBehaviour
         // Walkアニメーションの開始
         if (_playerAnimator != null)
         {
-            _playerAnimator.SetBool("WalkBool", true);
+            foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", true);
         }
         else
         {
@@ -516,7 +538,7 @@ public class StageSelectPlayer : MonoBehaviour
         // Walkアニメーションの終了
         if (_playerAnimator != null)
         {
-            _playerAnimator.SetBool("WalkBool", false);
+            foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", false);
         }
         else
         {

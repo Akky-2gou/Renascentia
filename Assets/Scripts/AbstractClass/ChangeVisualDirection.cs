@@ -2,6 +2,7 @@ using UnityEngine;
 using Live2D.Cubism.Rendering;
 using System.Collections.Generic;
 using System;
+using UnityEngine.Rendering;
 
 /*
  * キャラクターの視覚的な方向を変えるクラス群の抽象クラス
@@ -15,7 +16,8 @@ public abstract class ChangeVisualDirection : MonoBehaviour
     public enum VisualDirection
     {
         Left,
-        Right
+        Right,
+        None
     }
 
     // 向きを変えた時に変更されるオブジェクトのレンダラー
@@ -26,6 +28,18 @@ public abstract class ChangeVisualDirection : MonoBehaviour
 
     // 左を向いた時に使用されるテクスチャ
     [SerializeField] private Texture2D _leftTexture;
+
+    [Header("初期状態の向き")]
+    [SerializeField] private VisualDirection _initialDirection = VisualDirection.None;
+
+
+    private void Start()
+    {
+        if (_initialDirection != VisualDirection.None)
+        {
+            Change(_initialDirection);
+        }
+    }
 
     /// <summary>
     /// 視覚的に方向を変える処理
