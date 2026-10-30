@@ -17,6 +17,8 @@ public class ResetTeamComposition : Button
     /// </summary>
     public void OnClick()
     {
+        //seを鳴らす
+        base.OnClick();
         _teamMemberSlot1.ClearSlot();
         _teamMemberSlot2.ClearSlot();
         _teamMemberSlot3.ClearSlot();

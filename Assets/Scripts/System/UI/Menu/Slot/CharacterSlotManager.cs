@@ -7,12 +7,19 @@ using System.Collections.Generic;
 /// </summary>
 public class CharacterSlotManager : MonoBehaviour
 {
+	private enum SlotContainerType
+	{
+		TeamComposition,
+		CharacterDictionary
+	}
+
 	[SerializeField] private CharacterSlot characterSlotPrefab;
 	[SerializeField] private GridLayoutGroup gridLayoutGroup;
 	[SerializeField] private ShowCharacterDescription characterDescription;
 	[SerializeField] private CharacterDetailDatabase characterDetailDatabase;
 	[SerializeField] private int slotsPerRow = 4;
 	[SerializeField] private bool refreshOnEnable = true;
+	[SerializeField] private SlotContainerType slotContainerType = SlotContainerType.TeamComposition;
 
 	private readonly List<CharacterSlot> spawnedSlots = new List<CharacterSlot>();
 	private GameProgress gameProgress;
@@ -82,7 +89,11 @@ public class CharacterSlotManager : MonoBehaviour
 		unlockedCharacterIds.RemoveAll(id => id <= 0);
 		unlockedCharacterIds.Sort();
 
-		TeamConpositionManager teamConpositionManager = Object.FindFirstObjectByType<TeamConpositionManager>();
+		TeamConpositionManager teamConpositionManager = null;
+		if (slotContainerType == SlotContainerType.TeamComposition)
+		{
+			teamConpositionManager = Object.FindFirstObjectByType<TeamConpositionManager>();
+		}
 
 		foreach (int characterId in unlockedCharacterIds)
 		{
@@ -108,10 +119,13 @@ public class CharacterSlotManager : MonoBehaviour
 			spawnedSlots.Add(slot);
 		}
 
-		TeamMemberManager teamMemberManager = Object.FindFirstObjectByType<TeamMemberManager>();
-		if (teamMemberManager != null)
+		if (slotContainerType == SlotContainerType.TeamComposition)
 		{
-			teamMemberManager.SetCharacterSlots(spawnedSlots);
+			TeamMemberManager teamMemberManager = Object.FindFirstObjectByType<TeamMemberManager>();
+			if (teamMemberManager != null)
+			{
+				teamMemberManager.SetCharacterSlots(spawnedSlots);
+			}
 		}
 	}
 

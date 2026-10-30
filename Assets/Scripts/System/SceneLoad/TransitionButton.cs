@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class TransitionButton : Button
 {
     [SerializeField] private TransitionTarget _target;
+    [SerializeField] private int _seId = 1; // SEのID（SoundLibraryで設定した番号）
 
     [Tooltip("ON: _target のステージの代わりに、最後にいたマップ (GameProgress.LastMapId) を渡す")]
     [SerializeField] private bool _useLastMap = false;

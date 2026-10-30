@@ -8,11 +8,13 @@ public class SwitchPanelButton : Button
     
     [SerializeField] private GameObject currentPanel; // 今いるパネルを参照するための変数
     [SerializeField] private GameObject returnPanel;   // 遷移するパネルを参照するための変数
-    
+
     // 画面遷移の関数
     public override void OnClick()
     {
+        Debug.Log("SwitchPanelButtonが押されました");
         base.OnClick(); // 決定音を鳴らす
+
         currentPanel.SetActive(false);
         returnPanel.SetActive(true);
     }

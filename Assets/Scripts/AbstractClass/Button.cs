@@ -10,6 +10,8 @@ public abstract class Button : MonoBehaviour, ISelectHandler, IPointerEnterHandl
     /// <summary>
     /// UIが選択されるたびに「カチカチ」と音を流したりする際の親オブジェクト
     /// </summary>
+    
+    [SerializeField] private int _seId = 1; // SEのID
 
     // カーソルが入ってるか出ているか判定する変数
     private static bool isPointer = false;
@@ -18,37 +20,20 @@ public abstract class Button : MonoBehaviour, ISelectHandler, IPointerEnterHandl
     // 決定時の処理を施す抽象メソッド
     public virtual void OnClick()
     {
-        /*
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlaySE(14); // 決定音
-        }
-        */
+        TriggerClickSounds(_seId); // 決定音を鳴らす
     }
 
     // 決定時に音を鳴らす処理
-    private void TriggerClickSounds()
+    private void TriggerClickSounds(int seId=1)
     {
-        /*
-        // 効果音を鳴らす
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlaySE(14); // 14はUI決定音のインデックス
-        }
-        */
+        SoundManager.Instance.PlaySe(seId); // 決定音
     }
 
     // 選択された際に音を鳴らす処理
-    private void TriggerSelectionSounds()
+    private void TriggerSelectionSounds(int seId=2)
     {
         Debug.Log("otosentaku");
-        /*
-        // 効果音を鳴らす
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlaySE(13); // 12はUI選択音のインデックス
-        }
-        */
+        SoundManager.Instance.PlaySe(seId); // 選択音
     }
 
     // 選択された際の音以外の処理を施す抽象メソッド
