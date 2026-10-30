@@ -6376,6 +6376,14 @@ MonoBehaviour:
   stageId: 3
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 1685583618}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 2144819571}
+  moveOnUp: {fileID: 1685583618}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 2144819571}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!212 &868282612
@@ -10298,6 +10306,14 @@ MonoBehaviour:
   stageId: 4
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 868282611}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 868282611}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!212 &1685583619
@@ -11834,6 +11850,14 @@ MonoBehaviour:
   stageId: 1
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 2144819571}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 2144819571}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!61 &1986245016
@@ -12463,6 +12487,14 @@ MonoBehaviour:
   stageId: 2
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 868282611}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 1986245015}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 868282611}
+  moveOnRight: {fileID: 1986245015}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!61 &2144819572

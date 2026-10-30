@@ -10,6 +10,7 @@ public class StageSelectKeyboardController : MonoBehaviour
     private readonly List<StageSelectNode> stageNodes = new List<StageSelectNode>();
     private StageSelectPlayer stageSelectPlayer;
     private int selectedIndex = -1;
+    private StageSelectNode selectedNode;
 
     private void Awake()
     {
@@ -29,6 +30,11 @@ public class StageSelectKeyboardController : MonoBehaviour
 
     private void Start()
     {
+        if (selectedIndex >= 0 && selectedIndex < stageNodes.Count)
+        {
+            selectedNode = stageNodes[selectedIndex];
+        }
+
         ApplySelection();
     }
 
@@ -39,7 +45,7 @@ public class StageSelectKeyboardController : MonoBehaviour
             return;
         }
 
-        if (stageNodes.Count == 0 || selectedIndex < 0)
+        if (stageNodes.Count == 0 || selectedNode == null)
         {
             return;
         }
@@ -49,18 +55,49 @@ public class StageSelectKeyboardController : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame)
+        if (Keyboard.current.wKey.wasPressedThisFrame)
         {
-            if (stageSelectPlayer.IsOpeningDialogue) return;
-            TryMoveSelection(-1);
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.W);
         }
-        else if (Keyboard.current.dKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame)
+        else if (Keyboard.current.aKey.wasPressedThisFrame)
         {
-            if (stageSelectPlayer.IsOpeningDialogue) return;
-            TryMoveSelection(1);
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.A);
+        }
+        else if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.S);
+        }
+        else if (Keyboard.current.dKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.D);
+        }
+        else if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.Up);
+        }
+        else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.Down);
+        }
+        else if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.Left);
+        }
+        else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+        {
+            if (stageSelectPlayer != null && stageSelectPlayer.IsOpeningDialogue) return;
+            TryMoveSelection(StageSelectNode.NavigationKey.Right);
         }
         else if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
+            if (stageSelectPlayer == null) return;
             if (!stageSelectPlayer.CanAcceptSubmit()) return; // ダイアログ表示中、または閉じたフレームは、受け付けない
             stageSelectPlayer.RequestBattleStartOnCurrentStage();
         }
@@ -75,6 +112,7 @@ public class StageSelectKeyboardController : MonoBehaviour
         }
 
         selectedIndex = nextIndex;
+        selectedNode = stageNodes[selectedIndex];
         ApplySelection();
     }
 
@@ -98,15 +136,14 @@ public class StageSelectKeyboardController : MonoBehaviour
         return -1;
     }
 
-    private void TryMoveSelection(int direction)
+    private void TryMoveSelection(StageSelectNode.NavigationKey navigationKey)
     {
-        int nextIndex = selectedIndex + direction;
-        if (nextIndex < 0 || nextIndex >= stageNodes.Count)
+        if (selectedNode == null)
         {
             return;
         }
 
-        StageSelectNode nextNode = stageNodes[nextIndex];
+        StageSelectNode nextNode = selectedNode.GetNextNode(navigationKey);
         if (nextNode == null)
         {
             return;
@@ -118,7 +155,14 @@ public class StageSelectKeyboardController : MonoBehaviour
             return;
         }
 
+        int nextIndex = stageNodes.IndexOf(nextNode);
+        if (nextIndex < 0)
+        {
+            return;
+        }
+
         selectedIndex = nextIndex;
+        selectedNode = nextNode;
         ApplySelection();
         stageSelectPlayer?.MoveToStage(nextNode.StageId);
     }
@@ -137,6 +181,7 @@ public class StageSelectKeyboardController : MonoBehaviour
 
         if (selectedIndex >= 0 && selectedIndex < stageNodes.Count && stageNodes[selectedIndex] != null)
         {
+            selectedNode = stageNodes[selectedIndex];
             Debug.Log("選択中ノード: " + stageNodes[selectedIndex].StageId);
         }
     }
