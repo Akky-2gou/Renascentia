@@ -35,8 +35,9 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: a16540b80f522964592fa94ae5f47d70, type: 3}
     detailBackgroundIconOffset: {x: 20, y: -50}
     detailBackgroundIconScale: 1.5
-  - characterId: 2
-    characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA"
+    characterPrefab: {fileID: 447002470704470471, guid: 42139614dd83b40008e673babaaf39ce, type: 3}
+  - characterId: 3
+    characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA(\u9752)"
     species: "\u7406\u60F3"
     hp: 110
     attack: 80
@@ -57,8 +58,9 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
     detailBackgroundIconOffset: {x: 100, y: 0}
     detailBackgroundIconScale: 2
-  - characterId: 3
-    characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA"
+    characterPrefab: {fileID: 4194924287017135608, guid: 23e369e29108d4e9dba230768715beb9, type: 3}
+  - characterId: 4
+    characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA(\u8D64)"
     species: 
     hp: 110
     attack: 110
@@ -79,7 +81,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
     detailBackgroundIconOffset: {x: -100, y: 0}
     detailBackgroundIconScale: 2
-  - characterId: 4
+    characterPrefab: {fileID: 6041174838066580613, guid: 99ca004eb6b214b02acde74258d66535, type: 3}
+  - characterId: 2
     characterName: "\u771F\u73E0\u306E\u8033\u98FE\u308A"
     species: "\u6D6A\u6F2B"
     hp: 95
@@ -101,6 +104,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 7654c916b6edec34abcd7ea02600fe03, type: 3}
     detailBackgroundIconOffset: {x: 0, y: -50}
     detailBackgroundIconScale: 1.5
+    characterPrefab: {fileID: 613545324556406948, guid: 435728ca08ecb433ebe5f746f08eaac9, type: 3}
   - characterId: 5
     characterName: "\u591C\u8B66"
     species: "\u6D6A\u6F2B"
@@ -120,9 +124,10 @@ MonoBehaviour:
     skill3Description: "cr\u7387+30%"
     passive: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u306E\u30C0\u30E1\u30FC\u30B8\u304C\uFF0B30%"
     bonusPassive: 
-    detailBackgroundIcon: {fileID: 21300000, guid: 39599e5fbe9ed3742a15ea30238e3b24, type: 3}
+    detailBackgroundIcon: {fileID: 21300000, guid: 659a13aed13f16b409452b375d5f653f, type: 3}
     detailBackgroundIconOffset: {x: 0, y: -100}
     detailBackgroundIconScale: 1.5
+    characterPrefab: {fileID: 0}
   - characterId: 6
     characterName: "\u6700\u5F8C\u306E\u6669\u9910"
     species: "\u7406\u60F3"
@@ -145,6 +150,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 7
     characterName: 
     species: 
@@ -167,6 +173,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 8
     characterName: "\u8A18\u61B6\u306E\u56FA\u57F7"
     species: 
@@ -189,6 +196,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 9
     characterName: "\u65E5\u5098"
     species: 
@@ -211,6 +219,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 10
     characterName: "\u661F\u6708\u591C"
     species: "\u5E7B\u60F3"
@@ -233,6 +242,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 11
     characterName: "\u30B2\u30EB\u30CB\u30AB"
     species: 
@@ -255,6 +265,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 12
     characterName: 
     species: 
@@ -277,6 +288,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 13
     characterName: "\u83D6\u84B2"
     species: "\u5370\u8C61"
@@ -299,6 +311,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 14
     characterName: "\u79CB\u51AC\u5C71\u6C34\u56F3"
     species: "\u5370\u8C61"
@@ -321,6 +334,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 15
     characterName: "\u9ED2\u304D\u306D\u3053"
     species: "\u5E7B\u60F3"
@@ -343,6 +357,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 16
     characterName: "\u8607\u59B2\u5DF1\u99C5\u5802"
     species: "\u5E7B\u60F3"
@@ -365,6 +380,7 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}
   - characterId: 17
     characterName: "\u795E\u5948\u5DDD\u6C96\u6D6A\u88CF"
     species: "\u6D6A\u6F2B"
@@ -387,3 +403,4 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    characterPrefab: {fileID: 0}

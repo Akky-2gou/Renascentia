@@ -49,6 +49,9 @@ public class CharacterDetailRecord
     public Sprite detailBackgroundIcon;
     public Vector2 detailBackgroundIconOffset;
     public float detailBackgroundIconScale = 1f;
+
+    // 後から Inspector で差し込む、該当キャラクターの Prefab
+    public GameObject characterPrefab;
 }
 
 #if UNITY_EDITOR

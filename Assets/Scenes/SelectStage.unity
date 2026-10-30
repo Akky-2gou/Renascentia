@@ -8330,6 +8330,14 @@ PrefabInstance:
       propertyPath: _returnFromTeamCompositionButton
       value: 
       objectReference: {fileID: 1411959971}
+    - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
+      propertyPath: '_exclusiveCharacterGroups.Array.data[0].characterIds.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
+      propertyPath: '_exclusiveCharacterGroups.Array.data[0].characterIds.Array.data[1]'
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4816671331577186687, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.3069
@@ -8960,6 +8968,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ReadCharacterDetail, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 229644431824216230, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 954719233889060856, guid: 9cc2cec3b167b4b82ab35acf3d5ae318, type: 3}
+    - target: {fileID: 229644431824216230, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 300265953248931958, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 300265953248931958, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 317244906574919700, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -8976,6 +9000,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 502168492856877061, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 551710429083668044, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -9052,6 +9080,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 1432186859419374313, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: firstSelectedButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1477672956102833845, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamMemberManager
       value: 
