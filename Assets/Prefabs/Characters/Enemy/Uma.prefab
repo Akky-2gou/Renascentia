@@ -900,6 +900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6158689518021971209}
   - component: {fileID: 2900294343942688882}
+  - component: {fileID: 207518028324366246}
   - component: {fileID: 8597829880137456671}
   - component: {fileID: 6012071895173936470}
   - component: {fileID: 8168835903721326377}
@@ -940,6 +941,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatus
   _targetMarkRoot: {fileID: 6461393733756195156}
+--- !u!95 &207518028324366246
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5399039531408162222}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1bf88c46391bcd1449c6383ef741376a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &8597829880137456671
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1479,7 +1502,7 @@ GameObject:
   - component: {fileID: 8977090537615521276}
   - component: {fileID: 2068998454731976242}
   m_Layer: 0
-  m_Name: uma
+  m_Name: Uma
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1509,7 +1532,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8601062179591052995}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 1bf88c46391bcd1449c6383ef741376a, type: 2}
   m_CullingMode: 0
