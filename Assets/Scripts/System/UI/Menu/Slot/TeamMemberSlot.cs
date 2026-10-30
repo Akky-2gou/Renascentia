@@ -15,6 +15,9 @@ public class TeamMemberSlot : Button
     // 編成されたメンバーを管理するマネージャー
     [SerializeField] private TeamMemberManager _teamMemberManager;
 
+    [Header("ちびキャラを表示させたいRawImageオブジェクト")]
+	[SerializeField] private PrefabRawImageDisplay _prefabRawImageDisplay;
+
     // キャラクターIDのプロパティ
     public int CharacterID => _characterID;
     
@@ -55,12 +58,14 @@ public class TeamMemberSlot : Button
         {
             text.text = "キャラクターID: " + _characterID;
         }
+
+        ClearCharacter();
     }
     
     /// <summary>
     /// スロットにキャラIDで指定されたキャラをアサインする処理
     /// </summary>
-    public void AssignCharacter(int ID)
+    public void AssignCharacter(int ID, CharacterDetailRecord record)
     {
         // マネージャーにキャラクターIDの変更を通知
         _teamMemberManager.OnTeamMemberIdChanged(_characterID, ID);
@@ -75,6 +80,24 @@ public class TeamMemberSlot : Button
         {
             text.text = "キャラクターID: " + _characterID;
         }
+
+        ShowCharacter(record);
+    }
+
+    // キャラがアサインされていない状態にする関数
+    private void ClearCharacter()
+    {
+        // ちびキャラを非表示
+        _prefabRawImageDisplay.Clear();
+        
+    }
+
+    // キャラを表示する関数
+    private void ShowCharacter(CharacterDetailRecord record)
+    {
+        // ちびキャラを表示
+        _prefabRawImageDisplay.ShowPrefab(record.characterPrefab);
+        
     }
 
     /// <summary>

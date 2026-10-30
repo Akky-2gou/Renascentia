@@ -19,6 +19,7 @@ public class ShowCharacterDescription : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI _specialSkill3Text;
 	[SerializeField] private TextMeshProUGUI _passiveText;
 	[SerializeField] private TextMeshProUGUI _bonusPassiveText;
+	[SerializeField] private PrefabRawImageDisplay _prefabRawImageDisplay;
 
 	public void SetCharacterDetail(CharacterDetailRecord record)
 	{
@@ -49,6 +50,9 @@ public class ShowCharacterDescription : MonoBehaviour
 		SetText(_specialSkill3Text, $"S3: {record.skill3Damage}\n{record.skill3Description}");
 		SetText(_passiveText, $"パッシブ: {record.passive}");
 		SetText(_bonusPassiveText, $"ボーナスパッシブ: {record.bonusPassive}");
+
+		// キャラクターのプレハブを元にちびキャラを表示
+		_prefabRawImageDisplay.ShowPrefab(record.characterPrefab);
 	}
 
 	public void Clear()
@@ -74,6 +78,9 @@ public class ShowCharacterDescription : MonoBehaviour
 		SetText(_specialSkill3Text, string.Empty);
 		SetText(_passiveText, string.Empty);
 		SetText(_bonusPassiveText, string.Empty);
+
+		// ちびキャラの表示をオフにする
+		_prefabRawImageDisplay.Clear();
 	}
 
 	private void SetText(TextMeshProUGUI target, string value)
