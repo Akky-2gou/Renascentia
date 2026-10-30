@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefe29fd2d5d2b640b3b2f5011490895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorFloorSelectButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &121174905512838101
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +925,7 @@ RectTransform:
   - {fileID: 8892830619010102750}
   - {fileID: 5602182048136392216}
   - {fileID: 1860352311886465317}
+  - {fileID: 7952554676760552653}
   m_Father: {fileID: 6328300743517355394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2482,7 +2483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 440b949528c8a1d40bfdba90b9a77ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetTeamComposition
-  _seId: 1
+  _clickSeId: 1
   _teamMemberSlot1: {fileID: 1477672956102833845}
   _teamMemberSlot2: {fileID: 3617879364782759049}
   _teamMemberSlot3: {fileID: 6952934424478655320}
@@ -2656,7 +2657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 8179068610234747958}
   returnPanel: {fileID: 3408814843019624015}
 --- !u!1 &1093635971430963360
@@ -3115,7 +3116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 3408814843019624015}
   returnPanel: {fileID: 3508526916633003140}
 --- !u!1 &1357592035646286850
@@ -4975,7 +4976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 3508526916633003140}
   returnPanel: {fileID: 3408814843019624015}
 --- !u!1 &2965054398005411861
@@ -5345,7 +5346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefe29fd2d5d2b640b3b2f5011490895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorFloorSelectButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &3253806785492761948
 GameObject:
   m_ObjectHideFlags: 0
@@ -5502,7 +5503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 0
+  _clickSeId: 0
   currentPanel: {fileID: 3408814843019624015}
   returnPanel: {fileID: 8935182339333881363}
 --- !u!114 &4686701043509857881
@@ -5517,7 +5518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f786c79661e60a649b51cc9c2a37d84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CloseConfirmDialogButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 5579409495840305063}
 --- !u!1 &3262451294013150515
 GameObject:
@@ -5665,7 +5666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 502168492856877061}
   returnPanel: {fileID: 1478558715102012794}
 --- !u!1 &3307853806796398469
@@ -5913,7 +5914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 3840740608617722664}
   returnPanel: {fileID: 3408814843019624015}
 --- !u!222 &2935663632887815947
@@ -6263,7 +6264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5bd67fe28bc4f42ad4266691d136be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenConfirmDialogButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 6538295930241187039}
 --- !u!1 &3392307765783444600
 GameObject:
@@ -7014,7 +7015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2b574aa31559241831f19ce7dcd0b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToTitleConfirmButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &4018616272554362818
 GameObject:
   m_ObjectHideFlags: 0
@@ -7448,7 +7449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 3408814843019624015}
   returnPanel: {fileID: 3840740608617722664}
 --- !u!1 &4403395369598016798
@@ -8258,7 +8259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab033f3f600cdd2408c76068e6837d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoMapConfirmButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &4882841121408927379
 GameObject:
   m_ObjectHideFlags: 0
@@ -8402,7 +8403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f786c79661e60a649b51cc9c2a37d84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 4713589889248953228}
 --- !u!1 &4899301263977825313
 GameObject:
@@ -8616,6 +8617,96 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4912180500227134301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7952554676760552653}
+  - component: {fileID: 940432915604718918}
+  - component: {fileID: 782726171870202260}
+  - component: {fileID: 281229356873210835}
+  m_Layer: 5
+  m_Name: Live2DImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7952554676760552653
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912180500227134301}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.5000024, y: 2.5000024, z: 2.5000024}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 5093712982536508804}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 192.70013, y: -108.39998}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &940432915604718918
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912180500227134301}
+  m_CullTransparentMesh: 1
+--- !u!114 &782726171870202260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912180500227134301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: 8d37c29cd6252364ba6bfce14ffcbd1b, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &281229356873210835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912180500227134301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbf3ac5c56514d4cbefc2d9e80f7603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Live2DImageDisplay
+  _cameraPrefab: {fileID: 2075810428260034418, guid: 3e415d235300b1c4e9803e773d01e1db, type: 3}
+  _cameraPos: {x: -400, y: 0, z: -10}
+  _targetOffsetPos: {x: 0, y: 0, z: 1}
+  _targetScale: {x: 1, y: 1, z: 1}
+  _renderTextureSize: 1024
 --- !u!1 &5298360190331867831
 GameObject:
   m_ObjectHideFlags: 0
@@ -8772,7 +8863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 0
+  _clickSeId: 0
   currentPanel: {fileID: 3408814843019624015}
   returnPanel: {fileID: 1513328615824734796}
 --- !u!114 &2749398235709433821
@@ -8787,7 +8878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f786c79661e60a649b51cc9c2a37d84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CloseConfirmDialogButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 5579409495840305063}
 --- !u!1 &5343597656093375276
 GameObject:
@@ -8900,6 +8991,7 @@ MonoBehaviour:
   _specialSkill3Text: {fileID: 4606680073965034920}
   _passiveText: {fileID: 3788811787645949119}
   _bonusPassiveText: {fileID: 0}
+  _prefabRawImageDisplay: {fileID: 0}
 --- !u!1 &5391201577491178745
 GameObject:
   m_ObjectHideFlags: 0
@@ -9672,7 +9764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 8935182339333881363}
   returnPanel: {fileID: 3408814843019624015}
 --- !u!1 &6097863100623381479
@@ -10059,7 +10151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee451011089db043bd31bf393fef16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharactorListReturnButton
-  _seId: 1
+  _clickSeId: 1
   _teamConpositionManager: {fileID: 0}
 --- !u!1 &6267894597216655544
 GameObject:
@@ -10509,7 +10601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 3408814843019624015}
   returnPanel: {fileID: 8179068610234747958}
 --- !u!1 &6426067303044563863
@@ -10806,7 +10898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 1513328615824734796}
   returnPanel: {fileID: 3408814843019624015}
 --- !u!1 &6529886536120460934
@@ -11348,7 +11440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefe29fd2d5d2b640b3b2f5011490895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorFloorSelectButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &7097060040535585378
 GameObject:
   m_ObjectHideFlags: 0
@@ -12078,7 +12170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f786c79661e60a649b51cc9c2a37d84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 6538295930241187039}
 --- !u!1 &7661951677799870867
 GameObject:
@@ -13107,7 +13199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 502168492856877061}
   returnPanel: {fileID: 8179068610234747958}
 --- !u!1 &8499938132564619094
@@ -13265,7 +13357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefe29fd2d5d2b640b3b2f5011490895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorFloorSelectButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &8558315162497072889
 GameObject:
   m_ObjectHideFlags: 0
@@ -13412,7 +13504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5bd67fe28bc4f42ad4266691d136be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenConfirmDialogButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 5579409495840305063}
 --- !u!1 &8609951467689676103
 GameObject:
@@ -14225,7 +14317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5bd67fe28bc4f42ad4266691d136be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenConfirmDialogButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 4713589889248953228}
 --- !u!1 &8935182339333881363
 GameObject:
@@ -14912,6 +15004,10 @@ PrefabInstance:
     - target: {fileID: 695350482940687951, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703794555389789104, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
+      propertyPath: _cameraPos.x
+      value: -430
       objectReference: {fileID: 0}
     - target: {fileID: 3184763087512871872, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_Name
@@ -17339,6 +17435,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharactorDescriptionBackDrop
       objectReference: {fileID: 0}
+    - target: {fileID: 1682964516668741760, guid: 4def5c2b1e045429e81bc7d84df03793, type: 3}
+      propertyPath: _prefabRawImageDisplay
+      value: 
+      objectReference: {fileID: 281229356873210835}
     - target: {fileID: 5348063601146788705, guid: 4def5c2b1e045429e81bc7d84df03793, type: 3}
       propertyPath: m_SortingLayer
       value: 0
@@ -18186,6 +18286,10 @@ PrefabInstance:
     - target: {fileID: 695350482940687951, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703794555389789104, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
+      propertyPath: _cameraPos.x
+      value: -420
       objectReference: {fileID: 0}
     - target: {fileID: 3184763087512871872, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_Name
@@ -19762,6 +19866,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2703794555389789104, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
+      propertyPath: _cameraPos.x
+      value: -440
+      objectReference: {fileID: 0}
     - target: {fileID: 3184763087512871872, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_Name
       value: TeamMemberSlot4
@@ -19893,6 +20001,10 @@ PrefabInstance:
     - target: {fileID: 695350482940687951, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703794555389789104, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
+      propertyPath: _cameraPos.x
+      value: -410
       objectReference: {fileID: 0}
     - target: {fileID: 3184763087512871872, guid: 0c7e85836397aac4daa48dd5799485fd, type: 3}
       propertyPath: m_Name

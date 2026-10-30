@@ -32,6 +32,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5659215735363187783}
   - {fileID: 6290773846437950700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -146,9 +147,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24fffe1500f08d84792c058be31a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeamMemberSlot
-  _charactorID: -1
+  _clickSeId: 1
+  _characterID: -1
   _teamConpositionManager: {fileID: 0}
+  _teamMemberManager: {fileID: 0}
+  _prefabRawImageDisplay: {fileID: 2703794555389789104}
   text: {fileID: 1178628394292651444}
+--- !u!1 &7147889365758529811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5659215735363187783}
+  - component: {fileID: 5611997620409224828}
+  - component: {fileID: 2759039842522738972}
+  - component: {fileID: 2703794555389789104}
+  m_Layer: 5
+  m_Name: Live2DImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5659215735363187783
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147889365758529811}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 695350482940687951}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 49, y: -104}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5611997620409224828
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147889365758529811}
+  m_CullTransparentMesh: 1
+--- !u!114 &2759039842522738972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147889365758529811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: 8d37c29cd6252364ba6bfce14ffcbd1b, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &2703794555389789104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147889365758529811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbf3ac5c56514d4cbefc2d9e80f7603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Live2DImageDisplay
+  _cameraPrefab: {fileID: 2075810428260034418, guid: 3e415d235300b1c4e9803e773d01e1db, type: 3}
+  _cameraPos: {x: -400, y: 0, z: -10}
+  _targetOffsetPos: {x: 0, y: 0, z: 1}
+  _targetScale: {x: 1, y: 1, z: 1}
+  _renderTextureSize: 1024
 --- !u!1 &8754319641605436697
 GameObject:
   m_ObjectHideFlags: 0

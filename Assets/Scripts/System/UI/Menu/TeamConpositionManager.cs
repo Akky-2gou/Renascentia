@@ -128,7 +128,13 @@ public class TeamConpositionManager : MonoBehaviour
         CharacterListToTeamComposition(); // チーム編成に画面遷移
 
         if (_selectedTeamMemberSlot != null) {
-            _selectedTeamMemberSlot.AssignCharacter(selectedCharacterID); // 選択されたチームメンバースロットに割り当て
+            CharacterDetailRecord record = _characterDetailDatabase.GetByCharacterId(selectedCharacterID);
+            if (record == null)
+            {
+                Debug.LogWarning($"CharacterDetailDatabase にキャラクターID {selectedCharacterID} の詳細が見つかりませんでした。");
+                return;
+            }
+            _selectedTeamMemberSlot.AssignCharacter(selectedCharacterID, record); // 選択されたチームメンバースロットに割り当て
             _selectedTeamMemberSlot = null; // 選択されたチームメンバースロットを初期化
         }
     }
