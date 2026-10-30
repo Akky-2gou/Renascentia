@@ -24,6 +24,8 @@ public class SoundManager : MonoBehaviour
     private readonly AudioSource[] _bgmSources = new AudioSource[2]; // 交互に使う、BGM用の2つ
     private readonly Tween[] _bgmTweens = new Tween[2];              // それぞれのフェード
     private AudioSource _seSource;
+    private AudioSource _loopSeSource;
+    private int _currentLoopSeId = 0;
 
     private int _activeBgmIndex = 0;     // 今鳴っている（鳴らし始めた）側
     private int _currentBgmId = NO_BGM;  // 今鳴っているBGMの番号
@@ -60,6 +62,10 @@ public class SoundManager : MonoBehaviour
         _seSource = gameObject.AddComponent<AudioSource>();
         _seSource.playOnAwake = false;
 
+        _loopSeSource = gameObject.AddComponent<AudioSource>();
+        _loopSeSource.playOnAwake = false;
+        _loopSeSource.loop = true;
+
         // 対応表から、番号で引ける辞書を作る
         if (_library == null)
         {
@@ -93,6 +99,15 @@ public class SoundManager : MonoBehaviour
         _currentBgmId = id;
     }
 
+    /// <summary>SEを止める</summary>
+    public void StopSe(int id)
+    {
+        if (!TryGetEntry(_seTable, id, "SE", out SoundEntry entry)) return;
+
+        if (_shoeLogs) Debug.Log("SEを止める");
+        _seSource.Stop();
+    }
+
     /// <summary>BGMをフェードアウトして止める</summary>
     public void StopBgm()
     {
@@ -110,6 +125,45 @@ public class SoundManager : MonoBehaviour
 
         if (_shoeLogs) Debug.Log("SEを鳴らした");
         _seSource.PlayOneShot(entry.Clip, entry.Volume); // 重なっても、それぞれ最後まで鳴る
+    }
+
+    /// <summary>SEをループで鳴らす（同じIDが再生中なら何もしない）</summary>
+    public void PlayLoopSe(int id)
+    {
+        if (!TryGetEntry(_seTable, id, "SE", out SoundEntry entry)) return;
+
+        if (_loopSeSource.isPlaying && _currentLoopSeId == id)
+        {
+            return;
+        }
+
+        _loopSeSource.Stop();
+        _loopSeSource.clip = entry.Clip;
+        _loopSeSource.volume = entry.Volume;
+        _loopSeSource.Play();
+        _currentLoopSeId = id;
+
+        if (_shoeLogs) Debug.Log("SEをループ再生した");
+    }
+
+    /// <summary>ループSEを止める（指定IDが再生中のときのみ停止）</summary>
+    public void StopLoopSe(int id)
+    {
+        if (!_loopSeSource.isPlaying)
+        {
+            return;
+        }
+
+        if (_currentLoopSeId != id)
+        {
+            return;
+        }
+
+        _loopSeSource.Stop();
+        _loopSeSource.clip = null;
+        _currentLoopSeId = 0;
+
+        if (_shoeLogs) Debug.Log("ループSEを止めた");
     }
 
     // 指定した側のBGMを、フェードアウトして止める

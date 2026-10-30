@@ -39,7 +39,10 @@ public class WalkingCharactorSetter : MonoBehaviour
             {
                 // そのキャラクターを歩くキャラクターとし，プレイヤーの見た目を変更
                 _walkingCharactorSetupper.Setup(characterID);
-                _talkableCharacterManager.UpdateTalkableCharacters(characterID);
+                if (_talkableCharacterManager != null)
+                {
+                    _talkableCharacterManager.UpdateTalkableCharacters(characterID);
+                }
                 return;
             }
         }

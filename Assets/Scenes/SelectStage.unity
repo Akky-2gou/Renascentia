@@ -6235,7 +6235,7 @@ Transform:
   m_GameObject: {fileID: 711937395}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.9, y: 25.1, z: 0}
+  m_LocalPosition: {x: 91.3, y: 17, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6329,7 +6329,7 @@ Transform:
   m_GameObject: {fileID: 868282608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.2, y: -0.8, z: 0}
+  m_LocalPosition: {x: 92.8, y: -1.1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6649,6 +6649,7 @@ GameObject:
   - component: {fileID: 943891172}
   - component: {fileID: 943891171}
   - component: {fileID: 943891170}
+  - component: {fileID: 943891176}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6668,24 +6669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39fd2380d0789c043b3d3f34719fad9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WalkingCharactorSetupper
-  _charactorPrefabs:
-  - {fileID: 2199136292770638757, guid: b7a4e6d0ee82945ff91041d01bbcdbce, type: 3}
-  - {fileID: 447002470704470471, guid: 42139614dd83b40008e673babaaf39ce, type: 3}
-  - {fileID: 6041174838066580613, guid: 99ca004eb6b214b02acde74258d66535, type: 3}
-  - {fileID: 613545324556406948, guid: 435728ca08ecb433ebe5f746f08eaac9, type: 3}
-  - {fileID: 2036556910349694392, guid: 54a51f4121c144f0b84dbfd72d6db946, type: 3}
-  - {fileID: 1589078401375045364, guid: 7e25fed14982a4f64b02b2a5b94de745, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 1613352106365214314, guid: a5d64f3a8fd044fc9a5caedc0cb5557f, type: 3}
-  - {fileID: 7378612411323872761, guid: cb3890a6cef914428bfe113c6a9487fd, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 348511740201525240, guid: df43dc3e1a25f4b8683ede343d9d8869, type: 3}
-  - {fileID: 8576157232265359782, guid: bec1583702fc84748a23d05e85105884, type: 3}
-  - {fileID: 3092289408527506964, guid: 716727c061bc74b24a7aa330ce30d37f, type: 3}
-  - {fileID: 1233078432417074729, guid: 556e75bfc44694930814c768ed61af5e, type: 3}
+  _wakingCharacterData: {fileID: 11400000, guid: 01d1fcb317b307048b2883fbeb3085f0, type: 2}
+  _charactersXPositionSpace: 10
   _playerController: {fileID: 0}
   _stageSelectPlayer: {fileID: 943891171}
   _characterVisualScale: 0.65
@@ -6718,11 +6703,13 @@ MonoBehaviour:
     marker: {fileID: 711937399}
     offset: {x: 0, y: 0, z: 0}
   initialStageId: 1
-  moveSpeed: 200
+  moveSpeed: 10
+  moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
   battleSceneName: MapToBattle
   _battleConfirm: {fileID: 1600000473}
+  _seId: 3
 --- !u!50 &943891172
 Rigidbody2D:
   serializedVersion: 5
@@ -6957,6 +6944,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &943891176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943891169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c1c1f0a46376041b953ebd57322e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroupChangeVisualDirection
 --- !u!43 &953234582
 Mesh:
   m_ObjectHideFlags: 0
@@ -10383,7 +10382,7 @@ Transform:
   m_GameObject: {fileID: 1685583616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 58.4, y: 17.1, z: 0}
+  m_LocalPosition: {x: -15.5, y: 14.8, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11715,10 +11714,12 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
   initialStageId: 1
   moveSpeed: 0.1
+  moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
   battleSceneName: 
   _battleConfirm: {fileID: 0}
+  _seId: 3
 --- !u!1 &1980285097
 GameObject:
   m_ObjectHideFlags: 0
@@ -12592,7 +12593,7 @@ Transform:
   m_GameObject: {fileID: 2144819570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 55.1, y: -13.4, z: 0}
+  m_LocalPosition: {x: -15.8, y: -7.3, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
