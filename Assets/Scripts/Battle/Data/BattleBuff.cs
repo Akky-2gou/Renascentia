@@ -42,7 +42,8 @@ namespace Battle
     /// <summary>1回の行動で使う強化の合計。作成後は変わらない</summary>
     public class BuffTotals
     {
-        const int MAX_STAGE = 6; // 段階の上限（±）
+        const int MAX_STAGE = 10; // 段階の上限（±）
+        const float STAGE_BASE = 10f; // 段階の倍率の基準（10/10 から、分子か分母を1ずつ増やす）
 
         public static readonly BuffTotals None = new BuffTotals(new PendingBuff[0]); // 強化なし
 
@@ -84,9 +85,9 @@ namespace Battle
             CritDamageBonus = critDamage;
         }
 
-        // 0段階=1.0、+1=3/2、+2=4/2、+3=5/2 ... / -1=2/3、-2=2/4 ...
+        // 0段階=10/10、+1=11/10、+2=12/10 ... +10=20/10 / -1=10/11、-2=10/12 ... -10=10/20
         static float StageToMultiplier(int stage)
-            => stage >= 0 ? (2f + stage) / 2f : 2f / (2f - stage);
+            => stage >= 0 ? (STAGE_BASE + stage) / STAGE_BASE : STAGE_BASE / (STAGE_BASE - stage);
     }
 
     [System.Serializable]

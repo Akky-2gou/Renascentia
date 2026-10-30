@@ -10,6 +10,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game/Passives/FormationRowPassive")]
 public class FormationRowPassive : PassiveBase
 {
+    [Header("前衛と後衛のどちらに対して威力を上げるか")]
+    [SerializeField] private FormationRow _row;
+
     public override void Execute(BattleContext battleContext)
     {
         if (!HasBackRowTarget(battleContext)) return;
@@ -26,7 +29,7 @@ public class FormationRowPassive : PassiveBase
                 Debug.LogError($"{target.name} の前衛後衛が未設定です");
                 continue;
             }
-            if (target.Row == FormationRow.Back) return true;
+            if (target.Row == _row) return true;
         }
         return false;
     }

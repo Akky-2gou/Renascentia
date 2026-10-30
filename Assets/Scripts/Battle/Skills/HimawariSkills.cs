@@ -6,7 +6,7 @@ using Battle;
 [CreateAssetMenu(fileName = "HimawariSkill", menuName = "ScriptableObjects/Battle/Siistine/HimawariSkill")]
 public class HimawariSkills : AttackSkillBase
 {
-    [Header("追加ダメージ（0 なら使わない）")]
+    [Header("追加ダメージ（0 なら使わない。0.02 なら 2%）")]
     [SerializeField] private float _maxHpPercent;  // 相手の最大HPの何％を追加するか（0.02 なら 2%）
     [SerializeField] private float _lostHpPercent; // 相手の減少HP（最大HP − 今のHP）の何％を追加するか（0.03 なら 3%）
 

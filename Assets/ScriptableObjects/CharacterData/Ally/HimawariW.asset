@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HimawariW
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   _maxHp: 100
-  _attack: 10
+  _attack: 100
   _defense: 100
   _normalAttackPower: 100
   _healAmount: 0
@@ -26,10 +26,10 @@ MonoBehaviour:
   _iconScale: 13
   _characterPrefab: {fileID: 447002470704470471, guid: 42139614dd83b40008e673babaaf39ce, type: 3}
   _skills:
-  - {fileID: 11400000, guid: 61047105b99d2ef40961387e2a110f0e, type: 2}
-  - {fileID: 11400000, guid: 457212ac5ee68d841a088cd3caa24a3e, type: 2}
-  - {fileID: 11400000, guid: e55f0ffdf2bb52444bf5f402f6f91606, type: 2}
-  _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}
+  - {fileID: 11400000, guid: 8449280b3f7df4a22afb8a31c0eb31ba, type: 2}
+  - {fileID: 11400000, guid: 47982fe018b964278bc3f618d2657860, type: 2}
+  - {fileID: 11400000, guid: c45c17e4f354447cebcd2cdcdb97538a, type: 2}
+  _passive: {fileID: 11400000, guid: d405bab490d1e443ea7da57f79e4aae9, type: 2}
   _skillEffect1:
     _prefab: {fileID: 4181638402772279204, guid: 76279b1169f7d734dabeea1d8a28a04e, type: 3}
     _offset: {x: -7.5, y: 0}

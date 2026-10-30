@@ -6,7 +6,7 @@ using Battle;
 [CreateAssetMenu(fileName = "SistineSkill", menuName = "ScriptableObjects/Battle/Siistine/SistineSkill")]
 public class SistineBSkill : AttackSkillBase
 {
-    [Header("味方全体の回復")]
+    [Header("味方全体の回復（0.15 なら 15%）")]
     [SerializeField] private float _healPercent; // 味方それぞれの最大HPの何％を回復するか（0.15 なら 15%）
     public float HealPercent => _healPercent;
 

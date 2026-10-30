@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0198203e9c7f948b0533a762b51830, type: 3}
   m_Name: SistineB
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  _maxHp: 100
-  _attack: 10
-  _defense: 100
+  _maxHp: 110
+  _attack: 80
+  _defense: 110
   _normalAttackPower: 100
   _healAmount: 0
-  _characterType: 1
+  _characterType: 2
   _battleUnitType: 0
-  _attackElement: 1
-  _weaknesses: 0300000005000000
+  _attackElement: 4
+  _weaknesses: 05000000
   _icon: {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
   _iconOffset: {x: 82.35, y: -247}
   _iconScale: 12
   _characterPrefab: {fileID: 4194924287017135608, guid: 23e369e29108d4e9dba230768715beb9, type: 3}
   _skills:
-  - {fileID: 11400000, guid: 61047105b99d2ef40961387e2a110f0e, type: 2}
-  - {fileID: 11400000, guid: 457212ac5ee68d841a088cd3caa24a3e, type: 2}
-  - {fileID: 11400000, guid: e55f0ffdf2bb52444bf5f402f6f91606, type: 2}
+  - {fileID: 11400000, guid: b78407fc916e34e6e94e5d845408fbe1, type: 2}
+  - {fileID: 11400000, guid: b0e87d7813e8f48f29031ded32e43e99, type: 2}
+  - {fileID: 11400000, guid: 64482f403bbda476baf29a85b66671b4, type: 2}
   _passive: {fileID: 11400000, guid: 1dccd25052d5c3746bee0e9eddc33971, type: 2}
   _skillEffect1:
     _prefab: {fileID: -990994973267907316, guid: 36fffcd498f2edf41ae6972b8b9ac83d, type: 3}
