@@ -57,14 +57,20 @@ public class SoundManager : MonoBehaviour
             source.playOnAwake = false;
             source.loop = true;
             source.volume = 0f;
+            source.pitch = 1f;
+            source.spatialBlend = 0f;
             _bgmSources[i] = source;
         }
         _seSource = gameObject.AddComponent<AudioSource>();
         _seSource.playOnAwake = false;
+        _seSource.pitch = 1f;
+        _seSource.spatialBlend = 0f;
 
         _loopSeSource = gameObject.AddComponent<AudioSource>();
         _loopSeSource.playOnAwake = false;
         _loopSeSource.loop = true;
+        _loopSeSource.pitch = 1f;
+        _loopSeSource.spatialBlend = 0f;
 
         // 対応表から、番号で引ける辞書を作る
         if (_library == null)
@@ -123,8 +129,15 @@ public class SoundManager : MonoBehaviour
     {
         if (!TryGetEntry(_seTable, id, "SE", out SoundEntry entry)) return;
 
+        _seSource.pitch = 1f;
         if (_shoeLogs) Debug.Log("SEを鳴らした");
         _seSource.PlayOneShot(entry.Clip, entry.Volume); // 重なっても、それぞれ最後まで鳴る
+    }
+
+    /// <summary>単発SE(AudioSource.PlayOneShot)が再生中かどうか</summary>
+    public bool IsSePlaying()
+    {
+        return _seSource != null && _seSource.isPlaying;
     }
 
     /// <summary>SEをループで鳴らす（同じIDが再生中なら何もしない）</summary>
@@ -138,6 +151,7 @@ public class SoundManager : MonoBehaviour
         }
 
         _loopSeSource.Stop();
+        _loopSeSource.pitch = 1f;
         _loopSeSource.clip = entry.Clip;
         _loopSeSource.volume = entry.Volume;
         _loopSeSource.Play();

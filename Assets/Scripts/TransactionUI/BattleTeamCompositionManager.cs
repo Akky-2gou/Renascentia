@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks.Triggers;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,8 +59,22 @@ public class BattleTeamCompositionManager : MonoBehaviour
     }
 
     //本当にバトルシーンへ移動
-    public void ConfirmSortieToBattleScene()
+    public async void ConfirmSortieToBattleScene()
     {
+        if (sortieConfirmDialog != null)
+        {
+            sortieConfirmDialog.SetActive(false);
+        }
+
+        SoundManager soundManager = SoundManager.Instance;
+        if (soundManager != null)
+        {
+            while (soundManager.IsSePlaying())
+            {
+                await UniTask.Yield();
+            }
+        }
+
         LoadBattleScene();
     }
 
