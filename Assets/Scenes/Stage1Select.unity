@@ -2594,7 +2594,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30BF\u30A4\u30C8\u30EB\u306B\u623B\u308A\u307E\u3059\u304B\uFF1F\n"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
   m_sharedMaterial: {fileID: 7573449486024199980, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
@@ -6309,7 +6309,7 @@ Transform:
   m_GameObject: {fileID: 868282608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7, y: -4, z: 0}
+  m_LocalPosition: {x: -2.7, y: -7.8, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6376,6 +6376,14 @@ MonoBehaviour:
   stageId: 3
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 1685583618}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 2144819571}
+  moveOnUp: {fileID: 1685583618}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 2144819571}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!212 &868282612
@@ -6404,7 +6412,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6684,6 +6692,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
+  pivotToFootOffset: {x: -0.5, y: -4.5, z: 0}
   battleSceneName: MapToBattle
   _battleConfirm: {fileID: 1600000473}
   _seId: 3
@@ -6915,7 +6924,7 @@ Transform:
   m_GameObject: {fileID: 943891169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.86, y: -15.84, z: 0}
+  m_LocalPosition: {x: 82, y: -13, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -10002,6 +10011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmDialogController
   _noButton: {fileID: 1367580328}
+  _stageText: {fileID: 40704604}
+  _stageTextFormat: "\u30B9\u30C6\u30FC\u30B8 {0} \u306B\u51FA\u6483\u3057\u307E\u3059\u304B\uFF1F"
 --- !u!114 &1600000474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10298,6 +10309,14 @@ MonoBehaviour:
   stageId: 4
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 868282611}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 868282611}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!212 &1685583619
@@ -10326,7 +10345,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10368,8 +10387,8 @@ Transform:
   m_GameObject: {fileID: 1685583616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 9.9, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: -4.3, y: 11.5, z: 0}
+  m_LocalScale: {x: 12, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -11703,6 +11722,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
+  pivotToFootOffset: {x: 0, y: 0, z: 0}
   battleSceneName: 
   _battleConfirm: {fileID: 0}
   _seId: 3
@@ -11813,7 +11833,7 @@ Transform:
   m_GameObject: {fileID: 1986245013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.2, y: -15, z: 0}
+  m_LocalPosition: {x: 81.5, y: -17.9, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11834,6 +11854,14 @@ MonoBehaviour:
   stageId: 1
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 2144819571}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 2144819571}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!61 &1986245016
@@ -11908,7 +11936,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12463,6 +12491,14 @@ MonoBehaviour:
   stageId: 2
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 868282611}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 1986245015}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 868282611}
+  moveOnRight: {fileID: 1986245015}
   selectedAlpha: 0
   unselectedAlpha: 0
 --- !u!61 &2144819572
@@ -12537,7 +12573,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 3324b95ba832d474d931817a1109621a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12579,7 +12615,7 @@ Transform:
   m_GameObject: {fileID: 2144819570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.8, y: -7, z: 0}
+  m_LocalPosition: {x: 30.8, y: -10.1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
