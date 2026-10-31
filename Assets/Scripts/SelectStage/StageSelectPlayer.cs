@@ -219,7 +219,8 @@ public class StageSelectPlayer : MonoBehaviour
         selectedIndex = lastIndex;
         ClampSelection();
 
-        if (!PrepareTargetPositionForIndex(currentIndex))
+        // 最初の配置なので、向きは変えない（この時点では、向きを変えるキャラがまだ登録されていない）
+        if (!PrepareTargetPositionForIndex(currentIndex, false))
         {
             return;
         }
@@ -467,8 +468,8 @@ public class StageSelectPlayer : MonoBehaviour
         PrepareTargetPositionForIndex(selectedIndex);
     }
 
-    // 指定インデックスの目標位置を設定する
-    private bool PrepareTargetPositionForIndex(int index)
+    // 指定インデックスの目標位置を設定する。changeDirection が false なら、キャラの向きは変えない
+    private bool PrepareTargetPositionForIndex(int index, bool changeDirection = true)
     {
         if (!HasValidIndex(index))
         {
@@ -486,7 +487,7 @@ public class StageSelectPlayer : MonoBehaviour
         currentTargetPosition = target.marker.position + target.offset - pivotToFootOffset;
 
         // 目標位置と現在位置を比較し，進行方向を向く
-        if (_groupChangeVisualDirection != null)
+        if (changeDirection && _groupChangeVisualDirection != null)
         {
             if (currentTargetPosition.x < moveTarget.position.x) _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Left); 
             else _groupChangeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);

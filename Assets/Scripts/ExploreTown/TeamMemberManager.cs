@@ -42,6 +42,25 @@ public class TeamMemberManager : MonoBehaviour
         return true;
     }
 
+    /// <summary>CharacterData からキャラIDを引く（応急措置）。対応表になければエラーを出して false</summary>
+    public bool TryGetCharacterId(CharacterData data, out int characterId)
+    {
+        characterId = -1;
+        if (data == null || _characterDataById == null) return false;
+
+        for (int i = 0; i < _characterDataById.Length; i++)
+        {
+            if (_characterDataById[i] == data)
+            {
+                characterId = i; // 要素番号 = キャラID
+                return true;
+            }
+        }
+
+        Debug.LogError($"TeamMemberManager: {data.name} が対応表（Character Data By Id）にありません");
+        return false;
+    }
+
     public void SetCharacterSlots(IEnumerable<CharacterSlot> characterSlots)
     {
         _characterSlots = characterSlots == null ? new List<CharacterSlot>() : new List<CharacterSlot>(characterSlots);
