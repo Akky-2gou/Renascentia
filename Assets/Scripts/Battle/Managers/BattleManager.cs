@@ -152,9 +152,13 @@ public class BattleManager : MonoBehaviour
         _context = new BattleContext(_characterQueue); // 同じキューを渡す
         _context.FormChangeRequested += ChangeForm; // 形態変化の要求を受け取る
 
-        Party party = FindAnyObjectByType<Party>(); // パーティー情報を取得する
+        Party party = Party.Instance; // パーティー情報を取得する（シーンをまたいで残っている1つ）
+        if (party == null)
+        {
+            Debug.LogError("Partyが見つかりません");
+            return;
+        }
         CharacterData[] partyMembers = party.Members; // パーティーメンバーのステータスを取得する
-        if (!party.HasAnyMember())
         {
             Debug.LogError("パーティメンバーが1人も設定されていません");
         }

@@ -15,6 +15,9 @@ public class TeamMemberSlot : Button
     // 編成されたメンバーを管理するマネージャー
     [SerializeField] private TeamMemberManager _teamMemberManager;
 
+    [Header("応急措置: パーティの何番目のスロットか（0・1: 前衛 / 2・3: 後衛）")]
+    [SerializeField] private int _partyIndex = -1;
+
     [Header("ちびキャラを表示させたいRawImageオブジェクト")]
 	[SerializeField] private PrefabRawImageDisplay _prefabRawImageDisplay;
 
@@ -68,6 +71,7 @@ public class TeamMemberSlot : Button
         }
 
         ClearCharacter();
+        ApplyToParty();
     }
     
     /// <summary>
@@ -90,6 +94,31 @@ public class TeamMemberSlot : Button
         }
 
         ShowCharacter(record);
+        ApplyToParty();
+    }
+
+    // このスロットの今のキャラを、Party の同じ位置に反映する（応急措置）
+    private void ApplyToParty()
+    {
+        if (_partyIndex < 0)
+        {
+            Debug.LogError($"{name}: パーティの何番目のスロットか（_partyIndex）が設定されていません");
+            return;
+        }
+        if (Party.Instance == null)
+        {
+            Debug.LogError($"{name}: Party が存在しないため、編成をパーティに反映できません");
+            return;
+        }
+
+        if (_characterID == -1)
+        {
+            Party.Instance[_partyIndex] = null; // 空欄
+            return;
+        }
+
+        if (!_teamMemberManager.TryGetCharacterData(_characterID, out CharacterData data)) return; // ログは中で出る
+        Party.Instance[_partyIndex] = data;
     }
 
     // キャラがアサインされていない状態にする関数
