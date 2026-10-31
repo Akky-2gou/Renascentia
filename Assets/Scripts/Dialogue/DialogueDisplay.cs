@@ -250,18 +250,21 @@ public class DialogueDisplay : MonoBehaviour
             _textBoxImage.sprite = _textBoxBackGround.GetBackgroundSprite(_currentDialogueData._textBoxType);
 
             // BGMの再生
-            if (_currentDialogueData._bgmId >= 0 && _currentDialogueData._bgmId != _currentBGM) // BGMが変わった場合のみ再生開始
+            if (_isInTown || _isInBattle)
             {
-                // BGMを変更する処理をここに追加
-                Debug.Log($"BGMを変更: {_currentDialogueData._bgmId}");
-                _currentBGM = _currentDialogueData._bgmId;
+                if (_currentDialogueData._bgmId >= 0 && _currentDialogueData._bgmId != _currentBGM) // BGMが変わった場合のみ再生開始
+                {
+                    // BGMを変更
+                    SoundManager.Instance.PlayBgmLoop(_currentDialogueData._bgmId);
+                    _currentBGM = _currentDialogueData._bgmId;
+                }
             }
 
             // SEの再生
             if (_currentDialogueData._seId >= 0)
             {
-                // SEを再生する処理をここに追加
-                Debug.Log($"SEを再生: {_currentDialogueData._seId}");
+                // SEを再生
+                SoundManager.Instance.PlaySe(_currentDialogueData._seId);
             }
 
             if (isFast) // 早送り中の場合は一文字ずつ表示せずに即座に表示
