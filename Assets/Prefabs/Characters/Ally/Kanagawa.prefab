@@ -711,6 +711,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatus
   _targetMarkRoot: {fileID: 2433377356178885797}
+  _deathFadeSeconds: 0.8
+  _deathAnimationTimeout: 5
 --- !u!61 &2728973816526458165
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -47,6 +47,10 @@ public class CharacterData : ScriptableObject
     [SerializeField] GameObject _characterPrefab;
     public GameObject CharacterPrefab => _characterPrefab;
 
+    [Header("バトルでの大きさの倍率（1 で通常。大きく見せたい敵だけ変える）")]
+    [SerializeField, Min(0.1f)] float _battleScaleMultiplier = 1f;
+    public float BattleScaleMultiplier => _battleScaleMultiplier;
+
     [Header("スキル")]
     [SerializeField] SkillData[] _skills;
     public SkillData[] Skills => _skills;
