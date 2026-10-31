@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df648dc3cb78ed48b8a5c809d63885d, type: 3}
   m_Name: SoundLibrary
   m_EditorClassIdentifier: Assembly-CSharp::SoundLibrary
-  _bgm: []
+  _bgm:
+  - _id: 1
+    _clip: {fileID: 8300000, guid: 3ebb68eefaa4f44f18f339a464a5cebf, type: 3}
+    _volume: 0.1
+  - _id: 2
+    _clip: {fileID: 8300000, guid: aeba86386a9b14d3fb540786c37e70db, type: 3}
+    _volume: 0.1
+  - _id: 3
+    _clip: {fileID: 8300000, guid: 35670ef54c89b44f794a9e7bf6084162, type: 3}
+    _volume: 0.1
   _se:
   - _id: 1
     _clip: {fileID: 8300000, guid: 75ec594a188114b19a154c56152b1897, type: 3}
