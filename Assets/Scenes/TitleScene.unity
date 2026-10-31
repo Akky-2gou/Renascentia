@@ -761,7 +761,6 @@ GameObject:
   - component: {fileID: 414609096}
   - component: {fileID: 414609095}
   - component: {fileID: 414609098}
-  - component: {fileID: 414609099}
   - component: {fileID: 414609100}
   m_Layer: 5
   m_Name: NewGame
@@ -834,18 +833,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 414609099}
-        m_TargetAssemblyTypeName: TransitionButton, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 414609100}
         m_TargetAssemblyTypeName: NewGameButton, Assembly-CSharp
         m_MethodName: OnClick
@@ -920,24 +907,6 @@ MonoBehaviour:
   _easingMethod: 0
   _CustomAnimationCurve: {fileID: 11400000, guid: 1bcb3fc65091d4305ad5a0559d66dcd4, type: 2}
   _isAnimateOnEnable: 1
---- !u!114 &414609099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 414609093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d82c1dcea33563c4da1d3818495acbee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TransitionButton
-  _clickSeId: 1
-  _target:
-    _scene: 2
-    _parameter: 11
-    _stage: 0
-  _useLastMap: 0
 --- !u!114 &414609100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -951,7 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewGameButton
   _clickSeId: 1
-  _sequence: {fileID: 0}
+  _sequence: {fileID: 11400000, guid: aba0fcd2a3a044844b1c2669d3d55080, type: 2}
 --- !u!1 &442502814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,6 +1521,7 @@ Transform:
   - {fileID: 1007164596}
   - {fileID: 1459976215}
   - {fileID: 1979315176}
+  - {fileID: 1430799942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &859335121
@@ -3326,7 +3296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0185553cb146e47118f090320c1a15e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Party
-  _slot1: {fileID: 11400000, guid: 6045650a5c65f9e4a920804af2852530, type: 2}
+  _slot1: {fileID: 11400000, guid: 4daef4abe3ba74e4d93c00dc6fb3eab8, type: 2}
   _slot2: {fileID: 0}
   _slot3: {fileID: 0}
   _slot4: {fileID: 0}
@@ -3719,6 +3689,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409745706}
   m_CullTransparentMesh: 1
+--- !u!1 &1430799941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1430799942}
+  - component: {fileID: 1430799943}
+  m_Layer: 0
+  m_Name: SequenceFlow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1430799942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430799941}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 756527467}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1430799943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430799941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37918ec56256e247944db6cf05c8045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequenceFlow
 --- !u!1 &1459976214
 GameObject:
   m_ObjectHideFlags: 0
