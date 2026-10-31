@@ -558,14 +558,16 @@ public class BattleManager : MonoBehaviour
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
         PlaySeIfAvailable(_normalAttackSeId);
+        HashSet<CharacterStatus> aliveBefore = CollectAlive(defenders); // この攻撃で死ぬかを比べるため
         TakeDamage(attacker, defenders); // 通常攻撃はダメージを与えるだけ
         _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         IncreaseSP(BASIC_SP_GAIN); // 通常攻撃を行うとSPが1増加する
-        defender.PlayDamagedAnimation(); // defenderの被弾アニメーション
+        List<UniTask> deathTasks = PlayHitReactions(defenders, aliveBefore, false); // 被弾 or 死亡演出
         _context.AddNormalAttackHistory(_turnCount); // 行動履歴の追加
 
-        // 攻撃アニメーションが最後まで終わるまで待つ
+        // 攻撃アニメーションと、死亡演出が最後まで終わるまで待つ
         await endTcs.Task;
+        await UniTask.WhenAll(deathTasks);
 
         // イベントの登録を解除
         attacker.OnHitEvent -= onHit;
@@ -648,26 +650,19 @@ public class BattleManager : MonoBehaviour
 
         // ヒットの瞬間にダメージ計算と被弾アニメーションを再生！
         PlaySeIfAvailable(_skillAttackSeId);
+        HashSet<CharacterStatus> aliveBefore = CollectAlive(targets); // この攻撃で死ぬかを比べるため
         skill.Execute(_context); // 通常攻撃はダメージを与えるだけ
         _context.ConsumeLockedBuffs(); // 標的全員の処理が終わったので、使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
 
         DecreaseSP(_skillCost); // スキルを使うと消費スキル量が減少する
         ResetSkillCost();
-        bool playedTakeDamageSe = false;
-        foreach (var target in targets)
-        {
-            if (!playedTakeDamageSe)
-            {
-                PlaySeIfAvailable(_takeDamageSeId);
-                playedTakeDamageSe = true;
-            }
+        if (targets.Length > 0) PlaySeIfAvailable(_takeDamageSeId);
+        List<UniTask> deathTasks = PlayHitReactions(targets, aliveBefore, false); // 被弾 or 死亡演出
 
-            target.PlayDamagedAnimation(); // 被弾アニメーション
-        }
-
-        // 全部の演出が最後まで終わるまで待つ（演出は終わると自分で消える）
+        // 全部の演出と、死亡演出が最後まで終わるまで待つ（演出は終わると自分で消える）
         await UniTask.WhenAll(endTasks);
+        await UniTask.WhenAll(deathTasks);
 
         // スキル終了後のパッシブの発動
         if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterSkillAttack
@@ -974,6 +969,42 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // 攻撃の前に生きていた対象を覚えておく（この攻撃で死んだかを、あとで比べるため）
+    private static HashSet<CharacterStatus> CollectAlive(IEnumerable<CharacterStatus> targets)
+    {
+        var alive = new HashSet<CharacterStatus>();
+        foreach (var target in targets)
+        {
+            if (target.Alive) alive.Add(target);
+        }
+        return alive;
+    }
+
+    /// <summary>
+    /// ダメージを反映したあとに呼ぶ。この攻撃で死んだ対象には死亡演出、生きている対象には被弾アニメーションを出す
+    /// damagedOnlyPlayers が true なら、被弾アニメーションはプレイヤー側だけに出す（敵の行動用）
+    /// 死亡演出の終わりを待つための UniTask を返す
+    /// </summary>
+    private List<UniTask> PlayHitReactions(IEnumerable<CharacterStatus> targets, HashSet<CharacterStatus> aliveBefore, bool damagedOnlyPlayers)
+    {
+        var deathTasks = new List<UniTask>();
+        foreach (var target in targets)
+        {
+            // この攻撃で死んだ
+            if (aliveBefore.Contains(target) && !target.Alive)
+            {
+                deathTasks.Add(target.PlayDeathAsync(destroyCancellationToken));
+                continue;
+            }
+
+            if (!target.Alive) continue; // もともと死んでいた
+            if (damagedOnlyPlayers && target.BattleUnitType != BattleUnitType.Player) continue;
+
+            target.PlayDamagedAnimation();
+        }
+        return deathTasks;
+    }
+
     // 敵の行動処理。行動表からスキルと標的を選び、プレイヤーのスキルと同じ流れで発動する
     async UniTaskVoid EnemyAction()
     {
@@ -1014,28 +1045,25 @@ public class BattleManager : MonoBehaviour
         await hitTcs.Task;
 
         PlaySeIfAvailable(_skillAttackSeId);
+        HashSet<CharacterStatus> aliveBefore = CollectAlive(targets); // この攻撃で死ぬかを比べるため
         skill.Execute(_context);
         _context.ConsumeLockedBuffs();               // 使った強化を消す
         _context.AddSkillHistory(_turnCount, skill); // 行動履歴の追加
 
-        bool playedTakeDamageSe = false;
+        // 敵が味方(敵側)に使う強化などでは、被弾アニメーションを出さない
         foreach (var target in targets)
         {
-            // 敵が味方(敵側)に使う強化などでは、被弾アニメーションを出さない
             if (target.BattleUnitType == BattleUnitType.Player)
             {
-                if (!playedTakeDamageSe)
-                {
-                    PlaySeIfAvailable(_takeDamageSeId);
-                    playedTakeDamageSe = true;
-                }
-
-                target.PlayDamagedAnimation();
+                PlaySeIfAvailable(_takeDamageSeId);
+                break;
             }
         }
+        List<UniTask> deathTasks = PlayHitReactions(targets, aliveBefore, true); // 被弾 or 死亡演出
 
-        // 攻撃アニメーションが最後まで終わるまで待つ
+        // 攻撃アニメーションと、死亡演出が最後まで終わるまで待つ
         await endTcs.Task;
+        await UniTask.WhenAll(deathTasks);
 
         attacker.OnHitEvent -= onHit;
         attacker.OnAnimationEndEvent -= onEnd;
