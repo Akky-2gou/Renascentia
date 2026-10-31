@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class NewGameButton : Button
 {
+    [SerializeField] private SceneSequence _sequence;
+
     public override void OnClick()
     {
         base.OnClick();
@@ -19,5 +21,11 @@ public class NewGameButton : Button
         GameProgress.Instance.UnlockedCharacterIds.Add(0);
 
         //　シーン遷移の処理
+        if (SequenceFlow.Instance == null)
+        {
+            Debug.LogError("SequenceStartButton: SequenceFlow が存在しません");
+            return;
+        }
+        SequenceFlow.Instance.Begin(_sequence);
     }
 }

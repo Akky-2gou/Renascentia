@@ -300,6 +300,12 @@ public class DialogueDisplay : MonoBehaviour
                 _dialoguePanel.SetActive(false);
             }
             // 会話シーンなら、ステージの流れに「会話が終わった」ことを伝える（次の行き先は StageFlow が決める）
+            // 最初の流れ（SceneSequence）の途中なら、次へ進める
+            else if (SequenceFlow.Instance != null && SequenceFlow.Instance.IsRunning)
+            {
+                SequenceFlow.Instance.Next();
+            }
+            // 会話シーンなら、ステージの流れに「会話が終わった」ことを伝える（次の行き先は StageFlow が決める）
             else if (StageFlow.Instance == null)
             {
                 Debug.LogError("DialogueDisplay: StageFlow が存在しません");

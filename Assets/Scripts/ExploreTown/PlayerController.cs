@@ -322,6 +322,13 @@ public class PlayerController : MonoBehaviour
                         return;
                     }
 
+                    // 最初の流れ（SceneSequence）の途中なら、並びの次へ進める（行き先は SceneSequence で決める）
+                    if (SequenceFlow.Instance != null && SequenceFlow.Instance.IsRunning)
+                    {
+                        SequenceFlow.Instance.Next();
+                        return;
+                    }
+
                     // プレイヤーがオブジェクトに当たって遷移する例は1つしかないはずなので、強制させてる
                     // オブジェクトに当たって遷移する先が、1シーンにつき複数ある場合は分岐を増やす
                     SceneNavigator.Instance.Go(_nextScene);

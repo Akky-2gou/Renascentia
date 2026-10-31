@@ -106,6 +106,13 @@ public class BattleWinPresentationManager : MonoBehaviour
         }
 
         _menu.interactable = false; // 連打で2回呼ばれないように、1回押したらボタンを効かなくする
+
+        // 最初の流れの途中なら、並びの次へ。それ以外はステージの流れ
+        if (SequenceFlow.Instance != null && SequenceFlow.Instance.IsRunning)
+        {
+            SequenceFlow.Instance.Next();
+            return;
+        }
         StageFlow.Instance.OnBattleWon();
     }
 
