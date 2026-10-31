@@ -6294,9 +6294,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameProgress
   _stageProgress: 4
-  _testUnlockedCharacterIds: 0100000002000000030000000400000005000000
+  _testUnlockedCharacterIds: 0100000002000000030000000400000000000000
   _replaceOnApply: 0
-  _applyTestUnlockedOnAwake: 0
+  _applyTestUnlockedOnAwake: 1
   _lastMapId: 0
 --- !u!114 &856717684 stripped
 MonoBehaviour:
@@ -8393,11 +8393,11 @@ PrefabInstance:
       objectReference: {fileID: 1411959971}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_exclusiveCharacterGroups.Array.data[0].characterIds.Array.data[0]'
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2571885570395303585, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: '_exclusiveCharacterGroups.Array.data[0].characterIds.Array.data[1]'
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4816671331577186687, guid: b2ee6f68f7fc854469a6063f9cbdf077, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9123,6 +9123,10 @@ PrefabInstance:
     - target: {fileID: 1432186859419374313, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: firstSelectedButton
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477672956102833845, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: _characterID
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1477672956102833845, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamMemberManager

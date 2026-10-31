@@ -47,7 +47,7 @@ public class TeamMemberManager : MonoBehaviour
     /// </summary>
     private void ResolveExclusiveCharacterGroups(int targetCharacterId)
     {
-        if (targetCharacterId <= 0)
+        if (targetCharacterId < 0)
         {
             return;
         }

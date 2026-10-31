@@ -96,7 +96,7 @@ public class GameProgress : MonoBehaviour
 
         foreach (int characterId in characterIds)
         {
-            if (characterId <= 0)
+            if (characterId < 0)
             {
                 Debug.LogWarning($"無効なキャラクターIDをスキップしました: {characterId}");
                 continue;

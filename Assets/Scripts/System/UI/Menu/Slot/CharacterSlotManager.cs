@@ -86,7 +86,7 @@ public class CharacterSlotManager : MonoBehaviour
 		gridLayoutGroup.constraintCount = columns;
 
 		List<int> unlockedCharacterIds = new List<int>(gameProgress.UnlockedCharacterIds);
-		unlockedCharacterIds.RemoveAll(id => id <= 0);
+		unlockedCharacterIds.RemoveAll(id => id < 0);
 		unlockedCharacterIds.Sort();
 
 		TeamConpositionManager teamConpositionManager = null;

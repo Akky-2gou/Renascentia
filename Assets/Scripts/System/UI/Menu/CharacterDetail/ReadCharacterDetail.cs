@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
  */
 public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 {
-	private const int InitialDisplayCharacterId = 1;
+	private const int InitialDisplayCharacterId = 0;
 
 	[SerializeField] private int slotId = -1;
 	[SerializeField] private bool _canShowDetail;
@@ -46,7 +46,7 @@ public class ReadCharacterDetail : MonoBehaviour, IPointerClickHandler
 			return;
 		}
 
-		if (slotId <= 0)
+		if (slotId < 0)
 		{
 			_canShowDetail = false;
 			Debug.LogWarning($"slotId が無効です: {slotId}");
