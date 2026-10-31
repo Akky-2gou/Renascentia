@@ -20,14 +20,7 @@ public class GameProgress : MonoBehaviour
     private List<int> _collectedItemIds = new List<int>();
 
   
-    public MapId StageProgress
-    {
-        get { return _stageProgress; }
-        set 
-        { 
-            _stageProgress = value;
-        }
-    }
+
 
     public bool IsStageUnlocked(MapId stageId)
     {
@@ -53,6 +46,12 @@ public class GameProgress : MonoBehaviour
                 UnlockCharactersForProgress(previous, value);
             }
         }
+    }
+
+    public MapId LastMapId
+    {
+        get { return _lastMapId; }
+        set { _lastMapId = value; }
     }
 
     // 進行度が from から to に進んだとき、対応表に登録されたキャラを解放する
