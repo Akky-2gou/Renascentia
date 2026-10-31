@@ -335,7 +335,7 @@ public class BattleManager : MonoBehaviour
         // チュートリアル戦なら味方の出番が回ってきたときの演出を行う
         if (_isTutorial)
         {
-            _tutorialBattleManager.OnAllyActivationStarted().Forget();
+            _tutorialBattleManager.OnAllyTurnStarted().Forget();
         }
     }
 
@@ -484,6 +484,12 @@ public class BattleManager : MonoBehaviour
 
                     CharacterStatus endPoint = _characterQueue.Dequeue(); // 終了点をキューから取り出す
                     _characterQueue.Enqueue(endPoint); // 終了点をキューの最後に
+                    
+                    // チュートリアル戦なら味方の出番が回ってきたときの演出を行う
+                    if (_isTutorial)
+                    {
+                        _tutorialBattleManager.OnAllyTurnStarted().Forget();
+                    }
                 }
 
                 if (_characterQueue.Peek().Alive) break;
@@ -510,12 +516,6 @@ public class BattleManager : MonoBehaviour
             // ターン開始時のパッシブの発動
             if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.TurnStart)
                 _characterQueue.Peek().Passive.Execute(_context);
-
-            // チュートリアル戦なら味方の出番が回ってきたときの演出を行う
-            if (_isTutorial)
-            {
-                _tutorialBattleManager.OnAllyActivationStarted().Forget();
-            }
 
             return;
         }
@@ -597,6 +597,12 @@ public class BattleManager : MonoBehaviour
         if (_characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterNormalAttack
             || _characterQueue.Peek().Passive.PassiveTiming == PassiveTiming.AfterAction)
             _characterQueue.Peek().Passive.Execute(_context);
+        
+        // チュートリアル戦なら攻撃し終わったときの演出を行う
+        if (_isTutorial)
+        {
+            await _tutorialBattleManager.OnNormalAttackFinished();
+        }
 
         NextTurn(); // ターンを終了する
     }
@@ -620,17 +626,17 @@ public class BattleManager : MonoBehaviour
 
         // 戻り値のUniTaskを受け取らず「撃ち放し」にするために .Forget() をつける
         SkillAttack(new[] { target }, skill).Forget();
-        
-        // チュートリアル戦なら対象を選択した後の処理をする
-        if (_isTutorial)
-        {
-            _tutorialBattleManager.OnSelectedSkillTarget().Forget();
-        }
     }
 
     // スキル攻撃処理
     async UniTaskVoid SkillAttack(CharacterStatus[] targets, SkillData skill)
     {
+        // チュートリアル戦なら対象を選択した後の処理をする
+        if (_isTutorial)
+        {
+            _tutorialBattleManager.OnSelectedSkillTarget().Forget();
+        }
+
         CharacterStatus attacker = _characterQueue.Peek(); // 攻撃者の取得
         _context.BeginSkillAction(attacker, targets, skill, _turnCount); // 攻撃者と標的をバトル情報に追加
 
