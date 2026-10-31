@@ -14,7 +14,7 @@ public static class DamageCalculator
     private const float RANDOM_VARIANCE_MIN = 0.85f; // 乱数の下限
     private const float RANDOM_VARIANCE_MAX = 1.0f; // 乱数の上限
     private const float WEAKNESS_MULTIPLIER = 1.5f; // 苦手属性を突いたときの倍率
-    private const float DAMAGE_DIVISOR = 50f; // 元ダメージを割る値（威力 × 攻撃 / 防御 / 50）
+    private const float DAMAGE_DIVISOR = 5f; // 元ダメージを割る値（威力 × 攻撃 / 防御 / 50）
 
     /// <summary>
     /// ダメージ演算処理

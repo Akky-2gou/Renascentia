@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0198203e9c7f948b0533a762b51830, type: 3}
   m_Name: Bansan
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  _maxHp: 100
-  _attack: 100
-  _defense: 100
+  _maxHp: 400
+  _attack: 225
+  _defense: 225
   _normalAttackPower: 10
   _healAmount: 0
   _characterType: 1
@@ -27,9 +27,25 @@ MonoBehaviour:
   _characterPrefab: {fileID: 749130529908018651, guid: 333df65aa7226b0469b0f636a68a93c3, type: 3}
   _skills: []
   _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}
+  _skillEffect1:
+    _prefab: {fileID: 0}
+    _offset: {x: 0, y: 0}
+    _scale: {x: 1, y: 1}
+  _skillEffect2:
+    _prefab: {fileID: 0}
+    _offset: {x: 0, y: 0}
+    _scale: {x: 1, y: 1}
   _otherForm: {fileID: 0}
   _enemyBehavior:
     _defaultActions:
-    - _skill: {fileID: 11400000, guid: 988d1b57f8c2a0140963cb845d43c77a, type: 2}
+    - _skill: {fileID: 11400000, guid: b854c1d7dc64c454998da2fd4d265a20, type: 2}
       _weight: 1
-    _phases: []
+    - _skill: {fileID: 11400000, guid: b9cdd59fe194646b2b4652e2edd6bc5c, type: 2}
+      _weight: 2
+    _phases:
+    - _hpRatioBelow: 0.8
+      _actions:
+      - _skill: {fileID: 11400000, guid: b9cdd59fe194646b2b4652e2edd6bc5c, type: 2}
+        _weight: 1
+      - _skill: {fileID: 11400000, guid: b854c1d7dc64c454998da2fd4d265a20, type: 2}
+        _weight: 2
