@@ -6433,6 +6433,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MenuCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3358130052594978192, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Name
+      value: GoTownButton
+      objectReference: {fileID: 0}
     - target: {fileID: 3617879364782759049, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamMemberManager
       value: 
@@ -6441,6 +6445,10 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 5314084596912351458, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_text
+      value: "\u8857\u306B\u5411\u304B\u3044\u307E\u3059\u304B\uFF1F\n"
+      objectReference: {fileID: 0}
     - target: {fileID: 5412348880640555817, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
@@ -6452,6 +6460,18 @@ PrefabInstance:
     - target: {fileID: 5902193274455087470, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 6233501930979358301, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_Name
+      value: GoTownConfirmation
+      objectReference: {fileID: 0}
+    - target: {fileID: 6233501930979358301, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6364357006351418217, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_text
+      value: "\u8857"
       objectReference: {fileID: 0}
     - target: {fileID: 6590397191502898390, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
@@ -6465,6 +6485,14 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 6726728770199656428, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: _distinationScene._scene
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726728770199656428, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: _distinationSceneID._scene
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6923107231480110031, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
