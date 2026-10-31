@@ -283,7 +283,8 @@ public class BattleManager : MonoBehaviour
             if (enemyCharacters[i] == null) continue;
 
             enemyCharacters[i].transform.position = enemyPositions[i];
-            enemyCharacters[i].transform.localScale = new Vector3(enemyScales[i], enemyScales[i], 1);
+            float enemyScale = enemyScales[i] * _encounter.GetEnemyAt(i).BattleScaleMultiplier; // 敵ごとの倍率を掛ける
+            enemyCharacters[i].transform.localScale = new Vector3(enemyScale, enemyScale, 1);
             ChangeVisualDirection changeVisualDirection = enemyCharacters[i].GetComponent<ChangeVisualDirection>();
             changeVisualDirection.Change(ChangeVisualDirection.VisualDirection.Right);
 

@@ -119,13 +119,15 @@ public class SoundManager : MonoBehaviour
     // 今流れているBGMの音量を変更する
     public void ApplyBgmVolume(float preVolume, float postVolume)
     {
-        // フェード処理を行なっていなければ音量変更
-        if (!_isBgmFeadeOuting && !_isBgmFeadeIning) {
-            foreach (AudioSource source in _bgmSources) {
-                // 音源ごとに設定された音量を逆算し，それを元に音量を変更
-                float entryVolume = (preVolume == 0) ? 0 : source.volume / preVolume;
-                source.volume = entryVolume * _bgmVolume;
-            }
+        for (int i = 0; i < _bgmSources.Length; i++)
+        {
+            // フェード中の側は触らない（打ち切られたフェードは IsActive が false になるので、フラグが残る心配がない）
+            if (_bgmTweens[i] != null && _bgmTweens[i].IsActive()) continue;
+
+            AudioSource source = _bgmSources[i];
+            // 音源ごとに設定された音量を逆算し，それを元に音量を変更
+            float entryVolume = (preVolume == 0) ? 0 : source.volume / preVolume;
+            source.volume = entryVolume * _bgmVolume;
         }
     }
 

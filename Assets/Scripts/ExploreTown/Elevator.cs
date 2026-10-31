@@ -51,7 +51,6 @@ public class Elevator : MonoBehaviour
 
         // DOTweenのアニメーションが自動再生されないように設定
         DOTween.Init();
-        DOTween.defaultAutoPlay = AutoPlay.None;
     }
     
     // <summary>
