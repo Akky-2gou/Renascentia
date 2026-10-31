@@ -3474,7 +3474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1231722a5cc8e456e859ecf9cc46b628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VolumeChangerFromSlider
-  _soundManager: {fileID: 0}
   _bgmSlider: {fileID: 7309840605588838288}
   _seSlider: {fileID: 4350830031653876819}
   _volumeChangeSe: 2
@@ -8330,6 +8329,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoMapConfirmButton
   _clickSeId: 1
+  _distinationScene:
+    _scene: 5
+    _parameter: 0
+    _stage: 0
 --- !u!114 &3485928832679167745
 MonoBehaviour:
   m_ObjectHideFlags: 0
