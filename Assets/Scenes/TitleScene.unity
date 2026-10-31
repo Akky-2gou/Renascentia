@@ -951,6 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewGameButton
   _clickSeId: 1
+  _sequence: {fileID: 0}
 --- !u!1 &442502814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,8 +2422,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartBGMPlayer
   bgmId: 1
   isTitle: 1
-  titleIntroBgmId: 1
-  titleLoopBgmId: 2
+  titleIntroBgmId: 1000
+  titleLoopBgmId: 1001
 --- !u!1 &1193569753
 GameObject:
   m_ObjectHideFlags: 0
