@@ -159,6 +159,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
         CharacterData[] partyMembers = party.Members; // パーティーメンバーのステータスを取得する
+        if (!party.HasAnyMember())
         {
             Debug.LogError("パーティメンバーが1人も設定されていません");
         }
