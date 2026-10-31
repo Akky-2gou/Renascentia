@@ -15,6 +15,7 @@ public class GameProgress : MonoBehaviour
     [SerializeField] private bool _replaceOnApply = true; // trueなら反映時に既存の解放キャラを置き換える
     [SerializeField] private bool _applyTestUnlockedOnAwake = false; // trueなら起動時に_testUnlockedCharacterIdsを自動反映する
     [SerializeField] private MapId _lastMapId;
+    [SerializeField] private CharacterUnlockTable _characterUnlockTable; // 進行度に応じて解放するキャラの対応表
     private List<int> _unlockedCharacterIds = new List<int>();
     private List<int> _collectedItemIds = new List<int>();
 
@@ -38,10 +39,42 @@ public class GameProgress : MonoBehaviour
         return (int)stageId <= (int)_stageProgress;
     }
 
-    public MapId LastMapId
+    public MapId StageProgress
     {
-        get { return _lastMapId; }
-        set { _lastMapId = value; }
+        get { return _stageProgress; }
+        set 
+        { 
+            MapId previous = _stageProgress;
+            _stageProgress = value;
+
+            // 進行度が上がったときだけ、その間に解放されるキャラを解放する
+            if ((int)value > (int)previous)
+            {
+                UnlockCharactersForProgress(previous, value);
+            }
+        }
+    }
+
+    // 進行度が from から to に進んだとき、対応表に登録されたキャラを解放する
+    private void UnlockCharactersForProgress(MapId from, MapId to)
+    {
+        if (_characterUnlockTable == null)
+        {
+            Debug.LogWarning("GameProgress: CharacterUnlockTable が設定されていないため、キャラの解放を行いません");
+            return;
+        }
+
+        foreach (int characterId in _characterUnlockTable.GetCharacterIdsUnlockedBetween(from, to))
+        {
+            if (characterId <= 0)
+            {
+                Debug.LogWarning($"GameProgress: 無効なキャラクターIDをスキップしました: {characterId}");
+                continue;
+            }
+
+            AddUnlockedCharacter(characterId); // すでに解放済みなら何もしない
+            Debug.Log($"GameProgress: 進行度 {to} でキャラ {characterId} を解放しました");
+        }
     }
 
     //外部からリストを直接変更しないために、プロパティを通してアクセスする
