@@ -407,9 +407,17 @@ public class BattleManager : MonoBehaviour
         return isGameOver;
     }
 
-    // ゲームクリア判定
     bool IsGameClear()
     {
+        // 特殊な勝利条件（ボスのHPが半分以下など）を満たしていたら、敵が残っていても勝利
+        if (_encounter.VictoryConditions != null)
+        {
+            foreach (VictoryCondition condition in _encounter.VictoryConditions)
+            {
+                if (condition != null && condition.IsMet(_characterQueue)) return true;
+            }
+        }
+
         bool isClear = true; // クリアのフラグを初期化する
 
         // クリアの条件をチェックする
