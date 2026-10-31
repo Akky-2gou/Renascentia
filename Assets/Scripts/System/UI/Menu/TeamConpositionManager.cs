@@ -96,7 +96,7 @@ public class TeamConpositionManager : MonoBehaviour
         }
 
         int selectedCharacterId = _selectedTeamMemberSlot.CharacterID;
-        if (selectedCharacterId <= 0)
+        if (selectedCharacterId < 0)
         {
             _characterDescription?.Clear();
             return;

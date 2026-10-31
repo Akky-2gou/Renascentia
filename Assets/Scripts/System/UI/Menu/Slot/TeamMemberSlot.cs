@@ -26,6 +26,8 @@ public class TeamMemberSlot : Button
     [SerializeField] private Sprite _emptySlotSprite; // 空欄のスロットの画像
     [SerializeField] private CharacterDetailDatabase _characterDetailDatabase;
 
+    private static bool _loggedId0Debug = false;
+
     private void Start()
     {
         // マネージャーにキャラクターIDの変更を通知
@@ -113,7 +115,7 @@ public class TeamMemberSlot : Button
             return;
         }
 
-        if (characterId <= 0)
+        if (characterId < 0)
         {
             _slotImage.sprite = _emptySlotSprite;
             return;
@@ -124,11 +126,22 @@ public class TeamMemberSlot : Button
         {
             if (_characterDetailDatabase == null)
             {
+                if (characterId == 0 && !_loggedId0Debug)
+                {
+                    _loggedId0Debug = true;
+                    Debug.LogWarning("[ID0 DEBUG] CharacterDetailDatabase が未設定です。TeamMemberSlotでID=0の画像を取得できません。");
+                }
                 _slotImage.sprite = _emptySlotSprite;
                 return;
             }
 
             targetRecord = _characterDetailDatabase.GetByCharacterId(characterId);
+        }
+
+        if (characterId == 0 && !_loggedId0Debug)
+        {
+            _loggedId0Debug = true;
+            Debug.Log($"[ID0 DEBUG] DB参照結果: recordNull={targetRecord == null}, teamCompositionIconNull={(targetRecord == null ? true : targetRecord.teamCompositionIcon == null)}");
         }
 
         if (targetRecord == null || targetRecord.teamCompositionIcon == null)
