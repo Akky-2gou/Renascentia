@@ -110,6 +110,16 @@ public class BattleWinPresentationManager : MonoBehaviour
         // 最初の流れの途中なら、並びの次へ。それ以外はステージの流れ
         if (SequenceFlow.Instance != null && SequenceFlow.Instance.IsRunning)
         {
+            // チュートリアルの戦闘は 1-1 扱いなので、ここで 1-1 をクリアにする
+            if (GameProgress.Instance == null)
+            {
+                Debug.LogError("BattleWinPresentationManager: GameProgress がないため、チュートリアルのクリアを記録できません");
+            }
+            else if (GameProgress.Instance.StageProgress < MapId.Map1_2)
+            {
+                GameProgress.Instance.StageProgress = MapId.Map1_2;
+            }
+
             SequenceFlow.Instance.Next();
             return;
         }
