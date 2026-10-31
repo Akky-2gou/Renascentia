@@ -52,7 +52,10 @@ public class ShowCharacterDescription : MonoBehaviour
 		SetText(_bonusPassiveText, $"ボーナスパッシブ: {record.bonusPassive}");
 
 		// キャラクターのプレハブを元にちびキャラを表示
-		_prefabRawImageDisplay.ShowPrefab(record.characterPrefab);
+		if (_prefabRawImageDisplay != null)
+		{
+			_prefabRawImageDisplay.ShowPrefab(record.characterPrefab);
+		}
 	}
 
 	public void Clear()
@@ -80,7 +83,10 @@ public class ShowCharacterDescription : MonoBehaviour
 		SetText(_bonusPassiveText, string.Empty);
 
 		// ちびキャラの表示をオフにする
-		_prefabRawImageDisplay.Clear();
+		if (_prefabRawImageDisplay != null)
+		{
+			_prefabRawImageDisplay.Clear();
+		}
 	}
 
 	private void SetText(TextMeshProUGUI target, string value)

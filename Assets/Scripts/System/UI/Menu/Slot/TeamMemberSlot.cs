@@ -20,9 +20,11 @@ public class TeamMemberSlot : Button
 
     // キャラクターIDのプロパティ
     public int CharacterID => _characterID;
-    
-    // デバッグ用：テキスト
-    [SerializeField] private TextMeshProUGUI text;
+
+    // スロットのImage
+    [SerializeField] private UnityEngine.UI.Image _slotImage; // スロットのImageコンポーネントへの参照
+    [SerializeField] private Sprite _emptySlotSprite; // 空欄のスロットの画像
+    [SerializeField] private CharacterDetailDatabase _characterDetailDatabase;
 
     private void Start()
     {
@@ -32,11 +34,15 @@ public class TeamMemberSlot : Button
         // スロットのテキストを初期化
         if (_characterID == -1)
         {
-            text.text = "空欄";
+            //text.text = "空欄";
+            // NoImageを差し込む
+            _slotImage.sprite = _emptySlotSprite;
+
         }
         else
         {
-            text.text = "キャラクターID: " + _characterID;
+            //text.text = "キャラクターID: " + _characterID;
+            ApplySlotImageByCharacterId(_characterID, null);
         }
     }
     
@@ -52,11 +58,11 @@ public class TeamMemberSlot : Button
         
         if (_characterID == -1)
         {
-            text.text = "空欄";
+            _slotImage.sprite = _emptySlotSprite;
         }
         else
         {
-            text.text = "キャラクターID: " + _characterID;
+            ApplySlotImageByCharacterId(_characterID, null);
         }
 
         ClearCharacter();
@@ -74,11 +80,11 @@ public class TeamMemberSlot : Button
 
         if (_characterID == -1)
         {
-            text.text = "空欄";
+            _slotImage.sprite = _emptySlotSprite;
         }
         else
         {
-            text.text = "キャラクターID: " + _characterID;
+            ApplySlotImageByCharacterId(_characterID, record);
         }
 
         ShowCharacter(record);
@@ -98,6 +104,40 @@ public class TeamMemberSlot : Button
         // ちびキャラを表示
         _prefabRawImageDisplay.ShowPrefab(record.characterPrefab);
         
+    }
+
+    private void ApplySlotImageByCharacterId(int characterId, CharacterDetailRecord record)
+    {
+        if (_slotImage == null)
+        {
+            return;
+        }
+
+        if (characterId <= 0)
+        {
+            _slotImage.sprite = _emptySlotSprite;
+            return;
+        }
+
+        CharacterDetailRecord targetRecord = record;
+        if (targetRecord == null)
+        {
+            if (_characterDetailDatabase == null)
+            {
+                _slotImage.sprite = _emptySlotSprite;
+                return;
+            }
+
+            targetRecord = _characterDetailDatabase.GetByCharacterId(characterId);
+        }
+
+        if (targetRecord == null || targetRecord.teamCompositionIcon == null)
+        {
+            _slotImage.sprite = _emptySlotSprite;
+            return;
+        }
+
+        _slotImage.sprite = targetRecord.teamCompositionIcon;
     }
 
     /// <summary>
