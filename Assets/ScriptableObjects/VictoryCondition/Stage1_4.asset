@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c182f18966844af58d0d22dab0b44f6, type: 3}
+  m_Name: Stage1_4
+  m_EditorClassIdentifier: Assembly-CSharp::BossHpVictoryCondition
+  _boss: {fileID: 11400000, guid: 622d64ac51cb9f64a8abbc3ff7939a50, type: 2}
+  _hpRatio: 0.5
