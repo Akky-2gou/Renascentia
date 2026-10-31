@@ -386,7 +386,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("接触！");
             _touchingCollision = collision;
-            _selectButton.interactable = true;
+            // シーン移動中は、決定ボタンが先に破棄されていることがあるので、残っているときだけ変更する
+            if (_selectButton != null)
+            {
+                _selectButton.interactable = true;
+            }
             return;
         }
 
@@ -413,7 +417,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("接触してないよ！");
             _touchingCollision = null;
-            _selectButton.interactable = false;
+            // シーン移動中は、決定ボタンが先に破棄されていることがあるので、残っているときだけ変更する
+            if (_selectButton != null)
+            {
+                _selectButton.interactable = false;
+            }
             // _textDisplay.HideText(dct).Forget();
         }
     }

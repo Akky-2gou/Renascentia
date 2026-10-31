@@ -39,6 +39,7 @@ public class TalkableCharacterManager : MonoBehaviour
             // システィーナの場合
             if (tcd.CharacterID == _wakingCharacterData.SistineBId || tcd.CharacterID == _wakingCharacterData.SistineRId)
             {
+                if (GameProgress.Instance.StageProgress < MapId.Map1_3) continue;
                 // システィーナ青を左，システィーナ赤を右に配置
                 GameObject sistineB = Instantiate(_wakingCharacterData[_wakingCharacterData.SistineBId], 
                                                     new Vector3(tcd.Position.x - _sistineXPositionSpace / 2, tcd.Position.y, tcd.Position.z), 
