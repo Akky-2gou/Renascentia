@@ -11,9 +11,10 @@ public class TutorialBattleManager : MonoBehaviour
     [Header("DialogueDisplayの参照")]
     [SerializeField] private DialogueDisplay _dialogueDisplay;
 
-    [Header("チュートリアル内の各会話のID")]
+    [Header("チュートリアル内の各会話のID（負なら会話なし）")]
     [SerializeField] private int _forceToSelectNormalAttackButtonEpisodeIndex;
     [SerializeField] private int _forceToSelectNormalAttackTargetEpisodeIndex;
+    [SerializeField] private int _finishNormalAttackEpisodeIndex;
     [SerializeField] private int _forceToSelectSkillButtonEpisodeIndex;
     [SerializeField] private int _forceToSelectSkillTargetEpisodeIndex;
     [SerializeField] private int _tutorialFinishEpisodeIndex;
@@ -49,6 +50,7 @@ public class TutorialBattleManager : MonoBehaviour
     private bool _isFinishedForcingToSelectNormalAttackButton = false;
     private bool _isFinishedForcingToSelectNormalAttackTarget = false;
     private bool _isFinishedSelectingNormalAttackTarget = false;
+    private bool _isFinishedNormalAttack = false;
     private bool _isFinishedForcingToSelectSkillButton = false;
     private bool _isFinishedForcingToSelectSkillAttackButton = false;
     private bool _isFinishedForcingToSelectSkillTarget = false;
@@ -85,6 +87,7 @@ public class TutorialBattleManager : MonoBehaviour
         _isFinishedForcingToSelectNormalAttackButton = false;
         _isFinishedForcingToSelectNormalAttackTarget = false;
         _isFinishedSelectingNormalAttackTarget = false;
+        _isFinishedNormalAttack = false;
         _isFinishedForcingToSelectSkillButton = false;
         _isFinishedForcingToSelectSkillTarget = false;
         _isFinishedSelectingSkillTarget = false;
@@ -102,9 +105,9 @@ public class TutorialBattleManager : MonoBehaviour
     }
 
     // <summary>
-    // 味方の手番が始まったときの処理を行う
+    // 味方のターンが始まったときの処理を行う
     // </summary>
-    public async UniTask OnAllyActivationStarted()
+    public async UniTask OnAllyTurnStarted()
     {
         // 通常攻撃ボタンの選択をさせていなければさせる
         if (!_isFinishedForcingToSelectNormalAttackButton)
@@ -201,6 +204,19 @@ public class TutorialBattleManager : MonoBehaviour
     }
 
     // <summary>
+    // ダメージを与えたときの処理を行う
+    // </summary>
+    public async UniTask OnNormalAttackFinished()
+    {
+        if (_isFinishedNormalAttack) return;
+
+        // 会話終了まで待つ
+        await TalkAsync(_finishNormalAttackEpisodeIndex);
+
+        _isFinishedNormalAttack = true;
+    }
+
+    // <summary>
     // スキル消費量選択ボタンを選択した際に，スキルアタックボタンを選択させる
     // </summary>
     public async UniTask OnSelectedSkillButton()
@@ -254,6 +270,7 @@ public class TutorialBattleManager : MonoBehaviour
     // </summary>
     public async UniTask OnSelectedSkillTarget()
     {
+        Debug.Log("OnSelectedSkillTarget");
         if (_isFinishedSelectingSkillTarget) return;
 
         // メッセージを非表示
@@ -296,6 +313,9 @@ public class TutorialBattleManager : MonoBehaviour
     // 会話を非同期で行う処理
     public async UniTask TalkAsync(int episodeIndex)
     {
+        // エピソードインデックスが無効なら何もしない
+        if (episodeIndex < 0) return;
+
         // 会話開始
         _dialogueDisplay.StartTalking(episodeIndex, DialogueMode.InBattle);
 
