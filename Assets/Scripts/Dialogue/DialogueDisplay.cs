@@ -250,7 +250,7 @@ public class DialogueDisplay : MonoBehaviour
             _textBoxImage.sprite = _textBoxBackGround.GetBackgroundSprite(_currentDialogueData._textBoxType);
 
             // BGMの再生
-            if (_isInTown || _isInBattle)
+            if (!_isInTown && !_isInBattle)
             {
                 if (_currentDialogueData._bgmId >= 0 && _currentDialogueData._bgmId != _currentBGM) // BGMが変わった場合のみ再生開始
                 {
