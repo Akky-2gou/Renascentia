@@ -20,6 +20,10 @@ public class CharacterDialogDatabase : ScriptableObject
     {
         public string _characterName; // キャラクターの名前
         public Sprite[] _expressions; // キャラクターの表情のスプライト配列
+        public Vector2 _characterImagePos; // キャラクターの画像の位置
+        public float _characterImageScale; // キャラクターの画像の位置
+        public Vector2 _characterLogImagePos; // ログでのキャラクターの画像の位置
+        public float _characterLogImageScale; // ログでのキャラクターの画像の位置
     }
 
     [SerializeField] private List<CharacterDialogData> _characters;
@@ -61,4 +65,63 @@ public class CharacterDialogDatabase : ScriptableObject
         return _characters[characterId]._expressions[expressionId];
     }
 
+    /// <summary>
+    /// キャラクターIDからキャラクターの画像の位置を取得するメソッド
+    /// </summary>
+    public Vector2 GetCharacterImagePos(int characterId)
+    {
+        // キャラクターIDが範囲外の場合はエラーメッセージを出力して空文字を返す
+        if (characterId < 0 || characterId >= _characters.Count)
+        {
+            Debug.LogError($"キャラクターIDが不正: {characterId}");
+            return new Vector2();
+        }
+        
+        return _characters[characterId]._characterImagePos;
+    }
+
+    /// <summary>
+    /// キャラクターIDからキャラクターの画像の大きさを取得するメソッド
+    /// </summary>
+    public float GetCharacterImageScale(int characterId)
+    {
+        // キャラクターIDが範囲外の場合はエラーメッセージを出力して空文字を返す
+        if (characterId < 0 || characterId >= _characters.Count)
+        {
+            Debug.LogError($"キャラクターIDが不正: {characterId}");
+            return 0;
+        }
+        
+        return _characters[characterId]._characterImageScale;
+    }
+
+    /// <summary>
+    /// キャラクターIDからログでのキャラクターの画像の位置を取得するメソッド
+    /// </summary>
+    public Vector2 GetCharacterLogImagePos(int characterId)
+    {
+        // キャラクターIDが範囲外の場合はエラーメッセージを出力して空文字を返す
+        if (characterId < 0 || characterId >= _characters.Count)
+        {
+            Debug.LogError($"キャラクターIDが不正: {characterId}");
+            return new Vector2();
+        }
+        
+        return _characters[characterId]._characterLogImagePos;
+    }
+
+    /// <summary>
+    /// キャラクターIDからログでのキャラクターの画像の大きさを取得するメソッド
+    /// </summary>
+    public float GetCharacterLogImageScale(int characterId)
+    {
+        // キャラクターIDが範囲外の場合はエラーメッセージを出力して空文字を返す
+        if (characterId < 0 || characterId >= _characters.Count)
+        {
+            Debug.LogError($"キャラクターIDが不正: {characterId}");
+            return 0;
+        }
+        
+        return _characters[characterId]._characterLogImageScale;
+    }
 }

@@ -19,8 +19,8 @@ public class DialogueDisplay : MonoBehaviour
     [SerializeField] private TMP_Text _dialogueText; // 会話テキストを表示するTMP_Text
     [SerializeField] private TMP_Text _nameText; // 名前を表示するTMP_Text
 
-    [SerializeField] private Image _leftCharacterImage; // 左側のキャラクターのイメージ
-    [SerializeField] private Image _rightCharacterImage; // 右側のキャラクターのイメージ
+    [SerializeField] private GameObject _leftCharacter; // 左側のキャラクター
+    [SerializeField] private GameObject _rightCharacter; // 右側のキャラクター
     [SerializeField] private Image _backgroundImage; // 背景のイメージ
     [SerializeField] private Image _textBoxImage; // テキストボックスのイメージ
 
@@ -45,6 +45,11 @@ public class DialogueDisplay : MonoBehaviour
 
     private DialogueData _currentDialogueData; // 現在のセリフデータ
 
+    private Image _leftCharacterImage; // 左側のキャラクターのイメージ
+    private Image _rightCharacterImage; // 右側のキャラクターのイメージ
+    private RectTransform _leftCharacterTransform; // 左側のキャラクターのTransform
+    private RectTransform _rightCharacterTransform; // 右側のキャラクターのTransform
+
     private bool _isTextTyping = false; // テキストが表示中かどうかのフラグ
     private bool _isAutoPlaying = false; // 自動再生中かどうかのフラグ
     private bool _isFastForwarding = false; // 高速自動再生中かどうかのフラグ
@@ -59,6 +64,8 @@ public class DialogueDisplay : MonoBehaviour
     public bool IsEpisodeCompleted => _isEpisodeCompleted; // 会話終了フラグのプロパティ
 
     private int _currentBGM = -1; // 現在のBGM番号
+
+    private string _playerName = "あなた";
    
     private CancellationTokenSource _textTypingCts; // テキスト表示のキャンセレーショントークンソース
     private CancellationToken _dct; // DestroyCancellationToken
@@ -74,6 +81,15 @@ public class DialogueDisplay : MonoBehaviour
 
         // ダイアログパネルを非アクティブ化
         _dialoguePanel.SetActive(false);
+    }
+
+    private void Start()
+    {
+        _leftCharacterImage = _leftCharacter.GetComponent<Image>();
+        _rightCharacterImage = _rightCharacter.GetComponent<Image>();
+
+        _leftCharacterTransform = _leftCharacter.GetComponent<RectTransform>();
+        _rightCharacterTransform = _rightCharacter.GetComponent<RectTransform>();
     }
 
     /// <summary>
@@ -185,6 +201,12 @@ public class DialogueDisplay : MonoBehaviour
                 _leftCharacterImage.color = Color.gray; // 左キャラをグレーにする
                 _rightCharacterImage.color = Color.gray; // 右キャラをグレーにする
             }
+            else if (_currentDialogueData._isCharacterSpeaking == 2) // 主人公が話している場合
+            {
+                _nameText.text = _playerName; // 主人公の名前を表示
+                _leftCharacterImage.color = Color.gray; // 左キャラをグレーにする
+                _rightCharacterImage.color = Color.gray; // 右キャラをグレーにする
+            }
 
             // 左右キャラクターの存在を確認し，画像を更新
             if (_currentDialogueData._leftCharacterId < 0) // 左側のキャラクターが存在しない場合
@@ -194,6 +216,9 @@ public class DialogueDisplay : MonoBehaviour
             else // 左側のキャラクターが存在する場合
             {
                 _leftCharacterImage.sprite = _characterDialogDatabase.GetCharacterExpressionSprite(_currentDialogueData._leftCharacterId, _currentDialogueData._leftCharacterExpressionId);
+                _leftCharacterTransform.anchoredPosition = _characterDialogDatabase.GetCharacterImagePos(_currentDialogueData._leftCharacterId);
+                float scale = _characterDialogDatabase.GetCharacterImageScale(_currentDialogueData._leftCharacterId);
+                _leftCharacterTransform.localScale = new Vector2(scale, scale);
             }
 
             if (_currentDialogueData._rightCharacterId < 0) // 右側のキャラクターが存在しない場合
@@ -203,6 +228,11 @@ public class DialogueDisplay : MonoBehaviour
             else // 右側のキャラクターが存在する場合
             {
                 _rightCharacterImage.sprite = _characterDialogDatabase.GetCharacterExpressionSprite(_currentDialogueData._rightCharacterId, _currentDialogueData._rightCharacterExpressionId);
+                Vector2 vec = _characterDialogDatabase.GetCharacterImagePos(_currentDialogueData._rightCharacterId);
+                vec.x *= -1;
+                _rightCharacterTransform.anchoredPosition = vec;
+                float scale = _characterDialogDatabase.GetCharacterImageScale(_currentDialogueData._rightCharacterId);
+                _rightCharacterTransform.localScale = new Vector2(scale, scale);
             }
 
             // 背景やテキストボックスを更新

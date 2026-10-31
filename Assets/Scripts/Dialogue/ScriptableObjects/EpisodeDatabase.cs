@@ -34,7 +34,7 @@ public class DialogueData
     public int _rightCharacterId; // 右側のキャラクターのID
     public int _rightCharacterExpressionId; // 右側のキャラクターの表情ID
 
-    public int _isCharacterSpeaking; // キャラクターが話しているかどうか（-1: どちらも話していない、0: 右側、1: 左側）
+    public int _isCharacterSpeaking; // キャラクターが話しているかどうか（-1: どちらも話していない、0: 右側、1: 左側, 2: 主人公）
 
     public string _dialogueText; // 会話テキスト
 

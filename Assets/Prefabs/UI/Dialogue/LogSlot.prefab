@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u795E\u5948\u5DDD\u770C\u6C96\u6D6A\u88CF\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
-  m_sharedMaterial: {fileID: 7573449486024199980, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
+  m_sharedMaterial: {fileID: -5691618000500529279, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 3162442408646038194}
   - component: {fileID: 4487881341669094935}
   - component: {fileID: 6745394619860963944}
+  - component: {fileID: 4985409352974389864}
   m_Layer: 5
   m_Name: CharacterImageBackGround
   m_TagString: Untagged
@@ -213,6 +214,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4985409352974389864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041533208714709322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
+  m_Padding: {x: 5, y: 0, z: 0, w: 5}
+  m_Softness: {x: 10, y: 10}
 --- !u!1 &5767395808788099602
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,8 +263,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -225, y: -35}
-  m_SizeDelta: {x: 200, y: 30}
+  m_AnchoredPosition: {x: -220.85107, y: -31.127686}
+  m_SizeDelta: {x: 208.2979, y: 37.7447}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8531960996912125230
 CanvasRenderer:
@@ -356,8 +371,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\n\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\n\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
-  m_sharedMaterial: {fileID: 7573449486024199980, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
+  m_sharedMaterial: {fileID: -5691618000500529279, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -420,7 +435,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.89160925, y: 0, z: 0.32159612, w: 0}
+  m_margin: {x: -0.89160925, y: 3.923767, z: 0.32159612, w: 1.8739929}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -479,7 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LogSlotSetupper
   _dialogueText: {fileID: 8068292848848484595}
   _nameText: {fileID: 388139867091240826}
-  _characterImage: {fileID: 2706274224853027107}
+  _characterImageObj: {fileID: 8453706414648914690}
 --- !u!1 &8453706414648914690
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,14 +522,14 @@ RectTransform:
   m_GameObject: {fileID: 8453706414648914690}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3.4221184, y: 3.4221184, z: 3.4221184}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3162442408646038194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -21.3, y: -110.5}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2588398592659701586
@@ -545,9 +560,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 468139395314935204, guid: 712bcd8d0ad5c0440a2c5226370b743a, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
