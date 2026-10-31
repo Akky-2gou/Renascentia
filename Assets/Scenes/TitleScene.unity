@@ -762,6 +762,7 @@ GameObject:
   - component: {fileID: 414609095}
   - component: {fileID: 414609098}
   - component: {fileID: 414609099}
+  - component: {fileID: 414609100}
   m_Layer: 5
   m_Name: NewGame
   m_TagString: Untagged
@@ -835,6 +836,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 414609099}
         m_TargetAssemblyTypeName: TransitionButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 414609100}
+        m_TargetAssemblyTypeName: NewGameButton, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -925,6 +938,19 @@ MonoBehaviour:
     _parameter: 11
     _stage: 0
   _useLastMap: 0
+--- !u!114 &414609100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414609093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa7caeccd684477fb92adb31183bd21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewGameButton
+  _clickSeId: 1
 --- !u!1 &442502814
 GameObject:
   m_ObjectHideFlags: 0
@@ -4928,9 +4954,6 @@ MonoBehaviour:
   loadOnStart: 0
   makeFullSaveData: {fileID: 1564321182}
   moveToSceneAfterLoad: 1
-  targetSceneName: SceneId.Town
-  targetParameter: 0
-  targetStage: 0
 --- !u!4 &2026107773
 Transform:
   m_ObjectHideFlags: 0
