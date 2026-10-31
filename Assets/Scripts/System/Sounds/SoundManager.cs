@@ -59,6 +59,7 @@ public class SoundManager : MonoBehaviour
 
     private int _activeBgmIndex = 0;     // 今鳴っている（鳴らし始めた）側
     private int _currentBgmId = NO_BGM;  // 今鳴っているBGMの番号
+    private bool _isCurrentBgmLoop = true;
 
     [Header("trueにするとデバッグログが流れる")]
     [SerializeField] private bool _shoeLogs = false;
@@ -139,7 +140,35 @@ public class SoundManager : MonoBehaviour
     /// <summary>BGMを鳴らす。今と同じBGMなら何もしない</summary>
     public void PlayBgm(int id)
     {
-        if (id == _currentBgmId) 
+        PlayBgmLoop(id);
+    }
+
+    /// <summary>BGMをループ再生する。今と同じBGMがループ再生中なら何もしない</summary>
+    public void PlayBgmLoop(int id)
+    {
+        PlayBgmInternal(id, true);
+    }
+
+    /// <summary>BGMを1回だけ再生する。今と同じBGMが単発再生中なら何もしない</summary>
+    public void PlayBgmOnce(int id)
+    {
+        PlayBgmInternal(id, false);
+    }
+
+    /// <summary>BGMの長さ（秒）を返す。見つからない場合は0</summary>
+    public float GetBgmLength(int id)
+    {
+        if (!TryGetEntry(_bgmTable, id, "BGM", out SoundEntry entry))
+        {
+            return 0f;
+        }
+
+        return entry.Clip.length;
+    }
+
+    private void PlayBgmInternal(int id, bool loop)
+    {
+        if (id == _currentBgmId && loop == _isCurrentBgmLoop)
         {
             if (_shoeLogs) Debug.Log("同じBGMだったので変更なし");
             return; // 同じBGMなら、そのまま流し続ける
@@ -153,10 +182,11 @@ public class SoundManager : MonoBehaviour
         if (_shoeLogs) Debug.Log("BGMを変える");
         // 反対側で、新しい曲をフェードイン
         int nextIndex = 1 - _activeBgmIndex;
-        FadeInBgm(nextIndex, entry);
+        FadeInBgm(nextIndex, entry, loop);
 
         _activeBgmIndex = nextIndex;
         _currentBgmId = id;
+        _isCurrentBgmLoop = loop;
     }
 
     /// <summary>SEを止める</summary>
@@ -176,6 +206,7 @@ public class SoundManager : MonoBehaviour
         if (_shoeLogs) Debug.Log("BGMを止める");
         FadeOutBgm(_activeBgmIndex);
         _currentBgmId = NO_BGM;
+        _isCurrentBgmLoop = true;
     }
 
     /// <summary>SEを1回鳴らす</summary>
@@ -249,7 +280,7 @@ public class SoundManager : MonoBehaviour
     }
 
     // 指定した側で、新しいBGMを最初からフェードインさせる
-    private void FadeInBgm(int index, SoundEntry entry)
+    private void FadeInBgm(int index, SoundEntry entry, bool loop)
     {
         _isBgmFeadeIning = true;
 
@@ -258,13 +289,14 @@ public class SoundManager : MonoBehaviour
         _bgmTweens[index]?.Kill(); // この側がフェードアウト中だった場合は、そこで打ち切って使い回す
         source.Stop();
         source.clip = entry.Clip;
+        source.loop = loop;
         source.volume = 0f;
         source.Play();
 
         _bgmTweens[index] = DOTween.To(() => source.volume, v => source.volume = v, entry.Volume * _bgmVolume, _bgmFadeDuration)
             .SetUpdate(true)
             .SetLink(gameObject)
-            .OnComplete(() => { source.Stop(); _isBgmFeadeIning = false; });
+            .OnComplete(() => { _isBgmFeadeIning = false; });
     }
 
     // 対応表から辞書を作る
