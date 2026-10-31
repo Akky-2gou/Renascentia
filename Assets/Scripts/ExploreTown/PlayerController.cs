@@ -1,8 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using System;
 using System.Collections.Generic;
 
 /*
@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("PlayerInputの参照")]
     [SerializeField] private PlayerInput _playerInput;
+
+    [Header("決定ボタン")]
+    [SerializeField] private UnityEngine.UI.Button _selectButton;
 
     [Header("初期状態での向き")]
     [SerializeField] private ChangeVisualDirection.VisualDirection _initailDirection;
@@ -96,6 +99,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("GroupChangeVisualDirection取得成功");
         }
+        
+        _selectButton.interactable = false;
     }
 
     /// <summary>
@@ -124,51 +129,43 @@ public class PlayerController : MonoBehaviour
         // 向きを初期化
         _groupChangeVisualDirection.Change(_isFacingRight ? ChangeVisualDirection.VisualDirection.Right : ChangeVisualDirection.VisualDirection.Left); 
     }
-
-    /// <summary>
-    /// 移動ボタンが入力された際の処理
-    /// </summary>
-    public void OnMove(InputAction.CallbackContext context)
+    
+    // 移動を開始する関数
+    public void StartMove(Vector2 moveVec)
     {
-        if (context.performed)
-        {
-            if (!_isInputEnabled) return;
+        if (!_isInputEnabled) return;
 
-            _moveInput = context.ReadValue<Vector2>();
-            if (!_isMoving)
+        _moveInput = moveVec;
+        if (!_isMoving)
+        {
+            // 動き始めたら摩擦を0にする
+            _col.sharedMaterial.friction = 0;
+            // physicsマテリアルの更新
+            _col.enabled = false;
+            _col.enabled = true;
+
+            _isMoving = true;
+
+            if (SoundManager.Instance != null)
             {
-                // 動き始めたら摩擦を0にする
-                _col.sharedMaterial.friction = 0;
-                // physicsマテリアルの更新
-                _col.enabled = false;
-                _col.enabled = true;
-
-                _isMoving = true;
-
-                if (SoundManager.Instance != null)
-                {
-                    SoundManager.Instance.PlayLoopSe(_walkSeId);
-                }
-
-                // Walkアニメーションの開始
-                if (_playerAnimator != null)
-                {
-                    foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", true);
-                }
-                else
-                {
-                    Debug.LogError("playerAnimator is null in OnMove");
-                }
-
-                MoveLoop(_cancellationTokenSource.Token).Forget(); // 非同期ループを開始
+                SoundManager.Instance.PlayLoopSe(_walkSeId);
             }
-        }
-        else if (context.canceled)
-        {
-            StopMove();
+
+            // Walkアニメーションの開始
+            if (_playerAnimator != null)
+            {
+                foreach (Animator anim in _playerAnimator) anim.SetBool("WalkBool", true);
+            }
+            else
+            {
+                Debug.LogError("playerAnimator is null in OnMove");
+            }
+
+            MoveLoop(_cancellationTokenSource.Token).Forget(); // 非同期ループを開始
         }
     }
 
+    // 移動を停止する関数
     private void StopMove()
     {
         if (SoundManager.Instance != null)
@@ -244,11 +241,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
-    /// <summary>
-    /// 決定ボタンが入力された際の処理
-    /// </summary>
-    public void OnInteract(InputAction.CallbackContext context)
+
+    // 接触しているオブジェクトに対してインタラクトする
+    private void Interact()
     {
         // テキスト表示中でEnterキー待ち状態の場合は何もしない
         // (GameTextDisplayがEnterキーを処理する)
@@ -391,6 +386,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("接触！");
             _touchingCollision = collision;
+            _selectButton.interactable = true;
             return;
         }
 
@@ -417,7 +413,63 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("接触してないよ！");
             _touchingCollision = null;
+            _selectButton.interactable = false;
             // _textDisplay.HideText(dct).Forget();
         }
+    }
+    
+    /// <summary>
+    /// Enter が入力された際の処理
+    /// </summary>
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        Interact();
+    }
+    
+    /// <summary>
+    /// 決定ボタンが入力された際の処理
+    /// </summary>
+    public void OnPushedSelect()
+    {
+        Interact();
+    }
+
+    /// <summary>
+    /// キーボードで左右移動が入力された際の処理
+    /// </summary>
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            StartMove(context.ReadValue<Vector2>());
+        }
+        else if (context.canceled)
+        {
+            StopMove();
+        }
+    }
+
+    /// <summary>
+    /// 左移動ボタンが入力された際の処理
+    /// </summary>
+    public void OnPushedLeftMoveButton()
+    {
+        StartMove(new Vector2(-1, 0));
+    }
+
+    /// <summary>
+    /// 右移動ボタンが入力された際の処理
+    /// </summary>
+    public void OnPushedRightMoveButton()
+    {
+        StartMove(new Vector2(1, 0));
+    }
+
+    /// <summary>
+    /// 移動ボタンが離された際の処理
+    /// </summary>
+    public void OnReleasedMoveButton()
+    {
+        StopMove();
     }
 }
