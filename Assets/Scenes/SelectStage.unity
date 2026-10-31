@@ -6165,6 +6165,14 @@ MonoBehaviour:
   stageId: 5
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 1
   unselectedAlpha: 0.45
 --- !u!212 &711937398
@@ -6396,6 +6404,14 @@ MonoBehaviour:
   stageId: 3
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 1
   unselectedAlpha: 0.45
 --- !u!212 &868282612
@@ -6707,6 +6723,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 943891175}
+  pivotToFootOffset: {x: 0, y: 0, z: 0}
   battleSceneName: MapToBattle
   _battleConfirm: {fileID: 1600000473}
   _seId: 3
@@ -8751,7 +8768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f786c79661e60a649b51cc9c2a37d84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoButton
-  _seId: 1
+  _clickSeId: 1
   _confirmDialogController: {fileID: 1600000473}
 --- !u!114 &1367580331
 MonoBehaviour:
@@ -9259,6 +9276,26 @@ PrefabInstance:
       propertyPath: _seId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2070847079760845208, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070847079760845208, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070847079760845208, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070847079760845208, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070847079760845208, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2082356058759683376, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -9271,6 +9308,14 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 2368929771214763609, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368929771214763609, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2496004880417718788, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
@@ -9355,6 +9400,10 @@ PrefabInstance:
       propertyPath: _seId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2885902556191539623, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: _clickSeId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3221864380492788101, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: gameProgress
       value: 
@@ -9379,6 +9428,14 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 3380879872388132635, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3380879872388132635, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3484259242486589863, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: saveData
       value: 
@@ -9393,6 +9450,10 @@ PrefabInstance:
       objectReference: {fileID: 856717684}
     - target: {fileID: 3623674639958644363, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _seId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623674639958644363, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: _clickSeId
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3682301685767983938, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
@@ -9554,6 +9615,26 @@ PrefabInstance:
     - target: {fileID: 4833871135184698629, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -125
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926575367274736346, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926575367274736346, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926575367274736346, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926575367274736346, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926575367274736346, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5153101934849118690, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _soundManager
@@ -9823,6 +9904,18 @@ PrefabInstance:
       propertyPath: _teamConpositionManager
       value: 
       objectReference: {fileID: 856717684}
+    - target: {fileID: 7377684087016451337, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377684087016451337, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377684087016451337, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7571705620092050874, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: _teamConpositionManager
       value: 
@@ -9851,6 +9944,18 @@ PrefabInstance:
       propertyPath: saveData
       value: 
       objectReference: {fileID: 1032344581}
+    - target: {fileID: 8550364879876065658, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550364879876065658, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550364879876065658, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8577044552740730882, guid: 01d8bc8f864784ceabfb55d8e5716ea7, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
@@ -10062,6 +10167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmDialogController
   _noButton: {fileID: 1367580328}
+  _stageText: {fileID: 0}
+  _stageTextFormat: "\u30B9\u30C6\u30FC\u30B8 {0} \u306B\u51FA\u6483\u3057\u307E\u3059\u304B\uFF1F"
 --- !u!114 &1600000474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10358,6 +10465,14 @@ MonoBehaviour:
   stageId: 4
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 1
   unselectedAlpha: 0.45
 --- !u!212 &1685583619
@@ -11763,6 +11878,7 @@ MonoBehaviour:
   moveSpeedScale: 1
   arriveDistance: 0.05
   moveTarget: {fileID: 25427043}
+  pivotToFootOffset: {x: 0, y: 0, z: 0}
   battleSceneName: 
   _battleConfirm: {fileID: 0}
   _seId: 3
@@ -11894,6 +12010,14 @@ MonoBehaviour:
   stageId: 1
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 1
   unselectedAlpha: 0.45
 --- !u!61 &1986245016
@@ -12523,6 +12647,14 @@ MonoBehaviour:
   stageId: 2
   stageSelectPlayer: {fileID: 943891171}
   stageSelectKeyboardController: {fileID: 1589572275}
+  moveOnW: {fileID: 0}
+  moveOnA: {fileID: 0}
+  moveOnS: {fileID: 0}
+  moveOnD: {fileID: 0}
+  moveOnUp: {fileID: 0}
+  moveOnDown: {fileID: 0}
+  moveOnLeft: {fileID: 0}
+  moveOnRight: {fileID: 0}
   selectedAlpha: 1
   unselectedAlpha: 0.45
 --- !u!61 &2144819572

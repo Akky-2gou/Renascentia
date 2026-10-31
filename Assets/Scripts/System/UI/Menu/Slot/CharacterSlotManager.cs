@@ -100,6 +100,7 @@ public class CharacterSlotManager : MonoBehaviour
 			CharacterSlot slot = Instantiate(characterSlotPrefab, gridLayoutGroup.transform, false);
 			slot.CharacterID = characterId;
 			slot.TeamConpositionManager = teamConpositionManager;
+			ApplyCharacterSlotIcon(slot, characterId);
 
 			UnityEngine.UI.Button uiButton = slot.GetComponent<UnityEngine.UI.Button>();
 			if (uiButton == null)
@@ -126,6 +127,31 @@ public class CharacterSlotManager : MonoBehaviour
 			{
 				teamMemberManager.SetCharacterSlots(spawnedSlots);
 			}
+		}
+	}
+
+	private void ApplyCharacterSlotIcon(CharacterSlot slot, int characterId)
+	{
+		if (slot == null || characterDetailDatabase == null)
+		{
+			return;
+		}
+
+		CharacterDetailRecord record = characterDetailDatabase.GetByCharacterId(characterId);
+		if (record == null || record.characterSlotIcon == null)
+		{
+			return;
+		}
+
+		Image slotImage = slot.GetComponent<Image>();
+		if (slotImage == null)
+		{
+			slotImage = slot.GetComponentInChildren<Image>(true);
+		}
+
+		if (slotImage != null)
+		{
+			slotImage.sprite = record.characterSlotIcon;
 		}
 	}
 
