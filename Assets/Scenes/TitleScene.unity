@@ -2406,6 +2406,7 @@ GameObject:
   - component: {fileID: 1193569757}
   - component: {fileID: 1193569756}
   - component: {fileID: 1193569755}
+  - component: {fileID: 1193569758}
   m_Layer: 5
   m_Name: TitleUISlot
   m_TagString: Untagged
@@ -2498,6 +2499,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193569753}
   m_CullTransparentMesh: 1
+--- !u!114 &1193569758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193569753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1231722a5cc8e456e859ecf9cc46b628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VolumeChangerFromSlider
+  _bgmSlider: {fileID: 1922934626}
+  _seSlider: {fileID: 1998368912}
+  _volumeChangeSe: 2
 --- !u!1 &1221139470
 GameObject:
   m_ObjectHideFlags: 0
