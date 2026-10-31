@@ -674,6 +674,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1751898432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &97505303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 577272353669270282, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+  m_PrefabInstance: {fileID: 1720287406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &108553778
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,11 +710,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDisplay
   _dialogueText: {fileID: 1720287414}
   _nameText: {fileID: 1720287413}
-  _leftCharacterImage: {fileID: 1720287412}
-  _rightCharacterImage: {fileID: 1720287411}
+  _leftCharacter: {fileID: 97505303}
+  _rightCharacter: {fileID: 1785144538}
   _backgroundImage: {fileID: 1720287410}
   _textBoxImage: {fileID: 1720287409}
-  _episodeDatabase: {fileID: 11400000, guid: 64c98c6c5c47740d5a52c425fc0c8cf9, type: 2}
+  _episodeDatabase: {fileID: 11400000, guid: 56b446a76ef0d4e3f86de44586697ae3, type: 2}
   _characterDialogDatabase: {fileID: 11400000, guid: 9206ce36b7d8b478ea7f6da3a5133de2, type: 2}
   _backGround: {fileID: 11400000, guid: 693522944333a402781a694a34c69465, type: 2}
   _textBoxBackGround: {fileID: 11400000, guid: d56a5d2c0bff741369e352bf61ea546f, type: 2}
@@ -6900,28 +6905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &1720287411 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3577270062432550175, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
-  m_PrefabInstance: {fileID: 1720287406}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &1720287412 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 131385420542490501, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
-  m_PrefabInstance: {fileID: 1720287406}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &1720287413 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7172745783510154055, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
@@ -7419,6 +7402,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1785144538 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5281054375370264700, guid: 7549ec0d457ce41b3992c9eec3520779, type: 3}
+  m_PrefabInstance: {fileID: 1720287406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1812897487
 Mesh:
   m_ObjectHideFlags: 0

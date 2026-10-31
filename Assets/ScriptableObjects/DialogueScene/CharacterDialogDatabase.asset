@@ -13,13 +13,52 @@ MonoBehaviour:
   m_Name: CharacterDialogDatabase
   m_EditorClassIdentifier: Assembly-CSharp::CharacterDialogDatabase
   _characters:
-  - _characterName: "\u5343\u8449\u3000\u307F\u306A\u3068"
+  - _characterName: Dummy
     _expressions:
-    - {fileID: 21300000, guid: a960b5ddaa1f444ed8e40c17ba5e1c1c, type: 3}
-    - {fileID: 21300000, guid: 256961d6e83be4b8f933e2e871befb4f, type: 3}
-  - _characterName: "\u98EF\u5C71\u3000\u6E80"
+    - {fileID: 468139395314935204, guid: 712bcd8d0ad5c0440a2c5226370b743a, type: 3}
+    _characterImagePos: {x: 0, y: 0}
+    _characterImageScale: 0
+    _characterLogImagePos: {x: 0, y: 0}
+    _characterLogImageScale: 0
+  - _characterName: Dummy
     _expressions:
-    - {fileID: 21300000, guid: 02bf32c2ee4064f4d878be4ea0932392, type: 3}
-    - {fileID: 21300000, guid: c9da9cfd142db4ab9b023e4d57c596c6, type: 3}
-    - {fileID: 21300000, guid: d8d343ce02d6c4a2e87b6d2b3861372f, type: 3}
-    - {fileID: 21300000, guid: 841a0459a86c84f0087d289f14ee3dfa, type: 3}
+    - {fileID: 468139395314935204, guid: 712bcd8d0ad5c0440a2c5226370b743a, type: 3}
+    _characterImagePos: {x: 0, y: 0}
+    _characterImageScale: 0
+    _characterLogImagePos: {x: 0, y: 0}
+    _characterLogImageScale: 0
+  - _characterName: "\u3072\u307E\u308F\u308A"
+    _expressions:
+    - {fileID: 21300000, guid: 579d4fab1f24e07459c28fda2c77604c, type: 3}
+    _characterImagePos: {x: -230, y: -39}
+    _characterImageScale: 2.490114
+    _characterLogImagePos: {x: 15.9, y: -102.6}
+    _characterLogImageScale: 5.021016
+  - _characterName: "\u771F\u73E0\u306E\u8033\u98FE\u308A\u306E\u5C11\u5973"
+    _expressions:
+    - {fileID: 21300000, guid: 7654c916b6edec34abcd7ea02600fe03, type: 3}
+    _characterImagePos: {x: -214, y: -36}
+    _characterImageScale: 2.11595
+    _characterLogImagePos: {x: -20.4, y: -113.1}
+    _characterLogImageScale: 4.710366
+  - _characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA\u306E\u8056\u6BCD"
+    _expressions:
+    - {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
+    _characterImagePos: {x: -214, y: 46}
+    _characterImageScale: 1.49376
+    _characterLogImagePos: {x: -1.8, y: -21.9}
+    _characterLogImageScale: 2.099699
+  - _characterName: "\u591C\u8B66"
+    _expressions:
+    - {fileID: 21300000, guid: 659a13aed13f16b409452b375d5f653f, type: 3}
+    _characterImagePos: {x: -228, y: -90}
+    _characterImageScale: 2.287613
+    _characterLogImagePos: {x: 7.6, y: -122.4}
+    _characterLogImageScale: 4.216094
+  - _characterName: "\u6700\u5F8C\u306E\u6669\u9910"
+    _expressions:
+    - {fileID: 468139395314935204, guid: 712bcd8d0ad5c0440a2c5226370b743a, type: 3}
+    _characterImagePos: {x: -273.3, y: -51.7}
+    _characterImageScale: 1.68812
+    _characterLogImagePos: {x: -21.3, y: -110.5}
+    _characterLogImageScale: 3.422118

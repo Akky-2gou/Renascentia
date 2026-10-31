@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TransitionTarget _nextScene;
 
 
+    private int _currentCharacterID = -1;
     private List<Animator> _playerAnimator; // Animatorを保持する変数
     private GroupChangeVisualDirection _groupChangeVisualDirection; // GroupChangeVisualDirectionを保持する変数
 
@@ -100,13 +101,16 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// プレイヤーの見た目を制御するコンポーネントの取得
     /// </summary>
-    public void SetPlayerVisualComponet(List<GameObject> playersObj, List<Animator> animator)
+    public void ChangePlayerVisual(int characterId, List<GameObject> playersObj, List<Animator> animator)
     {
         if (_groupChangeVisualDirection == null)
         {
             Debug.Log("PlayerController: GroupChangeVisualDirectionがnullのため，処理を中断");
             return;
         }
+
+        // キャラクターIDを取得
+        _currentCharacterID = characterId;
 
         // プレイヤーとなるメインキャラとそれにくっつくサブキャラクターを登録
         _groupChangeVisualDirection.UpdateMainCharacter(playersObj[0]);
@@ -346,7 +350,13 @@ public class PlayerController : MonoBehaviour
     {
         _playerInput.SwitchCurrentActionMap("UI"); // UIアクションマップに切り替え
 
-        await component.TalkAsync(_cancellationTokenSource.Token); // 会話終了まで待機
+        if (_currentCharacterID < 0)
+        {
+            Debug.LogError("PlayerContoller: キャラクターIDが不正です");
+        }
+        int episodeIDBase = 900 + _currentCharacterID * 10;
+
+        await component.TalkAsync(_cancellationTokenSource.Token, episodeIDBase); // 会話終了まで待機
 
         _playerInput.SwitchCurrentActionMap("Player"); // Playerアクションマップに切り替え
 

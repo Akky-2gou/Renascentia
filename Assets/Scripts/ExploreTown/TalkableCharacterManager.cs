@@ -96,7 +96,7 @@ public class TalkableCharacterManager : MonoBehaviour
             return;
         }
         talkableObject.DialogueDisplay = _dialogueDisplay;
-        talkableObject.EpisodeIndex = tcd.EpisodeID;
+        talkableObject.CharacterID = tcd.CharacterID;
     }
     
     /// <summary>

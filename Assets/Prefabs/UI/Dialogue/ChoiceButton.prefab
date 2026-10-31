@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339dbf7bb97512647bd4b63a0856e2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChoiceButton
+  _clickSeId: 1
   _choiceTextUI: {fileID: 3362397190055282529}
 --- !u!1 &4690640777159900691
 GameObject:
@@ -214,8 +215,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u9078\u629E\u80A2\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
-  m_sharedMaterial: {fileID: 7573449486024199980, guid: f98c740cf8b1a4cf79be7c2e88f4cf18, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
+  m_sharedMaterial: {fileID: -5691618000500529279, guid: 334eb1c59d03e4c48a905ae2758e609d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

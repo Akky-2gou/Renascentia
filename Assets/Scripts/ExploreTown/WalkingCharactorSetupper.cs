@@ -64,7 +64,7 @@ public class WalkingCharactorSetupper : MonoBehaviour
         }
 
         // 取得したものをPlayerControllerまたはStageSelectPlayerに渡す
-        if (_playerController != null) _playerController.SetPlayerVisualComponet(_characterVisualObj, animators);
+        if (_playerController != null) _playerController.ChangePlayerVisual(charactorID, _characterVisualObj, animators);
         if (_stageSelectPlayer != null) _stageSelectPlayer.SetPlayerVisualComponet(_characterVisualObj, animators);
     }
 }

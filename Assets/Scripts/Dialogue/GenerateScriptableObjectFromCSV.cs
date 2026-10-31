@@ -295,6 +295,12 @@ public class GenerateScriptableObjectFromCSV : AssetPostprocessor
                     && TryToGetNonNegativeInt(columns[3], ref rightCharacterExpressionId, false, true);
             }
 
+            // 主人公が話している（5つ目のデータが-1）の場合
+            if (columns[4].Trim() == "-1")
+            {
+                columns[4] = "2";
+            }
+
             if (   !isLeftCharacterIdValid
                 || !isRightCharacterIdValid
                 || !TryToGetNonNegativeInt(columns[4], ref isCharacterSpeaking, true, true)
