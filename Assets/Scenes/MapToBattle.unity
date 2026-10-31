@@ -183,7 +183,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace3eb5da7c0e9d4b94dde9ec4b4aa6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  _seId: 1
+  _clickSeId: 1
+  _buttonSeId: 8
 --- !u!1001 &139989787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1187,6 +1188,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmDialogController
   _noButton: {fileID: 1980414525}
+  _stageText: {fileID: 0}
+  _stageTextFormat: "\u30B9\u30C6\u30FC\u30B8 {0} \u306B\u51FA\u6483\u3057\u307E\u3059\u304B\uFF1F"
 --- !u!224 &497942671 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7865268973810301471, guid: fb5ff04a18a294e849544846e682b770, type: 3}
@@ -1603,6 +1606,7 @@ MonoBehaviour:
   _replaceOnApply: 0
   _applyTestUnlockedOnAwake: 0
   _lastMapId: 0
+  _characterUnlockTable: {fileID: 0}
 --- !u!1 &787429350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1688,7 @@ MonoBehaviour:
   _replaceOnApply: 1
   _applyTestUnlockedOnAwake: 1
   _lastMapId: 0
+  _characterUnlockTable: {fileID: 0}
 --- !u!4 &821996535
 Transform:
   m_ObjectHideFlags: 0
@@ -1849,6 +1854,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentConversation
   _initialConversationId: -1
+--- !u!1 &1048611706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1048611707}
+  - component: {fileID: 1048611708}
+  m_Layer: 0
+  m_Name: SequenceFlow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1048611707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048611706}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1373456677}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1048611708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048611706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37918ec56256e247944db6cf05c8045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequenceFlow
 --- !u!1 &1057843297
 GameObject:
   m_ObjectHideFlags: 0
@@ -2107,6 +2156,7 @@ Transform:
   - {fileID: 1985784687}
   - {fileID: 2095970430}
   - {fileID: 736284213}
+  - {fileID: 1048611707}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1650637778 stripped
