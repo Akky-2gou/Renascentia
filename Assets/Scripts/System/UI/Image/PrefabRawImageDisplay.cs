@@ -101,7 +101,11 @@ public class PrefabRawImageDisplay : MonoBehaviour
         // RenderTextureはGC（ガベージコレクション）されないため手動で解放
         if (_renderTexture != null)
         {
-            _camera.targetTexture = null;
+            // シーンを閉じるとき、カメラが先に消えていることがある。残っているときだけ外す
+            if (_camera != null)
+            {
+                _camera.targetTexture = null;
+            }
             _renderTexture.Release();
             Destroy(_renderTexture);
         }

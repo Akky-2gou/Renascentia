@@ -33,6 +33,9 @@ public class TeamMemberSlot : Button
 
     private void Start()
     {
+        // 応急措置: 今のパーティに入っているキャラを、このスロットに読み込む
+        LoadFromParty();
+
         // マネージャーにキャラクターIDの変更を通知
         _teamMemberManager.OnTeamMemberIdChanged(-1, _characterID);
 
@@ -48,6 +51,7 @@ public class TeamMemberSlot : Button
         {
             //text.text = "キャラクターID: " + _characterID;
             ApplySlotImageByCharacterId(_characterID, null);
+            ShowCharacterById(_characterID); // ちびキャラも表示する
         }
     }
     
@@ -119,6 +123,52 @@ public class TeamMemberSlot : Button
 
         if (!_teamMemberManager.TryGetCharacterData(_characterID, out CharacterData data)) return; // ログは中で出る
         Party.Instance[_partyIndex] = data;
+    }
+
+    // 今のパーティの同じ位置に入っているキャラを、このスロットのキャラIDにする（応急措置）
+    private void LoadFromParty()
+    {
+        if (_partyIndex < 0)
+        {
+            Debug.LogError($"{name}: パーティの何番目のスロットか（_partyIndex）が設定されていません");
+            return;
+        }
+        if (Party.Instance == null)
+        {
+            Debug.LogError($"{name}: Party が存在しないため、編成を読み込めません");
+            return;
+        }
+
+        CharacterData member = Party.Instance[_partyIndex];
+        if (member == null)
+        {
+            _characterID = -1; // パーティのこの位置は空欄
+            return;
+        }
+
+        if (_teamMemberManager.TryGetCharacterId(member, out int id)) // ログは中で出る
+        {
+            _characterID = id;
+        }
+    }
+
+    // キャラIDから詳細データを探して、ちびキャラを表示する
+    private void ShowCharacterById(int characterId)
+    {
+        if (_characterDetailDatabase == null)
+        {
+            Debug.LogError($"{name}: CharacterDetailDatabase が設定されていないため、ちびキャラを表示できません");
+            return;
+        }
+
+        CharacterDetailRecord record = _characterDetailDatabase.GetByCharacterId(characterId);
+        if (record == null)
+        {
+            Debug.LogError($"{name}: キャラID {characterId} の詳細データが見つかりません");
+            return;
+        }
+
+        ShowCharacter(record);
     }
 
     // キャラがアサインされていない状態にする関数
