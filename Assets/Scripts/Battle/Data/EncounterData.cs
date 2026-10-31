@@ -24,6 +24,11 @@ public class EncounterData : ScriptableObject
 
     public Sprite Background => _background;
 
+    [Header("特殊な勝利条件（空欄OK。どれか1つでも満たしたら勝利）")]
+    [SerializeField] private VictoryCondition[] _victoryConditions;
+
+    public VictoryCondition[] VictoryConditions => _victoryConditions;
+
     // 指定スロット（0〜3）の敵。空スロットなら null
     public CharacterData GetEnemyAt(int slotIndex)
     {
