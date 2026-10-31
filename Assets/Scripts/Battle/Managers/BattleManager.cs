@@ -102,6 +102,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private int _skillAttackSeId = 6; // スキル発動SE番号
     [SerializeField] private int _takeDamageSeId = 7; // 被ダメージSE番号
 
+    [SerializeField] private int _battleWinSeId = 1005; // 戦闘勝利SE番号
+    [SerializeField] private int _gameOverSeId = 1006; // ゲームオーバーSE番号
+
     void Start()
     {
         // ==================================================================
@@ -401,6 +404,7 @@ public class BattleManager : MonoBehaviour
     {
         bool isGameOver = true; // ゲームオーバーのフラグを初期化する
 
+
         // ゲームオーバーの条件をチェックする
         foreach (CharacterStatus character in _characterQueue)
         {
@@ -450,6 +454,7 @@ public class BattleManager : MonoBehaviour
             if (IsGameOver())
             {
                 Debug.Log("Game Over!");
+                SoundManager.Instance.PlayBgmLoop(_gameOverSeId); // ゲームオーバーSEを鳴らす
                 await _battleDefeatedPresentationManager.BattleDefeated();
                 return; // ゲームオーバーの場合は次のターンに進まない
             }
@@ -468,6 +473,7 @@ public class BattleManager : MonoBehaviour
             else if (IsGameClear())
             {
                 Debug.Log("Game Clear!");
+                SoundManager.Instance.PlayBgmLoop(_battleWinSeId); // 戦闘勝利SEを鳴らす
                 await _battleWinPresentationManager.BattleWin();
                 return; // ゲームクリアの場合は次のターンに進まない
             }

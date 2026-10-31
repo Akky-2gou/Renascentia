@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour
 
     private readonly AudioSource[] _bgmSources = new AudioSource[2]; // 交互に使う、BGM用の2つ
     private readonly Tween[] _bgmTweens = new Tween[2];              // それぞれのフェード
+    private readonly float[] _bgmBaseVolumes = new float[2];         // 各BGMソースの基準音量
     private AudioSource _seSource;
     private AudioSource _loopSeSource;
     private int _currentLoopSeId = 0;
@@ -125,9 +126,12 @@ public class SoundManager : MonoBehaviour
             if (_bgmTweens[i] != null && _bgmTweens[i].IsActive()) continue;
 
             AudioSource source = _bgmSources[i];
-            // 音源ごとに設定された音量を逆算し，それを元に音量を変更
-            float entryVolume = (preVolume == 0) ? 0 : source.volume / preVolume;
-            source.volume = entryVolume * _bgmVolume;
+            if (_bgmBaseVolumes[i] <= 0f && source.clip != null)
+            {
+                _bgmBaseVolumes[i] = GetBgmEntryVolumeByClip(source.clip);
+            }
+
+            source.volume = _bgmBaseVolumes[i] * _bgmVolume;
         }
     }
 
@@ -292,6 +296,7 @@ public class SoundManager : MonoBehaviour
         source.Stop();
         source.clip = entry.Clip;
         source.loop = loop;
+        _bgmBaseVolumes[index] = entry.Volume;
         source.volume = 0f;
         source.Play();
 
@@ -299,6 +304,24 @@ public class SoundManager : MonoBehaviour
             .SetUpdate(true)
             .SetLink(gameObject)
             .OnComplete(() => { _isBgmFeadeIning = false; });
+    }
+
+    private float GetBgmEntryVolumeByClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return 0f;
+        }
+
+        foreach (SoundEntry entry in _bgmTable.Values)
+        {
+            if (entry.Clip == clip)
+            {
+                return entry.Volume;
+            }
+        }
+
+        return 0f;
     }
 
     // 対応表から辞書を作る
