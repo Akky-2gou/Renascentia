@@ -50,6 +50,10 @@ public class CharacterDetailRecord
     public Vector2 detailBackgroundIconOffset;
     public float detailBackgroundIconScale = 1f;
 
+    public Sprite teamCompositionIcon;
+
+    public Sprite characterSlotIcon;
+    
     // 後から Inspector で差し込む、該当キャラクターの Prefab
     public GameObject characterPrefab;
 }

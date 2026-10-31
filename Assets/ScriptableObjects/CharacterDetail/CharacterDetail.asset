@@ -32,9 +32,11 @@ MonoBehaviour:
     skill3Description: 
     passive: "\u6575\u5F8C\u885B\u306B\u5BFE\u3057\u3066\u5A01\u529B\u304C\u4E0A\u304C\u308B"
     bonusPassive: 
-    detailBackgroundIcon: {fileID: 21300000, guid: a16540b80f522964592fa94ae5f47d70, type: 3}
+    detailBackgroundIcon: {fileID: 21300000, guid: 579d4fab1f24e07459c28fda2c77604c, type: 3}
     detailBackgroundIconOffset: {x: 20, y: -50}
     detailBackgroundIconScale: 1.5
+    teamCompositionIcon: {fileID: 4722368757477957172, guid: c772a55db8e214940a88c98f5b209dd4, type: 3}
+    characterSlotIcon: {fileID: 300942271621694507, guid: 1dc9c0af4069d4d5a9ab0c09c547f2f3, type: 3}
     characterPrefab: {fileID: 447002470704470471, guid: 42139614dd83b40008e673babaaf39ce, type: 3}
   - characterId: 3
     characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA(\u9752)"
@@ -58,6 +60,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
     detailBackgroundIconOffset: {x: 100, y: 0}
     detailBackgroundIconScale: 2
+    teamCompositionIcon: {fileID: -9148730174131469570, guid: 77cedaa730dd94a4fa7c6957126873a1, type: 3}
+    characterSlotIcon: {fileID: -1672778174250632451, guid: fba27105f3eac4ec6919959f58bf7ab8, type: 3}
     characterPrefab: {fileID: 4194924287017135608, guid: 23e369e29108d4e9dba230768715beb9, type: 3}
   - characterId: 4
     characterName: "\u30B7\u30B9\u30C6\u30A3\u30FC\u30CA(\u8D64)"
@@ -81,6 +85,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 9c7b927d17ee50c45a71b1edd6d123f5, type: 3}
     detailBackgroundIconOffset: {x: -100, y: 0}
     detailBackgroundIconScale: 2
+    teamCompositionIcon: {fileID: 5339578799772160304, guid: ff7790c16a70b45fba839eaaf039fcee, type: 3}
+    characterSlotIcon: {fileID: -559038391327812839, guid: 5aed7fabf565247a7b9070875b67f703, type: 3}
     characterPrefab: {fileID: 6041174838066580613, guid: 99ca004eb6b214b02acde74258d66535, type: 3}
   - characterId: 2
     characterName: "\u771F\u73E0\u306E\u8033\u98FE\u308A"
@@ -104,6 +110,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 7654c916b6edec34abcd7ea02600fe03, type: 3}
     detailBackgroundIconOffset: {x: 0, y: -50}
     detailBackgroundIconScale: 1.5
+    teamCompositionIcon: {fileID: 5622210507961756788, guid: 9f59d3c34becc42eb8f353ecd5ed1577, type: 3}
+    characterSlotIcon: {fileID: -1887562307350705669, guid: 2968ed8a7afb349a5b6599df98cf8fd4, type: 3}
     characterPrefab: {fileID: 613545324556406948, guid: 435728ca08ecb433ebe5f746f08eaac9, type: 3}
   - characterId: 5
     characterName: "\u591C\u8B66"
@@ -127,6 +135,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 21300000, guid: 659a13aed13f16b409452b375d5f653f, type: 3}
     detailBackgroundIconOffset: {x: 0, y: -100}
     detailBackgroundIconScale: 1.5
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 6
     characterName: "\u6700\u5F8C\u306E\u6669\u9910"
@@ -150,6 +160,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 7
     characterName: 
@@ -173,6 +185,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 8
     characterName: "\u8A18\u61B6\u306E\u56FA\u57F7"
@@ -196,6 +210,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 9
     characterName: "\u65E5\u5098"
@@ -219,6 +235,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 10
     characterName: "\u661F\u6708\u591C"
@@ -242,6 +260,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 11
     characterName: "\u30B2\u30EB\u30CB\u30AB"
@@ -265,6 +285,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 12
     characterName: 
@@ -288,6 +310,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 13
     characterName: "\u83D6\u84B2"
@@ -311,6 +335,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 14
     characterName: "\u79CB\u51AC\u5C71\u6C34\u56F3"
@@ -334,6 +360,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 15
     characterName: "\u9ED2\u304D\u306D\u3053"
@@ -357,6 +385,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 16
     characterName: "\u8607\u59B2\u5DF1\u99C5\u5802"
@@ -380,6 +410,8 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
   - characterId: 17
     characterName: "\u795E\u5948\u5DDD\u6C96\u6D6A\u88CF"
@@ -403,4 +435,6 @@ MonoBehaviour:
     detailBackgroundIcon: {fileID: 0}
     detailBackgroundIconOffset: {x: 0, y: 0}
     detailBackgroundIconScale: 0
+    teamCompositionIcon: {fileID: 0}
+    characterSlotIcon: {fileID: 0}
     characterPrefab: {fileID: 0}
