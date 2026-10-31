@@ -407,17 +407,20 @@ public class BattleManager : MonoBehaviour
         return isGameOver;
     }
 
+    // 特殊な勝利条件（ボスのHPが半分以下など）を満たしているか。満たしていたら、敵が残っていても勝利
+    bool IsSpecialVictory()
+    {
+        if (_encounter.VictoryConditions == null) return false;
+
+        foreach (VictoryCondition condition in _encounter.VictoryConditions)
+        {
+            if (condition != null && condition.IsMet(_characterQueue)) return true;
+        }
+        return false;
+    }
+
     bool IsGameClear()
     {
-        // 特殊な勝利条件（ボスのHPが半分以下など）を満たしていたら、敵が残っていても勝利
-        if (_encounter.VictoryConditions != null)
-        {
-            foreach (VictoryCondition condition in _encounter.VictoryConditions)
-            {
-                if (condition != null && condition.IsMet(_characterQueue)) return true;
-            }
-        }
-
         bool isClear = true; // クリアのフラグを初期化する
 
         // クリアの条件をチェックする
@@ -443,6 +446,18 @@ public class BattleManager : MonoBehaviour
                 Debug.Log("Game Over!");
                 await _battleDefeatedPresentationManager.BattleDefeated();
                 return; // ゲームオーバーの場合は次のターンに進まない
+            }
+            else if (IsSpecialVictory())
+            {
+                // 特殊勝利: 勝利演出は出さず、画面のフェードだけで次へ進む（フェードは SceneLoader が行う）
+                Debug.Log("Special Victory!");
+                if (StageFlow.Instance == null)
+                {
+                    Debug.LogError("BattleManager: StageFlow が存在しないため、特殊勝利のあとに遷移できません");
+                    return;
+                }
+                StageFlow.Instance.OnBattleWon(); // ステージ解放と、次の行き先（後の会話 or マップ）への遷移
+                return;
             }
             else if (IsGameClear())
             {
