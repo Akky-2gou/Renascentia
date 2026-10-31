@@ -3368,6 +3368,7 @@ GameObject:
   - component: {fileID: 3130283957982604567}
   - component: {fileID: 228693978732005155}
   - component: {fileID: 7440117547317383703}
+  - component: {fileID: 1336404203002522219}
   m_Layer: 5
   m_Name: TitleUISlot
   m_TagString: Untagged
@@ -3460,6 +3461,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1336404203002522219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397921121540336590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1231722a5cc8e456e859ecf9cc46b628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VolumeChangerFromSlider
+  _soundManager: {fileID: 0}
+  _bgmSlider: {fileID: 7309840605588838288}
+  _seSlider: {fileID: 4350830031653876819}
+  _volumeChangeSe: 2
 --- !u!1 &1478558715102012794
 GameObject:
   m_ObjectHideFlags: 0

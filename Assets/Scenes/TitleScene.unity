@@ -679,15 +679,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 1783781875506810053, guid: 8f32f64a0c29b4a6b8c269baa7e7d657, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -919,7 +919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82c1dcea33563c4da1d3818495acbee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransitionButton
-  _seId: 1
+  _clickSeId: 1
   _target:
     _scene: 2
     _parameter: 11
@@ -1936,15 +1936,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 1783781875506810053, guid: 8f32f64a0c29b4a6b8c269baa7e7d657, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2267,7 +2267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 1397351159}
   returnPanel: {fileID: 1320078839}
 --- !u!114 &1092180165
@@ -2385,7 +2385,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 104.63635, y: -63.4}
+  m_AnchoredPosition: {x: -86, y: -1}
   m_SizeDelta: {x: 295.3636, y: 450}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1193569755
@@ -3027,7 +3027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6422d98e4660e34c958724431190b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestButton
-  _seId: 1
+  _clickSeId: 1
 --- !u!1 &1295048152
 GameObject:
   m_ObjectHideFlags: 0
@@ -3968,7 +3968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fa557d90c3ca9408633ad6ed14997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchPanelButton
-  _seId: 1
+  _clickSeId: 1
   currentPanel: {fileID: 1320078839}
   returnPanel: {fileID: 1397351159}
 --- !u!1 &1541896970
