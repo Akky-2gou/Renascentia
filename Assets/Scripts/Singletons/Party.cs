@@ -13,6 +13,8 @@ public class Party : MonoBehaviour
     const int FRONT_SLOT_COUNT = 2; // 先頭2枠が前衛、残りが後衛
     private CharacterData[] _partyMembers = new CharacterData[MAX_PARTY_MEMBERS]; // パーティーメンバーのステータスを格納する配列
 
+    public static Party Instance { get; private set; }
+
     [Header("前衛（空欄OK、4スロット全部空はNG）")]
     [SerializeField] private CharacterData _slot1;
     [SerializeField] private CharacterData _slot2;
@@ -22,6 +24,14 @@ public class Party : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            if (Singletons.IsInDuplicate(this)) return; // 複製の Singletons の子は、何もしない（もうすぐ破棄される）
+            Debug.LogError("Partyが複数存在します");
+            return;
+        }
+        Instance = this;
+        
         // パーティーメンバーの初期化
         for (int i = 0; i < MAX_PARTY_MEMBERS; i++)
         {

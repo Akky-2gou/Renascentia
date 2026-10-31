@@ -20,6 +20,28 @@ public class TeamMemberManager : MonoBehaviour
 
     private HashSet<int> _assignedCharacterIds = new HashSet<int>(); // 編成されたキャラクターのIDの集合
 
+    [Header("応急措置: キャラID → CharacterData（要素番号 = キャラID）")]
+    [SerializeField] private CharacterData[] _characterDataById; // 0: ひまわり, 1: 真珠, 2: システィーナB, 3: システィーナR
+
+    /// <summary>キャラIDから CharacterData を引く（応急措置）。見つからなければエラーを出して false</summary>
+    public bool TryGetCharacterData(int characterId, out CharacterData data)
+    {
+        data = null;
+        if (_characterDataById == null || characterId < 0 || characterId >= _characterDataById.Length)
+        {
+            Debug.LogError($"TeamMemberManager: キャラID {characterId} の CharacterData が対応表にありません");
+            return false;
+        }
+
+        data = _characterDataById[characterId];
+        if (data == null)
+        {
+            Debug.LogError($"TeamMemberManager: キャラID {characterId} の CharacterData が空欄です");
+            return false;
+        }
+        return true;
+    }
+
     public void SetCharacterSlots(IEnumerable<CharacterSlot> characterSlots)
     {
         _characterSlots = characterSlots == null ? new List<CharacterSlot>() : new List<CharacterSlot>(characterSlots);
