@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using Live2D.Cubism.Rendering;
 
 /*
  * キャラクターのステータスを管理するクラス
@@ -52,6 +53,10 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     [SerializeField] private GameObject _targetMarkRoot; // 標的マークの画像
     private bool _hoverEnabled = false; // ホバーで標的マークを出してよい状態かどうか
+
+    [Header("死亡演出")]
+    [SerializeField, Min(0f)] private float _deathFadeSeconds = 0.8f;       // フェードして消えるまでの秒数
+    [SerializeField, Min(0.1f)] private float _deathAnimationTimeout = 5f;  // 死亡アニメーションを待つ最大秒数（保険）
 
     void Awake()
     {
@@ -300,6 +305,101 @@ public class CharacterStatus : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         Debug.Log("スキルアニメーション再生");
         _animator.SetTrigger("SkillTrigger");
+    }
+
+    // ====================================================
+    // 死亡演出に関する処理
+    // ====================================================
+
+    /// <summary>
+    /// 死亡演出を行う。終わるまで待てる
+    /// 敵: Death アニメーション → フェードして消える
+    /// 味方: 被弾アニメーションと同時にフェードして消える
+    /// </summary>
+    public async UniTask PlayDeathAsync(CancellationToken ct)
+    {
+        if (_animator == null)
+        {
+            Debug.LogError($"{name}: Animator が見つからないため、アニメーションなしでフェードします");
+            await FadeOutAsync(ct);
+            return;
+        }
+
+        switch (_battleUnitType)
+        {
+            case BattleUnitType.Enemy:
+                _animator.SetBool("DeathBool", true);
+                await WaitDeathAnimationEndAsync(ct);
+                await FadeOutAsync(ct);
+                break;
+
+            case BattleUnitType.Player:
+                PlayDamagedAnimation();
+                await FadeOutAsync(ct); // 被弾アニメーションと同時にフェードが進む
+                break;
+
+            default:
+                Debug.LogError($"{name}: 死亡演出に対応していない種類です: {_battleUnitType}");
+                break;
+        }
+    }
+
+    // Death ステートの再生が最後まで終わるまで待つ（保険として、最大 _deathAnimationTimeout 秒）
+    private async UniTask WaitDeathAnimationEndAsync(CancellationToken ct)
+    {
+        float elapsed = 0f;
+        while (elapsed < _deathAnimationTimeout)
+        {
+            AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
+            if (state.IsName("Death") && !_animator.IsInTransition(0) && state.normalizedTime >= 1f) return;
+
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, ct);
+        }
+        Debug.LogWarning($"{name}: Death アニメーションの終わりを待ちきれなかったので、フェードに進みます");
+    }
+
+    // だんだん透明にして消す。Live2D のモデルなら CubismRenderController、そうでなければ SpriteRenderer の α を下げる
+    private async UniTask FadeOutAsync(CancellationToken ct)
+    {
+        CubismRenderController cubism = GetComponentInChildren<CubismRenderController>();
+        SpriteRenderer[] sprites = cubism == null ? GetComponentsInChildren<SpriteRenderer>() : new SpriteRenderer[0];
+
+        if (cubism == null && sprites.Length == 0)
+        {
+            Debug.LogError($"{name}: フェードさせる見た目（CubismRenderController / SpriteRenderer）が見つかりません");
+            return;
+        }
+
+        // SpriteRenderer は、もとの α を覚えておいて、そこから 0 へ下げる
+        float[] startAlphas = new float[sprites.Length];
+        for (int i = 0; i < sprites.Length; i++) startAlphas[i] = sprites[i].color.a;
+        float cubismStart = cubism != null ? cubism.Opacity : 1f;
+
+        float elapsed = 0f;
+        while (elapsed < _deathFadeSeconds)
+        {
+            elapsed += Time.deltaTime;
+            float rate = 1f - Mathf.Clamp01(elapsed / _deathFadeSeconds); // 1 → 0
+
+            if (cubism != null) cubism.Opacity = cubismStart * rate;
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                Color c = sprites[i].color;
+                c.a = startAlphas[i] * rate;
+                sprites[i].color = c;
+            }
+
+            await UniTask.Yield(PlayerLoopTiming.Update, ct);
+        }
+
+        if (cubism != null) cubism.Opacity = 0f;
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            Color c = sprites[i].color;
+            c.a = 0f;
+            sprites[i].color = c;
+        }
     }
 
     // ====================================================
