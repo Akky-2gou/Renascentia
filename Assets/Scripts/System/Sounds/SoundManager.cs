@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /*
  * BGMとSEを再生するシングルトン（シーンをまたいで残る）
@@ -26,6 +29,33 @@ public class SoundManager : MonoBehaviour
     private AudioSource _seSource;
     private AudioSource _loopSeSource;
     private int _currentLoopSeId = 0;
+
+    // 設定でいじれる音量（これに音源の音量をかけたものを実際に使用．範囲は[0, 1]）
+    private const float INITIAL_VOLUME = 1.0f;
+    private float _bgmVolume = INITIAL_VOLUME;
+    private float _seVolume = INITIAL_VOLUME;
+    public float BgmVolume { 
+        get => _bgmVolume;
+        set
+        {
+            float preVolume = _bgmVolume;
+            _bgmVolume = Math.Clamp(value, 0f, 1f);
+            ApplyBgmVolume(preVolume, _bgmVolume); // 現在流れているBGMに反映
+        }
+    }
+    public float SeVolume { 
+        get => _seVolume;
+        set
+        {
+            float preVolume = _seVolume;
+            _seVolume = Math.Clamp(value, 0f, 1f);
+            ApplyLoopSeVolume(preVolume, _seVolume); // 現在流れているループSEに反映
+        }
+    }
+
+
+    private bool _isBgmFeadeOuting = false;
+    private bool _isBgmFeadeIning = false;
 
     private int _activeBgmIndex = 0;     // 今鳴っている（鳴らし始めた）側
     private int _currentBgmId = NO_BGM;  // 今鳴っているBGMの番号
@@ -80,6 +110,30 @@ public class SoundManager : MonoBehaviour
         }
         BuildTable(_library.Bgm, _bgmTable, "BGM");
         BuildTable(_library.Se, _seTable, "SE");
+
+        _isBgmFeadeOuting = false;
+        _isBgmFeadeIning = false;
+    }
+
+    // 今流れているBGMの音量を変更する
+    public void ApplyBgmVolume(float preVolume, float postVolume)
+    {
+        // フェード処理を行なっていなければ音量変更
+        if (!_isBgmFeadeOuting && !_isBgmFeadeIning) {
+            foreach (AudioSource source in _bgmSources) {
+                // 音源ごとに設定された音量を逆算し，それを元に音量を変更
+                float entryVolume = (preVolume == 0) ? 0 : source.volume / preVolume;
+                source.volume = entryVolume * _bgmVolume;
+            }
+        }
+    }
+
+    // 今流れているループSEの音量を変更する
+    public void ApplyLoopSeVolume(float preVolume, float postVolume)
+    {
+        // 音源ごとに設定された音量を逆算し，それを元に音量を変更
+        float entryVolume = (preVolume == 0) ? 0 : _loopSeSource.volume / preVolume;
+        _loopSeSource.volume = entryVolume * _seVolume;
     }
 
     /// <summary>BGMを鳴らす。今と同じBGMなら何もしない</summary>
@@ -131,7 +185,7 @@ public class SoundManager : MonoBehaviour
 
         _seSource.pitch = 1f;
         if (_shoeLogs) Debug.Log("SEを鳴らした");
-        _seSource.PlayOneShot(entry.Clip, entry.Volume); // 重なっても、それぞれ最後まで鳴る
+        _seSource.PlayOneShot(entry.Clip, entry.Volume * _seVolume); // 重なっても、それぞれ最後まで鳴る
     }
 
     /// <summary>単発SE(AudioSource.PlayOneShot)が再生中かどうか</summary>
@@ -153,7 +207,7 @@ public class SoundManager : MonoBehaviour
         _loopSeSource.Stop();
         _loopSeSource.pitch = 1f;
         _loopSeSource.clip = entry.Clip;
-        _loopSeSource.volume = entry.Volume;
+        _loopSeSource.volume = entry.Volume * _seVolume;
         _loopSeSource.Play();
         _currentLoopSeId = id;
 
@@ -181,20 +235,24 @@ public class SoundManager : MonoBehaviour
     }
 
     // 指定した側のBGMを、フェードアウトして止める
-    private void FadeOutBgm(int index)
+    private async Task FadeOutBgm(int index)
     {
+        _isBgmFeadeOuting = true;
+
         AudioSource source = _bgmSources[index];
 
         _bgmTweens[index]?.Kill();
         _bgmTweens[index] = DOTween.To(() => source.volume, v => source.volume = v, 0f, _bgmFadeDuration)
             .SetUpdate(true)        // 倍速やメニューで時間が止まっても、フェードは進める
             .SetLink(gameObject)
-            .OnComplete(() => source.Stop());
+            .OnComplete(() => { source.Stop(); _isBgmFeadeOuting = false; });
     }
 
     // 指定した側で、新しいBGMを最初からフェードインさせる
     private void FadeInBgm(int index, SoundEntry entry)
     {
+        _isBgmFeadeIning = true;
+
         AudioSource source = _bgmSources[index];
 
         _bgmTweens[index]?.Kill(); // この側がフェードアウト中だった場合は、そこで打ち切って使い回す
@@ -203,9 +261,10 @@ public class SoundManager : MonoBehaviour
         source.volume = 0f;
         source.Play();
 
-        _bgmTweens[index] = DOTween.To(() => source.volume, v => source.volume = v, entry.Volume, _bgmFadeDuration)
+        _bgmTweens[index] = DOTween.To(() => source.volume, v => source.volume = v, entry.Volume * _bgmVolume, _bgmFadeDuration)
             .SetUpdate(true)
-            .SetLink(gameObject);
+            .SetLink(gameObject)
+            .OnComplete(() => { source.Stop(); _isBgmFeadeIning = false; });
     }
 
     // 対応表から辞書を作る
