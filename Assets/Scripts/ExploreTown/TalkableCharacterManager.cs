@@ -104,31 +104,23 @@ public class TalkableCharacterManager : MonoBehaviour
     /// </summary>
     public void UpdateTalkableCharacters(int walkingCharactorID)
     {
-        // キャラクターIDに対応するオブジェクトが生成されていなければ，エラーを出力
+        // 歩くキャラクター以外は有効化
+
+        // 一旦，全員を有効化
+        foreach (GameObject obj in _talkableCharacters.Values) obj.SetActive(true);
+
+        // キャラクターIDに対応するオブジェクトが生成されていなければ，何もしない
         if (walkingCharactorID == _wakingCharacterData.SistineBId || walkingCharactorID == _wakingCharacterData.SistineRId)
         {
-            if (!_talkableCharacters.ContainsKey(_wakingCharacterData.SistineBId))
-            {
-                Debug.LogError($"TalkableCharacterSetupper: キャラクターID{_wakingCharacterData.SistineBId}に対応するキャラクターのオブジェクトが生成されていません");
-                return;
-            }
-            if (!_talkableCharacters.ContainsKey(_wakingCharacterData.SistineRId))
-            {
-                Debug.LogError($"TalkableCharacterSetupper: キャラクターID{_wakingCharacterData.SistineRId}に対応するキャラクターのオブジェクトが生成されていません");
-                return;
-            }
+            if (!_talkableCharacters.ContainsKey(_wakingCharacterData.SistineBId) ||
+                !_talkableCharacters.ContainsKey(_wakingCharacterData.SistineRId)) return;
         }
         else
         {
-            if (!_talkableCharacters.ContainsKey(walkingCharactorID))
-            {
-                Debug.LogError($"TalkableCharacterSetupper: キャラクターID{walkingCharactorID}に対応するキャラクターのオブジェクトが生成されていません");
-                return;
-            }
+            if (!_talkableCharacters.ContainsKey(walkingCharactorID)) return;
         }
 
-        // 歩くキャラクター以外は有効化
-        foreach (GameObject obj in _talkableCharacters.Values) obj.SetActive(true);
+        // 歩くキャラクターは無効化
         if (walkingCharactorID == _wakingCharacterData.SistineBId || walkingCharactorID == _wakingCharacterData.SistineRId)
         {
             _talkableCharacters[_wakingCharacterData.SistineBId].SetActive(false);
