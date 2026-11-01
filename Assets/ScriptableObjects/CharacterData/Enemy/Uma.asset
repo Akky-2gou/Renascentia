@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Uma
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   _maxHp: 100
-  _attack: 120
+  _attack: 100
   _defense: 100
   _normalAttackPower: 100
   _healAmount: 0
@@ -25,6 +25,7 @@ MonoBehaviour:
   _iconOffset: {x: 31, y: -95}
   _iconScale: 4.4
   _characterPrefab: {fileID: 5399039531408162222, guid: 92904d6bd265b604fbcb50784ed3d2f5, type: 3}
+  _battleScaleMultiplier: 1
   _skills:
   - {fileID: 0}
   _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}

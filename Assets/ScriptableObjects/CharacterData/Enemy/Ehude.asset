@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0198203e9c7f948b0533a762b51830, type: 3}
   m_Name: Ehude
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  _maxHp: 90
-  _attack: 100
-  _defense: 90
+  _maxHp: 80
+  _attack: 80
+  _defense: 80
   _normalAttackPower: 100
   _healAmount: 0
   _characterType: 1
@@ -25,6 +25,7 @@ MonoBehaviour:
   _iconOffset: {x: 1.6, y: -8.5}
   _iconScale: 1.4
   _characterPrefab: {fileID: 224686150830792876, guid: 133d3cb1ddfb07645bea13050c6dc347, type: 3}
+  _battleScaleMultiplier: 1
   _skills: []
   _passive: {fileID: 11400000, guid: 99fc96884450fe34795c17d6c0a60398, type: 2}
   _skillEffect1:
