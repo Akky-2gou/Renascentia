@@ -473,7 +473,7 @@ public class BattleManager : MonoBehaviour
             else if (IsGameClear())
             {
                 Debug.Log("Game Clear!");
-                SoundManager.Instance.PlayBgmLoop(_battleWinSeId); // 戦闘勝利SEを鳴らす
+                SoundManager.Instance.PlayBgmOnce(_battleWinSeId); // 戦闘勝利SEを鳴らす
                 await _battleWinPresentationManager.BattleWin();
                 return; // ゲームクリアの場合は次のターンに進まない
             }
