@@ -43,6 +43,12 @@ public class CharacterData : ScriptableObject
     [SerializeField] private float _iconScale = 1f; // 表示スケールの補正(画像ごとの余白の違いを吸収)
     public float IconScale => _iconScale;
 
+    [Header("戦闘勝利時の画像の位置・大きさ")]
+    [SerializeField] private Vector2 _winOffset; // 表示位置の補正(中心からのズレ)
+    public Vector2 WinOffset => _winOffset;
+    [SerializeField] private float _winScale = 1f; // 表示スケールの補正(画像ごとの余白の違いを吸収)
+    public float WinScale => _winScale;
+
     [Header("キャラクターPreafab")]
     [SerializeField] GameObject _characterPrefab;
     public GameObject CharacterPrefab => _characterPrefab;
