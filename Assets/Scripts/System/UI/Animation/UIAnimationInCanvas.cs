@@ -48,13 +48,14 @@ public class UIAnimationInCanvas : MonoBehaviour
         _image = GetComponent<Image>();
     }
 
-    void Awake()
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
+    public void Initialize()
     {
-        if (_graphic == null)
-        {
-            _graphic = _image;
-        }
-        
+        // DOTWeenを初期化
+        DOTween.Init();
+
         // 目標位置・大きさを初期値で設定
         _targetPos = _rectTransform.anchoredPosition;
         _targetScale = _rectTransform.localScale;
@@ -72,9 +73,16 @@ public class UIAnimationInCanvas : MonoBehaviour
         _rectTransform.localScale = new Vector3(_rectTransform.localScale.x * (1 - _scaleRate.x), 
                                                 _rectTransform.localScale.y * (1 - _scaleRate.y), 
                                                 _rectTransform.localScale.z);
+    }
 
-        // DOTWeenを初期化
-        DOTween.Init();
+    void Awake()
+    {
+        if (_graphic == null)
+        {
+            _graphic = _image;
+        }
+        
+        Initialize();
     }
 
     void OnEnable()

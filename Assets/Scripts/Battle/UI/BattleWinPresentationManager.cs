@@ -22,14 +22,16 @@ public class BattleWinPresentationManager : MonoBehaviour
     [SerializeField] private UIAnimationInCanvas _backGround;
 
     [Header("キャラクターの画像")]
-    [SerializeField] private Image _characterImage;
-    [SerializeField] private Transform _characterTransform;
-    [SerializeField] private UIAnimationInCanvas _characterAnimation;
+    [SerializeField] private GameObject _characterImageObj;
 
     [Header("勝利後に出すUI (press any button など)")]
     [SerializeField] private CanvasGroup _menu;
     [SerializeField, Min(0f)] private float _fadeSeconds = 0.25f; // フェードにかける秒数
     private CancellationTokenSource _fadeCts;
+
+    private Image _characterImage;
+    private RectTransform _characterTransform;
+    private UIAnimationInCanvas _characterAnimation;
 
     
     // BMからできるようになったら消してね
@@ -40,6 +42,13 @@ public class BattleWinPresentationManager : MonoBehaviour
 
     private void Start()
     {
+        // キャラクター画像のオブジェクトから必要なコンポーネントを取得
+        _characterAnimation = _characterImageObj.GetComponent<UIAnimationInCanvas>();
+        if (_characterAnimation == null)
+        {
+            Debug.LogError("BattleWinPresentationManager: キャラクター画像のオブジェクトに必要なコンポーネントがありません");
+        }
+
         // 勝利後のUIは最初は隠しておく
         SetVisibleImmediate(false);
     }
@@ -54,10 +63,23 @@ public class BattleWinPresentationManager : MonoBehaviour
     /// </summary>
     public void Setup(CharacterData leaderCharacterData)
     {
+        // キャラクター画像のオブジェクトから必要なコンポーネントを取得
+        _characterImage = _characterImageObj.GetComponent<Image>();
+        _characterTransform = _characterImageObj.GetComponent<RectTransform>();
+        _characterAnimation = _characterImageObj.GetComponent<UIAnimationInCanvas>();
+
+        if (_characterImage == null || _characterTransform == null || _characterAnimation == null)
+        {
+            Debug.LogError("BattleWinPresentationManager: キャラクター画像のオブジェクトに必要なコンポーネントがありません");
+        }
+        
         // リーダーキャラのアイコンを取得
         _characterImage.sprite = leaderCharacterData.Icon;
 
-        // 必要なら_characterTransformを変更してけろ
+        // リーダーキャラのアイコンの位置と大きさを設定
+        _characterTransform.anchoredPosition = leaderCharacterData.WinOffset;
+        _characterTransform.localScale = Vector2.one * leaderCharacterData.WinScale;
+        _characterAnimation.Initialize(); // UIAnimationInCanvasの初期化
 
         // BMからできるようになったら消してね
         if (_isDebug) ForDebug().Forget();
