@@ -104,4 +104,16 @@ public class Party : MonoBehaviour
         }
         return false;
     }
+
+    /// <summary>
+    /// 学祭用: 編成を外から直接書き換える
+    /// </summary>
+    public void SetMembersForFestival(CharacterData slot1, CharacterData slot2, CharacterData slot3, CharacterData slot4)
+    {
+        // 実際に使われている編成（_partyMembers）を書き換える
+        _partyMembers[0] = slot1;
+        _partyMembers[1] = slot2;
+        _partyMembers[2] = slot3;
+        _partyMembers[3] = slot4;
+    }
 }
