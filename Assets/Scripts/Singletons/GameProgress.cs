@@ -39,9 +39,6 @@ public class GameProgress : MonoBehaviour
         { 
             MapId previous = _stageProgress;
             _stageProgress = value;
-            
-            // 学祭用処理 1-5に行かせない
-            if (_stageProgress > MapId.Map1_4) _stageProgress = MapId.Map1_4;
 
             // 進行度が上がったときだけ、その間に解放されるキャラを解放する
             if ((int)value > (int)previous)
